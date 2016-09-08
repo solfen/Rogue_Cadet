@@ -1,0 +1,37 @@
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
+
+[System.Serializable]
+public class ShotConfig {
+    public Bullet bulletPrefab;
+    public Transform origin;
+    public float angle;
+}
+
+public class Weapon : MonoBehaviour {
+
+    public bool autoFire;
+    public bool useController = false;
+    public float shotInterval = 0.25f;
+    public List<ShotConfig> bullets = new List<ShotConfig>();
+
+    private bool isTriggerd = false;
+    private float timer;
+	
+    void Update () {
+        isTriggerd = useController && Input.GetButton("MainShot");
+
+        if (timer <= 0 && (autoFire || isTriggerd)) {
+            for(int i = 0; i < bullets.Count; i++) {
+                Bullet bullet = Instantiate(bullets[i].bulletPrefab, bullets[i].origin.position, Quaternion.Euler(0, 0, bullets[i].angle-90)) as Bullet;
+                bullet.Init(bullets[i].angle);
+            }
+
+            timer = shotInterval;
+        }
+
+        timer -= Time.deltaTime;
+    }
+	
+}
