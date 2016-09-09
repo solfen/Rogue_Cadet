@@ -27,13 +27,14 @@ public class Paralax : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        numberOfPaneXOffset = Mathf.Floor(player.position.x / backgroundSize.x);
-        numberOfPaneYOffset = Mathf.Floor((player.position.y+backgroundSize.y/2) / backgroundSize.y);
+        if(player != null) {
+            numberOfPaneXOffset = Mathf.Floor(player.position.x / backgroundSize.x);
+            numberOfPaneYOffset = Mathf.Floor((player.position.y+backgroundSize.y/2) / backgroundSize.y);
 
-        backgrounds[0].position = new Vector3(numberOfPaneXOffset * backgroundSize.x, numberOfPaneYOffset * backgroundSize.y, 0);
-        backgrounds[1].position = new Vector3((numberOfPaneXOffset+1) * backgroundSize.x, numberOfPaneYOffset * backgroundSize.y, 0);
-        backgrounds[2].position = new Vector3((numberOfPaneXOffset) * backgroundSize.x, (numberOfPaneYOffset+1) * backgroundSize.y, 0);
-        backgrounds[3].position = new Vector3((numberOfPaneXOffset+1) * backgroundSize.x, (numberOfPaneYOffset + 1) * backgroundSize.y, 0);
-
+            backgrounds[0].position = new Vector3(numberOfPaneXOffset * backgroundSize.x, numberOfPaneYOffset * backgroundSize.y, 0);
+            backgrounds[1].position = new Vector3((numberOfPaneXOffset+1) * backgroundSize.x, numberOfPaneYOffset * backgroundSize.y, 0);
+            backgrounds[2].position = new Vector3((numberOfPaneXOffset) * backgroundSize.x, (numberOfPaneYOffset+1) * backgroundSize.y, 0);
+            backgrounds[3].position = new Vector3((numberOfPaneXOffset+1) * backgroundSize.x, (numberOfPaneYOffset + 1) * backgroundSize.y, 0);
+        }
     }
 }
