@@ -4,6 +4,7 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
+    public Camera camera;
     public float speed = 5f;
     public float maxLife = 100f;
     public float meleeDamage = 10f;
@@ -54,14 +55,19 @@ public class Player : MonoBehaviour {
 
     private void LifeUpdate() {
         if(life <= 0) {
-            anim.SetTrigger("Death");
-            spriteRender.color = Color.white;
-            Destroy(gameObject, 0.4f);
+            Die();
         }
 
         invincibiltyTimer -= Time.deltaTime;
         if (invincibiltyTimer < 0) {
             spriteRender.color = Color.white;
         }
+    }
+
+    private void Die() {
+        anim.SetTrigger("Death");
+        spriteRender.color = Color.white;
+        camera.transform.parent = null;
+        Destroy(gameObject, 0.4f);
     }
 }
