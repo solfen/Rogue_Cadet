@@ -4,18 +4,19 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
-    public Camera camera;
+    public Camera cam;
     public float speed = 5f;
     public float maxLife = 100f;
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
+    [HideInInspector]
+    public float life; 
 
     private Transform _transform;
     private Vector3 direction = Vector3.zero;
     private Animator anim;
     private SpriteRenderer spriteRender;
 
-    private float life;
     private float invincibiltyTimer;
 
     void Start() {
@@ -67,7 +68,7 @@ public class Player : MonoBehaviour {
     private void Die() {
         anim.SetTrigger("Death");
         spriteRender.color = Color.white;
-        camera.transform.parent = null;
+        cam.transform.parent = null;
         Destroy(gameObject, 0.4f);
     }
 }
