@@ -10,10 +10,13 @@ public class Player : MonoBehaviour {
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
     [HideInInspector]
-    public float life; 
+    public float life;
+    public Vector2 worldMax;
+    public Vector2 worldMin;
 
     private Transform _transform;
     private Vector3 direction = Vector3.zero;
+    private Vector3 newPos;
     private Animator anim;
     private SpriteRenderer spriteRender;
 
@@ -49,7 +52,11 @@ public class Player : MonoBehaviour {
         direction.x = Input.GetAxisRaw("Horizontal");
         direction.y = Input.GetAxisRaw("Vertical");
 
-        _transform.position += direction * speed * Time.deltaTime;
+        newPos = _transform.position + direction * speed * Time.deltaTime;
+        newPos.x = Mathf.Clamp(newPos.x, worldMin.x, worldMax.x);
+        newPos.y = Mathf.Clamp(newPos.y, worldMin.y, worldMax.y);
+
+        _transform.position = newPos;
 
         anim.SetFloat("XSpeed", direction.x);
     }
