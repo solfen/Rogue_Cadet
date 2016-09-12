@@ -8,9 +8,13 @@ public class Enemy : MonoBehaviour {
     public float hitFeedbakcDuration;
 
     private SpriteRenderer spriteRender;
+    private Animator anim;
+    private Color initialColor;
 
     void Start() {
         spriteRender = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        initialColor = spriteRender.color;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -25,14 +29,24 @@ public class Enemy : MonoBehaviour {
     }
 
     IEnumerator hitFeedback() {
-        spriteRender.color = Color.red;
-        yield return new WaitForSeconds(hitFeedbakcDuration);
-        spriteRender.color = Color.white;
+        float timer = hitFeedbakcDuration;
+        while(timer > 0) {
+            spriteRender.color = Color.red;
+            yield return null;
+            timer -= Time.deltaTime;
+            spriteRender.color = Color.white;
+            yield return null;
+            timer -= Time.deltaTime;
+        }
+
+        spriteRender.color = initialColor;
     }
 
     void Update() {
         if(life <= 0) {
-            Destroy(gameObject);
+            anim.SetTrigger("Death");
+            spriteRender.color = Color.white;
+            Destroy(gameObject, 0.4f);
         }
     }
 
