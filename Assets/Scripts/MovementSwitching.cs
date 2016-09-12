@@ -8,6 +8,7 @@ public class MovementSwitching : MonoBehaviour {
     public float lostSightDistance;
     public BaseMovement idleMovement;
     public BaseMovement attackMovement;
+    public Weapon weapon;
 
     private Transform _transform;
     private bool isIdle = true;
@@ -31,11 +32,13 @@ public class MovementSwitching : MonoBehaviour {
             isIdle = false;
             attackMovement.enabled = true;
             idleMovement.enabled = false;
+            weapon.enabled = true;
         }
         else if(targetDistance > lostSightDistance && !isIdle) {
             isIdle = true;
             attackMovement.enabled = false;
             idleMovement.enabled = true;
+            weapon.enabled = false;
         }
     }
 }
