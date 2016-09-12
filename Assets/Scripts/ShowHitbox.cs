@@ -14,8 +14,8 @@ public class ShowHitbox : MonoBehaviour {
 	void Start () {
         line = GetComponent<LineRenderer>();
 
-        float middleInHitboxX = realHitbox.transform.position.x + realHitbox.offset.x;
-        float middleInHitboxY = realHitbox.transform.position.y + realHitbox.offset.y;
+        float middleInHitboxX = realHitbox.transform.position.x + realHitbox.offset.x - transform.position.x;
+        float middleInHitboxY = realHitbox.transform.position.y + realHitbox.offset.y - transform.position.y;
         points[0] = new Vector3(middleInHitboxX - realHitbox.size.x / 2, middleInHitboxY + realHitbox.size.y / 2,0);
         points[1] = new Vector3(middleInHitboxX + realHitbox.size.x / 2, middleInHitboxY + realHitbox.size.y / 2,0);
         points[2] = new Vector3(middleInHitboxX + realHitbox.size.x / 2, middleInHitboxY - realHitbox.size.y / 2,0);
