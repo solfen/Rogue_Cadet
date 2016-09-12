@@ -2,18 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WaypointsMovement : MonoBehaviour {
+public class WaypointsMovement : BaseMovement {
 
     public List<Vector3> wayPoints;
-    public float speed;
-
     private int currentPoint = 0;
     private Vector3 direction;
-    private Transform _transform;
 
     // Use this for initialization
     void Start () {
-        _transform = GetComponent<Transform>();
         for(int i = 0; i < wayPoints.Count; i++) {
             wayPoints[i] += _transform.position;
         }

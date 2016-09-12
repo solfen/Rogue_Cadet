@@ -1,24 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class RandomMovement : MonoBehaviour {
+public class RandomMovement : BaseMovement {
 
-    public float speed;
     [Range(0,360)]
     public float minRandAngle;
     [Range(0, 360)]
     public float maxRandAngle;
     public float changeAngleInterval;
 
-    private Transform _transform;
     private Vector3 currentDir;
     private float angle;
     private float timer = 0;
-
-    // Use this for initialization
-    void Start () {
-        _transform = GetComponent<Transform>();
-    }
 	
 	void Update() {
         if(timer <= 0) {
