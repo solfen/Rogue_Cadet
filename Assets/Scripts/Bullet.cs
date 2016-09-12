@@ -24,9 +24,15 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    public void Init(float angle) {
-        angle *= Mathf.Deg2Rad;
-        direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+    public void Init(float angle, Transform target) {
+        if(target != null) {
+            direction = target.position - transform.position;
+            direction.Normalize();
+        }
+        else {
+            angle *= Mathf.Deg2Rad;
+            direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+        }
     }
 
     void OnTriggerEnter2D() {
