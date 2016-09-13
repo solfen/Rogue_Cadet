@@ -4,15 +4,13 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
+    public World world;
     public Camera cam;
     public float speed = 5f;
     public float maxLife = 100f;
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
-    [HideInInspector]
     public float life;
-    public Vector2 worldMax;
-    public Vector2 worldMin;
 
     private Transform _transform;
     private Vector3 direction = Vector3.zero;
@@ -54,8 +52,8 @@ public class Player : MonoBehaviour {
         direction.y = Input.GetAxisRaw("Vertical");
 
         newPos = _transform.position + direction * speed * Time.deltaTime;
-        newPos.x = Mathf.Clamp(newPos.x, worldMin.x, worldMax.x);
-        newPos.y = Mathf.Clamp(newPos.y, worldMin.y, worldMax.y);
+        newPos.x = Mathf.Clamp(newPos.x, cam.orthographicSize * cam.aspect+2f, world.worldUnitysize.x - cam.orthographicSize * cam.aspect - 2f);
+        newPos.y = Mathf.Clamp(newPos.y, cam.orthographicSize+0.5f, world.worldUnitysize.y - cam.orthographicSize - 0.5f);
 
         _transform.position = newPos;
 
