@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
     private Vector3 newPos;
     private Animator anim;
     private SpriteRenderer spriteRender;
+    private bool isDead = false;
 
     private float invincibiltyTimer;
 
@@ -62,7 +63,7 @@ public class Player : MonoBehaviour {
     }
 
     private void LifeUpdate() {
-        if(life <= 0) {
+        if(life <= 0 && !isDead) {
             Die();
         }
 
@@ -77,5 +78,6 @@ public class Player : MonoBehaviour {
         spriteRender.color = Color.white;
         cam.transform.parent = null;
         Destroy(gameObject, 0.4f);
+        isDead = true;
     }
 }

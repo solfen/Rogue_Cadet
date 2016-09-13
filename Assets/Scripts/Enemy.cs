@@ -15,6 +15,7 @@ public class Enemy : MonoBehaviour {
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
+        StartCoroutine("LifeUpdate");
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -42,13 +43,17 @@ public class Enemy : MonoBehaviour {
         spriteRender.color = initialColor;
     }
 
-    void Update() {
-        if(life <= 0) {
-            anim.SetTrigger("Death");
-            spriteRender.color = Color.white;
-            Destroy(gameObject, 0.4f);
-        }
-    }
+    IEnumerator LifeUpdate() {
+        while(true) {
+            if(life <= 0) {
+                anim.SetTrigger("Death");
+                spriteRender.color = Color.white;
+                Destroy(gameObject, 0.4f);
 
-    
+                StopCoroutine("LifeUpdate");
+            }
+
+            yield return null;
+        }
+    } 
 }
