@@ -13,10 +13,10 @@ public class Zone {
 
 public class Paralax : MonoBehaviour {
 
-    public Transform player;
     public List<Zone> zones = new List<Zone>();
     public Vector2 backgroundSize;
 
+    private Transform player;
     private Transform[] currentBackgrounds = new Transform[4];
     private List<Transform> backgrounds = new List<Transform>();
     private float numberOfPaneXOffset;
@@ -40,6 +40,8 @@ public class Paralax : MonoBehaviour {
         for(int i=0; i<4; i++) {
             currentBackgrounds[i] = backgrounds[i]; //inits the currentBackgrounds just in case 
         }
+
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 	
 	// Update is called once per frame

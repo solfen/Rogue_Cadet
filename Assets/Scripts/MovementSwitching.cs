@@ -3,7 +3,6 @@ using System.Collections;
 
 public class MovementSwitching : MonoBehaviour {
 
-    public Transform target;
     public float detectionDistance;
     public float lostSightDistance;
     public BaseMovement idleMovement;
@@ -11,6 +10,7 @@ public class MovementSwitching : MonoBehaviour {
     public Weapon weapon;
 
     private Transform _transform;
+    private Transform player;
     private bool isIdle = true;
     private float targetDistance;
 
@@ -18,15 +18,16 @@ public class MovementSwitching : MonoBehaviour {
 	void Start () {
         _transform = GetComponent<Transform>();
         attackMovement.enabled = false;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (target == null) {
+        if (player == null) {
             return;
         }
 
-        targetDistance = Vector3.Distance(_transform.position, target.position);
+        targetDistance = Vector3.Distance(_transform.position, player.position);
 
         if(targetDistance < detectionDistance && isIdle) {
             isIdle = false;

@@ -7,7 +7,7 @@ public class ShotConfig {
     public Bullet bulletPrefab;
     public Transform origin;
     public float angle;
-    public Transform target;
+    public bool targetPlayer;
 }
 
 public class Weapon : MonoBehaviour {
@@ -19,6 +19,11 @@ public class Weapon : MonoBehaviour {
 
     private bool isTriggerd = false;
     private float timer;
+    private Transform player;
+
+    void Start() {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
 	
     void Update () {
         isTriggerd = useController && Input.GetButton("MainShot");
@@ -26,7 +31,7 @@ public class Weapon : MonoBehaviour {
         if (timer <= 0 && (autoFire || isTriggerd)) {
             for(int i = 0; i < bullets.Count; i++) {
                 Bullet bullet = Instantiate(bullets[i].bulletPrefab, bullets[i].origin.position, Quaternion.Euler(0, 0, bullets[i].angle-90)) as Bullet;
-                bullet.Init(bullets[i].angle, bullets[i].target);
+                bullet.Init(bullets[i].angle, bullets[i].targetPlayer ? player : null);
             }
 
             timer = shotInterval;

@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour {
             life -= other.GetComponent<Bullet>().damage;
         }
 
-        StartCoroutine(hitFeedback());
+        StartCoroutine("hitFeedback");
     }
 
     IEnumerator hitFeedback() {
@@ -46,6 +46,8 @@ public class Enemy : MonoBehaviour {
     IEnumerator LifeUpdate() {
         while(true) {
             if(life <= 0) {
+                StopCoroutine("hitFeedback");
+
                 anim.SetTrigger("Death");
                 spriteRender.color = Color.white;
                 Destroy(gameObject, 0.4f);

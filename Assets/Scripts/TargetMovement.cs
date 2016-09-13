@@ -3,26 +3,28 @@ using System.Collections;
 
 public class TargetMovement : BaseMovement {
 
-    public Transform targetObject;
     [Range(0,360)]
     public float angleOffset;
     public bool updateDir;
 
+    private Transform player;
     private Vector3 currentDir;
     private Vector3 intialDir;
 	
     void OnEnable() {
-        currentDir = targetObject.position - transform.position;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        currentDir = player.position - transform.position;
         currentDir = Quaternion.Euler(0, 0, angleOffset) * currentDir;
     }
 
 	void Update () {
-        if(targetObject == null) {
+        if(player == null) {
             return;
         }
 
         if (updateDir) {
-            currentDir = targetObject.position - _transform.position;
+            currentDir = player.position - _transform.position;
             currentDir = Quaternion.Euler(0, 0, angleOffset) * currentDir;
         }
 
