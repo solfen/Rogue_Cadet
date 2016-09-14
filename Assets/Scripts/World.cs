@@ -26,6 +26,7 @@ public class World : MonoBehaviour {
     [HideInInspector]
     public Vector2 worldUnitysize;
     public Sector[,] map;
+    public bool isNewGame;
 
     [HideInInspector]
     public List<Enemy> enemies;
