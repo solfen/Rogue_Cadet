@@ -19,6 +19,10 @@ public class Enemy : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        if(life <= 0) {
+            return;
+        }
+
         if (other.tag == "Player") {
             life -= other.GetComponent<Player>().meleeDamage;
         }
