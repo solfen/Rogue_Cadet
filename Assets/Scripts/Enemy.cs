@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
@@ -15,8 +16,12 @@ public class Enemy : MonoBehaviour {
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
+        World.instance.enemies.Add(this);
         StartCoroutine("LifeUpdate");
     }
+
+
+
 
     void OnTriggerEnter2D(Collider2D other) {
         if(life <= 0) {
@@ -54,6 +59,7 @@ public class Enemy : MonoBehaviour {
 
                 anim.SetTrigger("Death");
                 spriteRender.color = Color.white;
+                World.instance.enemies.Remove(this);
                 Destroy(gameObject, 0.4f);
 
                 StopCoroutine("LifeUpdate");
