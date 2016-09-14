@@ -18,16 +18,18 @@ public class EnemyPack {
 
 public class EnemiesGenerator : MonoBehaviour {
 
-    public World world;
     [Range(0,1)]
     public float probabilityEmptySector = 0.25f;
     public List<EnemyPack> enemiesPacks;
     public Vector2 startPos;
 
+    private World world;
     private Dictionary<int, List<EnemyPack>> zonesEnemyPacks = new Dictionary<int, List<EnemyPack>>();
 
 	void Start () {
-	    for(int i = 0; i < world.zones.Count; i++) {
+        world = World.instance;
+
+        for (int i = 0; i < world.zones.Count; i++) {
             zonesEnemyPacks.Add(i, new List<EnemyPack>());
         }
 

@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class Player : MonoBehaviour {
 
-    public World world;
     public Camera cam;
     public float speed = 5f;
     public float maxLife = 100f;
@@ -12,6 +11,7 @@ public class Player : MonoBehaviour {
     public float invicibiltyDuration = 1f;
     public float life;
 
+    private World world;
     private Transform _transform;
     private Vector3 direction = Vector3.zero;
     private Vector3 newPos;
@@ -22,6 +22,7 @@ public class Player : MonoBehaviour {
     private float invincibiltyTimer;
 
     void Start() {
+        world = World.instance;
         _transform = GetComponent<Transform>();
         anim = GetComponent<Animator>();
         spriteRender = GetComponent<SpriteRenderer>();

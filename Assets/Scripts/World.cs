@@ -18,6 +18,8 @@ public class Sector {
 
 public class World : MonoBehaviour {
 
+    public static World instance;
+
     public List<Zone> zones;
     public Vector2 worldSize;
     public Vector2 backgroundSize;
@@ -25,7 +27,12 @@ public class World : MonoBehaviour {
     public Vector2 worldUnitysize;
     public Sector[,] map;
 
+    [HideInInspector]
+    public List<Enemy> enemies;
+
     void Awake() {
+        instance = this;
+
         map = new Sector[(int)worldSize.x, (int)worldSize.y];
 
         for(int i = 0; i < zones.Count; i++) {

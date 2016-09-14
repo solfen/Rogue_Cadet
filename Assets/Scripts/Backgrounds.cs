@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Backgrounds : MonoBehaviour {
-    public World world;
 
+
+    private World world;
     private Transform player;
     private Transform[] currentBackgrounds = new Transform[4];
     private List<Transform> backgrounds = new List<Transform>();
@@ -15,7 +16,10 @@ public class Backgrounds : MonoBehaviour {
     private Vector3 backgroundPosition = new Vector3();
 
     void Start () {
-        for(int i=0; i< world.zones.Count; i++) {
+        world = World.instance;
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        for (int i=0; i< world.zones.Count; i++) {
             for (int j=0; j<4; j++) {
                 GameObject bg = Instantiate(world.zones[i].backgroundsPrefab, transform) as GameObject;
                 bg.SetActive(false);
@@ -27,8 +31,6 @@ public class Backgrounds : MonoBehaviour {
             currentBackgrounds[i] = backgrounds[i]; //inits the currentBackgrounds just in case 
             currentBackgrounds[i].gameObject.SetActive(true);
         }
-
-        player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 	
 	// Update is called once per frame
