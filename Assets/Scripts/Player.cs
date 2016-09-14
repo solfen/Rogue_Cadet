@@ -33,12 +33,19 @@ public class Player : MonoBehaviour {
         LifeUpdate();
     }
 
+    void OnTriggerEnter2D(Collider2D other) {
+        Damage(other);
+    }
     void OnTriggerStay2D(Collider2D other) {
-        if(invincibiltyTimer <= 0) {
-            if(other.tag == "Enemy") {
+        Damage(other);
+    }
+
+    private void Damage(Collider2D other) {
+        if (invincibiltyTimer <= 0) {
+            if (other.tag == "Enemy") {
                 life -= other.GetComponent<Enemy>().meleeDamage;
             }
-            else if(other.tag == "Bullet") {
+            else if (other.tag == "Bullet") {
                 life -= other.GetComponent<Bullet>().damage;
             }
 
