@@ -49,7 +49,6 @@ public class EnemiesGenerator : MonoBehaviour {
                 while (packsToCheck.Count > 0) {
                     int index = packsToCheck[Random.Range(0, packsToCheck.Count)];
 
-                    Debug.Log(baseProba);
                     if (Random.value < packs[index].probabilityMultiplier * baseProba) {
                         InstantiatePack(packs[index].enemies, x, y);
                         break;
