@@ -22,6 +22,7 @@ public class EnemiesGenerator : MonoBehaviour {
     public float probabilityEmptySector = 0.25f;
     public List<EnemyPack> enemiesPacks;
     public Vector2 startPos;
+    public Transform enemiesParent;
 
     private World world;
     private Dictionary<int, List<EnemyPack>> zonesEnemyPacks = new Dictionary<int, List<EnemyPack>>();
@@ -64,7 +65,7 @@ public class EnemiesGenerator : MonoBehaviour {
 
     private void InstantiatePack(List<EnemyInstantiation> enemies, int x, int y) {
         for(int i = 0; i < enemies.Count; i++) {
-            Instantiate(enemies[i].Enemy, new Vector3(enemies[i].position.x + x * world.backgroundSize.x, enemies[i].position.y + y * world.backgroundSize.y, 0), Quaternion.identity);
+            Instantiate(enemies[i].Enemy, new Vector3(enemies[i].position.x + x * world.backgroundSize.x, enemies[i].position.y + y * world.backgroundSize.y, 0), Quaternion.identity, enemiesParent);
         }
     }
 

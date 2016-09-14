@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Backgrounds : MonoBehaviour {
 
+    public Transform backgroundsParent;
 
     private World world;
     private Transform player;
@@ -21,7 +22,7 @@ public class Backgrounds : MonoBehaviour {
 
         for (int i=0; i< world.zones.Count; i++) {
             for (int j=0; j<4; j++) {
-                GameObject bg = Instantiate(world.zones[i].backgroundsPrefab, transform) as GameObject;
+                GameObject bg = Instantiate(world.zones[i].backgroundsPrefab, backgroundsParent) as GameObject;
                 bg.SetActive(false);
                 backgrounds.Add(bg.transform);
             }
