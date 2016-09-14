@@ -5,11 +5,12 @@ using System.Collections;
 [RequireComponent(typeof(Text))]
 public class LifeBar : MonoBehaviour {
 
-    public Player player;
-
     private Text text;
+    private Player player;
+
     void Start() {
         text = GetComponent<Text>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
 	void Update () {
