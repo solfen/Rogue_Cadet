@@ -31,4 +31,10 @@ public class TargetMovement : BaseMovement {
         _transform.position += currentDir.normalized * speed * Time.deltaTime;
     }
 
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Wall") {
+            _transform.position -= currentDir.normalized * speed * Time.deltaTime * 10;
+        }
+    }
+
 }

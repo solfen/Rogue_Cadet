@@ -23,4 +23,11 @@ public class WaypointsMovement : BaseMovement {
         direction = wayPoints[currentPoint] - _transform.position;
         _transform.position += direction.normalized * speed * Time.deltaTime;
     }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Wall") {
+            _transform.position -= direction.normalized * speed * Time.deltaTime *10;
+            currentPoint = (currentPoint + 1) % wayPoints.Count;
+        }
+    }
 }

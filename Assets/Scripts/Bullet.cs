@@ -28,8 +28,11 @@ public class Bullet : MonoBehaviour {
         if(target != null) {
             direction = target.position - transform.position;
             direction.Normalize();
+            transform.rotation = Quaternion.Inverse(target.rotation);
         }
         else {
+            transform.rotation = Quaternion.Euler(0, 0, angle-90);
+
             angle *= Mathf.Deg2Rad;
             direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
         }

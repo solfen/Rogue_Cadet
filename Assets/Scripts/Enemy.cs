@@ -20,9 +20,6 @@ public class Enemy : MonoBehaviour {
         StartCoroutine("LifeUpdate");
     }
 
-
-
-
     void OnTriggerEnter2D(Collider2D other) {
         if(life <= 0) {
             return;
@@ -30,12 +27,13 @@ public class Enemy : MonoBehaviour {
 
         if (other.tag == "Player") {
             life -= other.GetComponent<Player>().meleeDamage;
+            StartCoroutine("hitFeedback");
         }
         else if (other.tag == "PlayerBullet") {
             life -= other.GetComponent<Bullet>().damage;
+            StartCoroutine("hitFeedback");
         }
 
-        StartCoroutine("hitFeedback");
     }
 
     IEnumerator hitFeedback() {
