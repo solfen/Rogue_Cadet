@@ -48,7 +48,6 @@ public class Player : MonoBehaviour {
             break;
 
             case "Wall":
-            Debug.Log("Hello");
                 direction *= -1;
                 Move();
             break;
@@ -74,8 +73,8 @@ public class Player : MonoBehaviour {
 
     private void Move() {
         newPos = _transform.position + direction * speed * Time.deltaTime;
-        newPos.x = Mathf.Clamp(newPos.x, cam.orthographicSize * cam.aspect+2f, world.worldUnitysize.x - cam.orthographicSize * cam.aspect - 2f);
-        newPos.y = Mathf.Clamp(newPos.y, cam.orthographicSize+0.5f, world.worldUnitysize.y - cam.orthographicSize - 0.5f);
+        //newPos.x = Mathf.Clamp(newPos.x, cam.orthographicSize * cam.aspect+2f, world.worldUnitysize.x - cam.orthographicSize * cam.aspect - 2f);
+        //newPos.y = Mathf.Clamp(newPos.y, cam.orthographicSize+0.5f, world.worldUnitysize.y - cam.orthographicSize - 0.5f);
 
         _transform.position = newPos;
 
