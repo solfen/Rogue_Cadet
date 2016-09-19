@@ -14,6 +14,7 @@ public class Zone {
 [System.Serializable]
 public class Sector {
     public int zoneType;
+    public bool hasRoom;
 }
 
 public class World : MonoBehaviour {
@@ -23,6 +24,7 @@ public class World : MonoBehaviour {
     public List<Zone> zones;
     public Vector2 worldSize;
     public Vector2 backgroundSize;
+    public Vector2 roomBaseSize;
     [HideInInspector]
     public Vector2 worldUnitysize;
     public Sector[,] map;
@@ -33,6 +35,8 @@ public class World : MonoBehaviour {
 
     void Awake() {
         instance = this;
+
+        //roomBaseSize = new Vector2(Camera.main.orthographicSize * 2 * Camera.main.aspect, Camera.main.orthographicSize * 2);
 
         map = new Sector[(int)worldSize.x, (int)worldSize.y];
 
