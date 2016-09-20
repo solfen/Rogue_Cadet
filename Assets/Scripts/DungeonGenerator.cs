@@ -9,7 +9,8 @@ public class DungeonGenerator : MonoBehaviour {
     public Vector2 startingPos;
     public Room startingRoom;
     public List<Room> rooms;
-    public int maxRoomNb = 10;
+    public List<Room> deadEndRooms;
+    public int minRoomsBeforeDeadEnd = 10;
     public float secondsBetweenInstanciation = 2;
 
     private World world;
@@ -20,6 +21,7 @@ public class DungeonGenerator : MonoBehaviour {
     private Vector2 nextRoomPos = Vector3.zero;
     private Vector3 roomWorldPos;
     private int currentRoomsNb;
+    private bool deadEndAdded = false;
 
     // Use this for initialization
     void Start () {
@@ -39,6 +41,12 @@ public class DungeonGenerator : MonoBehaviour {
         do {
            if (secondsBetweenInstanciation > 0)
                 yield return new WaitForSeconds(secondsBetweenInstanciation);
+
+           if(!deadEndAdded && currentRoomsNb >= minRoomsBeforeDeadEnd) {
+                deadEndAdded = true;
+                rooms.AddRange(deadEndRooms);
+            }
+
             GenerateRoom();
 
         } while (graphRooms.Count > 1);
@@ -61,7 +69,7 @@ public class DungeonGenerator : MonoBehaviour {
                     // and tey don't have the same refenrenctiel at all!
                     // so I calculated the place the current room exit should be (by reversing the dir of the previous room)
                     // then I calculated where the exit will actually be (exit pos of the previous room + exit pos of the current room)
-                    // now I can do a simple substrraction and get the offset!
+                    // now I can do a simple substraction and get the offset!
                     // man I really suck at those things...
 
                    // Debug.Log("previousExitIndex: " + previousExitIndex);
@@ -78,7 +86,7 @@ public class DungeonGenerator : MonoBehaviour {
                        // Destroy(tmpRoom.gameObject);
 
                         previousRoom.exits[previousExitIndex].connected = true;
-
+                        currentRoomsNb++;
                         roomPos.Set(nextRoomPos.x, nextRoomPos.y);
                         MarkMapWithRoom(roomPos, roomPos + rooms[i].size);
 
