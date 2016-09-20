@@ -2,8 +2,7 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-
-    public Camera cam;
+    
     public Transform sprite;
     public float speed = 5f;
     public float maxLife = 100f;
@@ -11,9 +10,9 @@ public class Player : MonoBehaviour {
     public float invicibiltyDuration = 1f;
     public float life;
     public float rotationMinAngle;
+    public float rotationDeadZone = 0.5f;
 
-    private World world;
-    private Transform _transform;
+    private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
     private Vector3 newPos;
     private Animator anim;
@@ -23,39 +22,35 @@ public class Player : MonoBehaviour {
     private float invincibiltyTimer;
 
     void Start() {
-        world = World.instance;
-        _transform = GetComponent<Transform>();
+        _rigidBody = GetComponent<Rigidbody2D>();
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
         life = maxLife;
     }
 
 	void Update () {
-        Turn();
-        GetMoveDirection();
-        Move();
         LifeUpdate();
     }
 
-    void OnTriggerEnter2D(Collider2D other) {
-        switch(other.tag) {
+    void FixedUpdate() {
+        Turn();
+        Move();
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        switch(other.gameObject.tag) {
             case "Enemy":
-                Damage(other.GetComponent<Enemy>().meleeDamage);
+                Damage(other.gameObject.GetComponent<Enemy>().meleeDamage);
             break;
 
             case "Bullet":
-                Damage(other.GetComponent<Bullet>().damage);
-            break;
-
-            case "Wall":
-                direction *= -1;
-                Move();
+                Damage(other.gameObject.GetComponent<Bullet>().damage);
             break;
         }
     }
 
-    void OnTriggerStay2D(Collider2D other) {
-        OnTriggerEnter2D(other);
+    void OnCollisionStay2D(Collision2D other) {
+        OnCollisionEnter2D(other);
     }
 
     private void Damage(float dmg) {
@@ -66,17 +61,10 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void GetMoveDirection() {
+    private void Move() {
         direction.x = Input.GetAxisRaw("Horizontal");
         direction.y = Input.GetAxisRaw("Vertical");
-    }
-
-    private void Move() {
-        newPos = _transform.position + direction * speed * Time.deltaTime;
-        //newPos.x = Mathf.Clamp(newPos.x, cam.orthographicSize * cam.aspect+2f, world.worldUnitysize.x - cam.orthographicSize * cam.aspect - 2f);
-        //newPos.y = Mathf.Clamp(newPos.y, cam.orthographicSize+0.5f, world.worldUnitysize.y - cam.orthographicSize - 0.5f);
-
-        _transform.position = newPos;
+        _rigidBody.velocity = direction * speed;
 
         anim.SetFloat("XSpeed", direction.x);
     }
@@ -85,8 +73,8 @@ public class Player : MonoBehaviour {
         direction.x = -Input.GetAxisRaw("Horizontal2");
         direction.y = -Input.GetAxisRaw("Vertical2");
 
-        if(direction.x > 0.5 || direction.x < -0.5 || direction.y > 0.5 || direction.y < -0.5) {
-            sprite.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle));
+        if(direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
+            _rigidBody.rotation = Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle;
         }
     }
 
@@ -104,7 +92,6 @@ public class Player : MonoBehaviour {
     private void Die() {
         anim.SetTrigger("Death");
         spriteRender.color = Color.white;
-        cam.transform.parent = null;
         Destroy(gameObject, 0.4f);
         isDead = true;
     }
