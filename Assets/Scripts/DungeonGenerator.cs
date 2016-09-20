@@ -2,14 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
+public class RoomList { //rooms that have the same exits and size
+    public List<Room> rooms = new List<Room>();
+}
+
+[System.Serializable]
+public class ZoneRooms {
+    public string name;
+    public int zoneIndex;
+    public List<RoomList> roomList;
+}
+
+[System.Serializable]
+public class BossRoom {
+    public GameObject boss;
+    public Vector2 roomSize;
+    public int zoneIndex;
+    [HideInInspector]
+    public bool canPop = true;
+}
 
 public class DungeonGenerator : MonoBehaviour {
 
-    public Transform roomsParent;
+    public List<Transform> roomsParent;
     public Vector2 startingPos;
     public Room startingRoom;
-    public List<Room> rooms;
-    public List<Room> deadEndRooms;
+    public List<ZoneRooms> zoneRooms; 
+    public List<ZoneRooms> deadEndRooms;
+    public List<BossRoom> bossRooms;
     public int minRoomsBeforeDeadEnd = 10;
     public float secondsBetweenInstanciation = 2;
 
@@ -17,11 +38,13 @@ public class DungeonGenerator : MonoBehaviour {
     private Room previousRoom;
     private List<Room> graphRooms = new List<Room>();
     private int previousExitIndex;
+    private int previousZoneIndex = 0;
     private Vector2 roomPos = Vector3.zero;
     private Vector2 nextRoomPos = Vector3.zero;
     private Vector3 roomWorldPos;
     private int currentRoomsNb;
     private bool deadEndAdded = false;
+    private List<RoomList> roomList;
 
     // Use this for initialization
     void Start () {
@@ -29,7 +52,14 @@ public class DungeonGenerator : MonoBehaviour {
         roomPos = startingPos;
         roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
 
-        previousRoom = Instantiate(startingRoom, roomWorldPos, Quaternion.identity, roomsParent) as Room;
+        for (int i = 0; i < bossRooms.Count; i++) {
+            if (world.isNewGame) {
+                PlayerPrefs.SetInt("Defeated_Boss" + i, 0);
+            }
+            bossRooms[i].canPop = PlayerPrefs.GetInt("Defeated_Boss" + i) == 0;
+        }
+
+        previousRoom = Instantiate(startingRoom, roomWorldPos, Quaternion.identity, roomsParent[previousZoneIndex]) as Room;
         graphRooms.Add(previousRoom);
         previousExitIndex = 0; //assumes that the starting room only has one exit
         MarkMapWithRoom(roomPos, roomPos + previousRoom.size);
@@ -44,12 +74,15 @@ public class DungeonGenerator : MonoBehaviour {
 
            if(!deadEndAdded && currentRoomsNb >= minRoomsBeforeDeadEnd) {
                 deadEndAdded = true;
-                rooms.AddRange(deadEndRooms);
+                zoneRooms.AddRange(deadEndRooms);
             }
 
+            GetNextZone((int)(roomPos.x + previousRoom.exits[previousExitIndex].pos.x), (int)(roomPos.y + previousRoom.exits[previousExitIndex].pos.y));
             GenerateRoom();
 
         } while (graphRooms.Count > 1);
+
+        AddBosses();
 
         Debug.Log(Time.realtimeSinceStartup);
         yield return null;
@@ -58,11 +91,12 @@ public class DungeonGenerator : MonoBehaviour {
 
     private void GenerateRoom() {
         List<int> roomsToCheck = new List<int>();
-        roomsToCheck.AddRange(System.Linq.Enumerable.Range(0, rooms.Count)); // so that we have a list like [0,1,2,3 ... count-1]
+        roomsToCheck.AddRange(System.Linq.Enumerable.Range(0, roomList.Count)); // so that we have a list like [0,1,2,3 ... count-1]
         while(roomsToCheck.Count > 0) {
             int i = roomsToCheck[Random.Range(0, roomsToCheck.Count)];
-            for (int j = 0; j < rooms[i].exits.Count; j++) {
-                if (rooms[i].exits[j].dir * -1 == previousRoom.exits[previousExitIndex].dir) {
+            Room randomRoom = roomList[i].rooms[Random.Range(0, roomList[i].rooms.Count)];
+            for (int j = 0; j < randomRoom.exits.Count; j++) {
+                if (randomRoom.exits[j].dir * -1 == previousRoom.exits[previousExitIndex].dir) {
                     // ok it's complicated. I'm pretty sure there's an easier way to do that.
                     // basicly it set the new pos of the room. Since the previous room exit gives the possition of the next room it should be easy right? WRONG
                     // because I have to take into acount the offset of the chosen exit of the new room
@@ -75,23 +109,23 @@ public class DungeonGenerator : MonoBehaviour {
                    // Debug.Log("previousExitIndex: " + previousExitIndex);
                     //Debug.Log("currentExit: " + j);
 
-                    nextRoomPos.x = roomPos.x + previousRoom.exits[previousExitIndex].pos.x - ((previousRoom.exits[previousExitIndex].pos.x + rooms[i].exits[j].pos.x) - (previousRoom.exits[previousExitIndex].pos.x - 1 * previousRoom.exits[previousExitIndex].dir.x)); 
-                    nextRoomPos.y = roomPos.y + previousRoom.exits[previousExitIndex].pos.y - ((previousRoom.exits[previousExitIndex].pos.y + rooms[i].exits[j].pos.y) - (previousRoom.exits[previousExitIndex].pos.y - 1 * previousRoom.exits[previousExitIndex].dir.y));
+                    nextRoomPos.x = roomPos.x + previousRoom.exits[previousExitIndex].pos.x - ((previousRoom.exits[previousExitIndex].pos.x + randomRoom.exits[j].pos.x) - (previousRoom.exits[previousExitIndex].pos.x - 1 * previousRoom.exits[previousExitIndex].dir.x)); 
+                    nextRoomPos.y = roomPos.y + previousRoom.exits[previousExitIndex].pos.y - ((previousRoom.exits[previousExitIndex].pos.y + randomRoom.exits[j].pos.y) - (previousRoom.exits[previousExitIndex].pos.y - 1 * previousRoom.exits[previousExitIndex].dir.y));
 
-                    roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
-                   /* Room tmpRoom = Instantiate(rooms[i], roomWorldPos, Quaternion.identity, roomsParent) as Room;
+                   /* roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
+                    Room tmpRoom = Instantiate(rooms[i], roomWorldPos, Quaternion.identity, roomsParent) as Room;
                     tmpRoom.transform.GetChild(0).GetComponent<UnityEngine.TileMap.TileMap>().color = Color.red;*/
 
-                    if (RoomHasPlace(nextRoomPos, nextRoomPos + rooms[i].size)) {
+                    if (RoomHasPlace(nextRoomPos, nextRoomPos + randomRoom.size)) {
                        // Destroy(tmpRoom.gameObject);
 
                         previousRoom.exits[previousExitIndex].connected = true;
                         currentRoomsNb++;
                         roomPos.Set(nextRoomPos.x, nextRoomPos.y);
-                        MarkMapWithRoom(roomPos, roomPos + rooms[i].size);
+                        MarkMapWithRoom(roomPos, roomPos + randomRoom.size);
 
                         roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
-                        previousRoom = Instantiate(rooms[i], roomWorldPos, Quaternion.identity, roomsParent) as Room;
+                        previousRoom = Instantiate(randomRoom, roomWorldPos, Quaternion.identity, roomsParent[previousZoneIndex]) as Room;
                         previousRoom.pos.Set(roomPos.x, roomPos.y);
                         previousRoom.exits[j].connected = true;
                         graphRooms.Add(previousRoom);
@@ -111,6 +145,33 @@ public class DungeonGenerator : MonoBehaviour {
         }
 
         GetUnconnectedExit();
+    }
+
+    private void AddBosses() { //WILL be changed
+        for (int i = 0; i < bossRooms.Count; i++) {
+            if(bossRooms[i].canPop) {
+                Room[] rooms = roomsParent[bossRooms[i].zoneIndex].GetComponentsInChildren<Room>();
+                for(int j = 0; j < rooms.Length; j++) {
+                    if(rooms[j].size == bossRooms[i].roomSize) {
+                        Destroy(rooms[j].enemiesParent.gameObject);
+                        GameObject boss = Instantiate(bossRooms[i].boss, rooms[j].transform, false) as GameObject;
+                        boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
+                        bossRooms[i].canPop = false;
+                        break;
+                    }
+                }
+
+                bossRooms[i].roomSize.x = 1;
+                i--;
+            }
+        }
+    }
+
+    private void GetNextZone(int x, int y) {   
+        if (x >= 0 && x < world.worldSize.x && y >= 0 && y < world.worldSize.y) {
+            previousZoneIndex = world.map[x, y].zoneType;
+            roomList = zoneRooms[previousZoneIndex].roomList;
+        }
     }
 
     private void GetUnconnectedExit() {
