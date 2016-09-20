@@ -13,6 +13,24 @@ public class Room : MonoBehaviour {
 
     public List<Exit> exits;
     public Vector2 size;
+    public List<EnemyPack> possibleEnemies;
+    [HideInInspector]
     public Vector2 pos = new Vector2();
-    //public List<EnemyPack> possibleEnemies;
+    
+    private Transform _transform;
+    private GameObject enemy;
+
+    void Start() {
+        _transform = GetComponent<Transform>();
+
+        if (possibleEnemies.Count > 0) {
+            List<EnemyInstantiation> enemies = possibleEnemies[Random.Range(0, possibleEnemies.Count)].enemies;
+            for (int i = 0; i < enemies.Count; i++) {
+                enemy = Instantiate(enemies[i].Enemy,_transform, false) as GameObject;
+                enemy.transform.localPosition = enemies[i].position;
+                enemy.transform.localRotation = enemies[i].rotation;
+            }
+        }
+    }
 }
+

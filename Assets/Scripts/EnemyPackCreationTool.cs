@@ -6,7 +6,7 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class EnemyPackCreationTool : MonoBehaviour {
 
-    public EnemiesGenerator generator;
+    public Room associatedRoom;
     public List<GameObject> enemiesPrefab;
 
     public GameObject enemyPack;
@@ -34,11 +34,12 @@ public class EnemyPackCreationTool : MonoBehaviour {
                 EnemyInstantiation enemy = new EnemyInstantiation();
                 Transform obj = enemyPack.transform.GetChild(i);
                 enemy.Enemy = prefabDictionary[obj.name.Substring(0, 6)]; // will not work when there's more than 9 enemiesTypes
-                enemy.position = new Vector2(obj.localPosition.x, obj.localPosition.y);
+                enemy.position = obj.localPosition;
+                enemy.rotation = obj.localRotation;
                 pack.enemies.Add(enemy);
             }
 
-            generator.enemiesPacks.Add(pack);
+            associatedRoom.possibleEnemies.Add(pack);
         }
 
         enabled = false;
