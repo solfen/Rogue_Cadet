@@ -95,7 +95,8 @@ public class Player : MonoBehaviour {
     private void Die() {
         anim.SetTrigger("Death");
         spriteRender.color = Color.white;
-        Destroy(gameObject, 0.4f);
         isDead = true;
+        DeathScreen.instance.OnPlayerDeath();
+        Destroy(gameObject, 0.4f);
     }
 }
