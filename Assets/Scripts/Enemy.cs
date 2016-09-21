@@ -7,16 +7,19 @@ public class Enemy : MonoBehaviour {
     public float meleeDamage;
     public float life;
     public float hitFeedbakcDuration;
+    public float score;
 
+    private World world;
     private SpriteRenderer spriteRender;
     private Animator anim;
     private Color initialColor;
 
     void Start() {
+        world = World.instance;
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
-        World.instance.enemies.Add(this);
+        world.enemies.Add(this);
         StartCoroutine("LifeUpdate");
     }
 
@@ -57,7 +60,8 @@ public class Enemy : MonoBehaviour {
 
                 anim.SetTrigger("Death");
                 spriteRender.color = Color.white;
-                World.instance.enemies.Remove(this);
+                world.enemies.Remove(this);
+                world.Score.KilledEnemy(this);
                 Destroy(gameObject, 0.4f);
 
                 StopCoroutine("LifeUpdate");

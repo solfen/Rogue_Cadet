@@ -32,6 +32,8 @@ public class World : MonoBehaviour {
 
     [HideInInspector]
     public List<Enemy> enemies;
+    [HideInInspector]
+    public Score Score;
 
     void Awake() {
         instance = this;

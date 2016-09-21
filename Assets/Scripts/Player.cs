@@ -37,8 +37,8 @@ public class Player : MonoBehaviour {
         Move();
     }
 
-    void OnCollisionEnter2D(Collision2D other) {
-        switch(other.gameObject.tag) {
+    void OnTriggerEnter2D(Collider2D other) {
+        switch(other.tag) {
             case "Enemy":
                 Damage(other.gameObject.GetComponent<Enemy>().meleeDamage);
             break;
@@ -46,11 +46,14 @@ public class Player : MonoBehaviour {
             case "Bullet":
                 Damage(other.gameObject.GetComponent<Bullet>().damage);
             break;
+
         }
+
+        World.instance.Score.PlayerHit();
     }
 
-    void OnCollisionStay2D(Collision2D other) {
-        OnCollisionEnter2D(other);
+    void OnTriggerStay2D(Collider2D other) {
+        OnTriggerEnter2D(other);
     }
 
     private void Damage(float dmg) {
