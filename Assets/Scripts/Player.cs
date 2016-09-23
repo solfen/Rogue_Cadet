@@ -4,6 +4,7 @@ using System.Collections;
 public class Player : MonoBehaviour {
     
     public Transform sprite;
+    public string typeName;
     public float speed = 5f;
     public float maxLife = 100f;
     public float meleeDamage = 10f;

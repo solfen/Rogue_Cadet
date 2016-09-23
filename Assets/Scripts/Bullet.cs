@@ -24,8 +24,10 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    public void Init(float angle, Transform target) {
-        if(target != null) {
+    public void Init(float angle, Transform target, float dmgMultiplier) {
+        damage *= dmgMultiplier;
+
+        if (target != null) {
             direction = target.position - transform.position;
             direction.Normalize();
             transform.rotation = Quaternion.Inverse(target.rotation);
