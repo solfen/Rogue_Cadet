@@ -29,25 +29,13 @@ public class World : MonoBehaviour {
     public Vector2 worldUnitysize;
     public Sector[,] map;
     public bool isNewGame;
-    public Dictionary<string, Player> shipTypes = new Dictionary<string, Player>();
     [HideInInspector]
     public List<Enemy> enemies;
     [HideInInspector]
     public Score Score;
 
-    [SerializeField]
-    private List<Player> shipTypesList;
-
     void Awake() {
         instance = this;
-
-        for(int i=0; i< shipTypesList.Count; i++) {
-            shipTypes.Add(shipTypesList[i].typeName, shipTypesList[i]);
-        }
-
-        string currentType = PlayerPrefs.GetString("selectedShip", "Barbarian");
-        Debug.Log(currentType);
-        Instantiate(shipTypes[currentType]);
 
         //roomBaseSize = new Vector2(Camera.main.orthographicSize * 2 * Camera.main.aspect, Camera.main.orthographicSize * 2);
 
