@@ -8,20 +8,18 @@ public class Bullet : MonoBehaviour {
     public float maxDistance;
 
     private Vector3 direction;
-    private Vector3 initialPos;
     private Transform _transform;
 
 	void Start () {
         _transform = GetComponent<Transform>();
-        initialPos = _transform.position;
     }
 
     void Update() {
         _transform.position += direction * speed * Time.deltaTime;
+    }
 
-        if (Vector3.Distance(initialPos, _transform.position) >= maxDistance) {
-            Destroy(gameObject);
-        }
+    void OnBecameInvisible() {
+        Destroy(gameObject);
     }
 
     public void Init(float angle, Transform target, float dmgMultiplier) {
