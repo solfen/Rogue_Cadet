@@ -40,6 +40,7 @@ public class EnemyPackCreationTool : MonoBehaviour {
             }
 
             associatedRoom.possibleEnemies.Add(pack);
+            EditorUtility.SetDirty(associatedRoom);
         }
 
         enabled = false;
