@@ -11,23 +11,29 @@ public class WaypointsMovement : BaseMovement {
     // Use this for initialization
     void Start () {
         for(int i = 0; i < wayPoints.Count; i++) {
-            wayPoints[i] += _transform.position;
+            wayPoints[i] = _transform.position + _transform.rotation * (wayPoints[i]);
         }
+
+        SelectNewPoint();
     }
 
     void Update() {
         if(Vector3.Distance(_transform.position, wayPoints[currentPoint]) < 0.1f) {
-            currentPoint = (currentPoint + 1) % wayPoints.Count;
+            SelectNewPoint();
         }
 
-        direction = wayPoints[currentPoint] - _transform.position;
-        _transform.position += direction.normalized * speed * Time.deltaTime;
+        _transform.position += direction * speed * Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Wall") {
-            _transform.position -= direction.normalized * speed * Time.deltaTime *10;
-            currentPoint = (currentPoint + 1) % wayPoints.Count;
+            SelectNewPoint();
         }
+    }
+
+    private void SelectNewPoint() {
+        currentPoint = (currentPoint + 1) % wayPoints.Count;
+        direction = wayPoints[currentPoint] - _transform.position;
+        direction.Normalize();
     }
 }
