@@ -11,36 +11,45 @@ public class BehaviourSwitch {
 
 public class BehaviourSwitching : MonoBehaviour {
 
-    public float detectionDistance;
-    public float lostSightDistance;
-
+    public float reactionTime = 1f;
     public List<BehaviourSwitch> behavioursToSwitch;
 
     private Transform _transform;
     private Transform player;
     private bool isIdle = true;
     private float targetDistance;
+    private Renderer render;
 
 	// Use this for initialization
 	void Start () {
         _transform = GetComponent<Transform>();
+        render = GetComponent<Renderer>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
+
         SwitchBehaviour();
     }
 	
-	// Update is called once per frame
-	void Update () {
-        if (player == null) {
-            return;
-        }
+    void OnBecameVisible () {
+        StopCoroutine("FoundTarget"); //TODO: Check if having a timer in Update is more optimized
+        StartCoroutine("FoundTarget");
+    }
 
-        targetDistance = Vector3.Distance(_transform.position, player.position);
+    void OnBecameInvisible () {
+        StopCoroutine("LostTarget");
+        StartCoroutine("LostTarget");
+    }
 
-        if(targetDistance < detectionDistance && isIdle) { // could probably set the isIdle in one line but it'll be more complicated, and not really more optimized
+    IEnumerator FoundTarget() {
+        yield return new WaitForSeconds(reactionTime);
+        if (render.isVisible) {
             isIdle = false;
             SwitchBehaviour();
         }
-        else if(targetDistance > lostSightDistance && !isIdle) {
+    }
+
+    IEnumerator LostTarget() {
+        yield return new WaitForSeconds(reactionTime);
+        if(!render.isVisible) {
             isIdle = true;
             SwitchBehaviour();
         }
@@ -51,4 +60,5 @@ public class BehaviourSwitching : MonoBehaviour {
             behavioursToSwitch[i].script.enabled = (behavioursToSwitch[i].inIdle && isIdle) || (behavioursToSwitch[i].inAttack && !isIdle);
         }
     }
+
 }
