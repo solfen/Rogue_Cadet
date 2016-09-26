@@ -28,8 +28,8 @@ public class RandomMovement : BaseMovement {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Wall") {
-            _transform.position -= currentDir * speed * Time.deltaTime * 10;
-            timer = 0;
+            _transform.position -= currentDir * speed * Time.deltaTime * 5;
+            currentDir = -currentDir;
         }
     }
 }
