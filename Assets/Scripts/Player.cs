@@ -78,6 +78,7 @@ public class Player : MonoBehaviour {
         direction.y = -Input.GetAxisRaw("Vertical2");
 
         if(direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
+            //_rigidBody.MoveRotation(Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle);
             _rigidBody.rotation = Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle;
         }
     }
