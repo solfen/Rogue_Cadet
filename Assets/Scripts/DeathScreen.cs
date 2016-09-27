@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DeathScreen : MonoBehaviour {
 
     public static DeathScreen instance;
+    public Text highScore;
 
     [SerializeField]
     private int levelToLoad = 1;
@@ -25,5 +27,8 @@ public class DeathScreen : MonoBehaviour {
     public void OnPlayerDeath() {
         anim.enabled = true;
         enabled = true;
+        float score = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), World.instance.Score.score);
+        PlayerPrefs.SetFloat("HighScore", score);
+        highScore.text = "High score: " + score;
     }
 }

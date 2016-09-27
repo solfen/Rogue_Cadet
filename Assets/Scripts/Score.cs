@@ -7,7 +7,7 @@ public class Score : MonoBehaviour {
     public float maxCombo;
     public float comboDownInterval = 1;
 
-    private float score = 0;
+    public float score = 0;
     private float combo = 1;
     private float comboDownTimer = 0;
 
