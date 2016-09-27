@@ -137,29 +137,37 @@ public class DungeonGenerator : MonoBehaviour {
 
     private void AddBosses() { //WILL be changed
         for (int i = 0; i < bossRooms.Count; i++) {
-            if(bossRooms[i].canPop) {
-                Room[] rooms = roomsParent[bossRooms[i].zoneIndex].GetComponentsInChildren<Room>();
-                for(int j = 0; j < rooms.Length; j++) {
-                    if(rooms[j].size == bossRooms[i].roomSize) {
-                        Destroy(rooms[j].enemiesParent.gameObject);
-                        GameObject boss = Instantiate(bossRooms[i].boss, rooms[j].transform, false) as GameObject;
-                        boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
-                        bossRooms[i].canPop = false;
-                        break;
-                    }
-                }
+            if (!bossRooms[i].canPop) {
+                continue;
+            }
 
-                if(bossRooms[i].roomSize.x > 1) {
-                    bossRooms[i].roomSize.x = 1;
-                    i--;
-                }
-                else {
-                    Application.LoadLevel(0);
-                    return;
-                }
-
+            Room[] rooms = roomsParent[bossRooms[i].zoneIndex].GetComponentsInChildren<Room>();
+            int index = FindBossRoom(i, rooms);
+            if(index != -1) {
+                Destroy(rooms[index].enemiesParent.gameObject);
+                GameObject boss = Instantiate(bossRooms[i].boss, rooms[index].transform, false) as GameObject;
+                boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
+                bossRooms[i].canPop = false;
+            }
+            else if(bossRooms[i].roomSize.x > 1) {
+                bossRooms[i].roomSize.x = 1;
+                i--;
+            }
+            else {
+                Application.LoadLevel(0);
+                return;
             }
         }
+    }
+
+    private int FindBossRoom(int i, Room[] rooms) {
+        for (int j = 0; j < rooms.Length; j++) {
+            if (rooms[j].size == bossRooms[i].roomSize) {
+                return j;
+            }
+        }
+
+        return -1;
     }
 
     private void GetNextZone(int x, int y) {   
