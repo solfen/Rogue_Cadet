@@ -45,6 +45,7 @@ public class DungeonGenerator : MonoBehaviour {
     private int currentRoomsNb;
     private bool deadEndAdded = false;
     private List<RoomList> roomList;
+    private int cpt;
 
     // Use this for initialization
     void Start () {
@@ -78,14 +79,15 @@ public class DungeonGenerator : MonoBehaviour {
             }
 
             GetNextZone((int)(roomPos.x + previousRoom.exits[previousExitIndex].pos.x), (int)(roomPos.y + previousRoom.exits[previousExitIndex].pos.y));
+            cpt = 0;
             GenerateRoom();
 
         } while (graphRooms.Count > 1);
 
         AddBosses();
 
-        Debug.Log(Time.realtimeSinceStartup);
         yield return null;
+        //Application.LoadLevel(0);
     }
        
 
@@ -106,19 +108,10 @@ public class DungeonGenerator : MonoBehaviour {
                     // now I can do a simple substraction and get the offset!
                     // man I really suck at those things...
 
-                   // Debug.Log("previousExitIndex: " + previousExitIndex);
-                    //Debug.Log("currentExit: " + j);
-
                     nextRoomPos.x = roomPos.x + previousRoom.exits[previousExitIndex].pos.x - ((previousRoom.exits[previousExitIndex].pos.x + randomRoom.exits[j].pos.x) - (previousRoom.exits[previousExitIndex].pos.x - 1 * previousRoom.exits[previousExitIndex].dir.x)); 
                     nextRoomPos.y = roomPos.y + previousRoom.exits[previousExitIndex].pos.y - ((previousRoom.exits[previousExitIndex].pos.y + randomRoom.exits[j].pos.y) - (previousRoom.exits[previousExitIndex].pos.y - 1 * previousRoom.exits[previousExitIndex].dir.y));
 
-                   /* roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
-                    Room tmpRoom = Instantiate(rooms[i], roomWorldPos, Quaternion.identity, roomsParent) as Room;
-                    tmpRoom.transform.GetChild(0).GetComponent<UnityEngine.TileMap.TileMap>().color = Color.red;*/
-
-                    if (RoomHasPlace(nextRoomPos, nextRoomPos + randomRoom.size)) {
-                       // Destroy(tmpRoom.gameObject);
-
+                   if(RoomHasPlace(nextRoomPos, nextRoomPos + randomRoom.size)) {
                         previousRoom.exits[previousExitIndex].connected = true;
                         currentRoomsNb++;
                         roomPos.Set(nextRoomPos.x, nextRoomPos.y);
@@ -133,17 +126,13 @@ public class DungeonGenerator : MonoBehaviour {
                         GetUnconnectedExit();
                         return;
                     }
-
-                    /*else {
-                        yield return new WaitForSeconds(secondsBetweenInstanciation);
-                        Destroy(tmpRoom.gameObject);
-                    }*/
                 }
             }
 
             roomsToCheck.Remove(i);
         }
 
+        Debug.Log("NOT FOUND");
         GetUnconnectedExit();
     }
 
@@ -175,20 +164,27 @@ public class DungeonGenerator : MonoBehaviour {
     }
 
     private void GetUnconnectedExit() {
-        List<int> exitsTocheck = new List<int>();
-        exitsTocheck.AddRange(System.Linq.Enumerable.Range(0, previousRoom.exits.Count));
-        while (exitsTocheck.Count > 0) {
-            previousExitIndex = exitsTocheck[Random.Range(0, exitsTocheck.Count)];
-            Exit exit = previousRoom.exits[previousExitIndex];
-            int x = (int)(roomPos.x + exit.pos.x);
-            int y = (int)(roomPos.y + exit.pos.y);
-            exit.connected = x < 0 || x >= world.worldSize.x || y < 0 || y >= world.worldSize.y || world.map[x, y].hasRoom;
-            if (!previousRoom.exits[previousExitIndex].connected) {
-                return;
-            }
+        cpt++;
+        if(cpt < 50) {
+            List<int> exitsTocheck = new List<int>();
+            exitsTocheck.AddRange(System.Linq.Enumerable.Range(0, previousRoom.exits.Count));
+            while (exitsTocheck.Count > 0) {
+                previousExitIndex = exitsTocheck[Random.Range(0, exitsTocheck.Count)];
+                Exit exit = previousRoom.exits[previousExitIndex];
+                int x = (int)(roomPos.x + exit.pos.x);
+                int y = (int)(roomPos.y + exit.pos.y);
+                exit.connected = x < 0 || x >= world.worldSize.x || y < 0 || y >= world.worldSize.y || world.map[x, y].hasRoom;
+                if (!exit.connected) {
+                    return;
+                }
 
-            exitsTocheck.Remove(previousExitIndex);
+                exitsTocheck.Remove(previousExitIndex);
+            }
         }
+        else {
+            Debug.LogError("MAX UNCONNECTED");
+            Debug.Break();
+        } 
 
         ReturnToPreviousRoom();
         if(graphRooms.Count > 1)
