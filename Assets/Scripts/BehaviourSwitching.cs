@@ -11,48 +11,48 @@ public class BehaviourSwitch {
 
 public class BehaviourSwitching : MonoBehaviour {
 
-    public float reactionTime = 1f;
+    public float reactionDuration = 1f;
     public List<BehaviourSwitch> behavioursToSwitch;
 
     private Transform _transform;
-    private Transform player;
     private bool isIdle = true;
-    private float targetDistance;
-    private Renderer render;
+    private float reactionTimer;
+    private bool isReactionStarted = false;
 
 	// Use this for initialization
 	void Start () {
         _transform = GetComponent<Transform>();
-        render = GetComponent<Renderer>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
 
         SwitchBehaviour();
     }
 	
     void OnBecameVisible () {
-        StopCoroutine("FoundTarget"); //TODO: Check if having a timer in Update is more optimized
-        StartCoroutine("FoundTarget");
+        VisibilityChanged(true);
     }
 
     void OnBecameInvisible () {
-        StopCoroutine("LostTarget");
-        StartCoroutine("LostTarget");
+        VisibilityChanged(false);
     }
 
-    IEnumerator FoundTarget() {
-        yield return new WaitForSeconds(reactionTime);
-        if (render.isVisible) {
-            isIdle = false;
-            SwitchBehaviour();
+    private void VisibilityChanged(bool isVisible) {
+        isIdle = !isVisible;
+        reactionTimer = reactionDuration;
+
+        if (!isReactionStarted && gameObject.activeSelf) {
+            StartCoroutine(ReactionDelay());
         }
     }
 
-    IEnumerator LostTarget() {
-        yield return new WaitForSeconds(reactionTime);
-        if(!render.isVisible) {
-            isIdle = true;
-            SwitchBehaviour();
+    IEnumerator ReactionDelay() {
+        isReactionStarted = true;
+
+        while (reactionTimer > 0) {
+            reactionTimer -= Time.deltaTime;
+            yield return null;
         }
+
+        SwitchBehaviour();
+        isReactionStarted = false;
     }
 
     private void SwitchBehaviour() {
