@@ -31,6 +31,7 @@ public class Score : MonoBehaviour {
         combo = Mathf.Min(maxCombo, combo+1);
         comboDownTimer = comboDownInterval;
         ScoreUI.instance.UpdateScore(score);
+        ScoreUI.instance.UpdateCombo(combo);
     }
 
     public void PlayerHit() {
