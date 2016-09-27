@@ -6,8 +6,12 @@ public class Enemy : MonoBehaviour {
 
     public float meleeDamage;
     public float life;
-    public float hitFeedbakcDuration;
     public float score;
+
+    [SerializeField]
+    private float hitFeedbakcDuration;
+    [SerializeField]
+    private float spriteTintDuration = 0.16f;
 
     private World world;
     private SpriteRenderer spriteRender;
@@ -41,21 +45,30 @@ public class Enemy : MonoBehaviour {
 
     IEnumerator hitFeedback() {
         float timer = hitFeedbakcDuration;
+
+        StartCoroutine("TintSprite");
         while(timer > 0) {
-            spriteRender.color = Color.red;
-            yield return null;
             timer -= Time.deltaTime;
-            spriteRender.color = Color.white;
             yield return null;
-            timer -= Time.deltaTime;
         }
+        StopCoroutine("TintSprite");
 
         spriteRender.color = initialColor;
+    }
+
+    IEnumerator TintSprite() {
+        while(true) {
+            spriteRender.color = Color.red;
+            yield return new WaitForSeconds(spriteTintDuration);
+            spriteRender.color = Color.white;
+            yield return new WaitForSeconds(spriteTintDuration);
+        }
     }
 
     IEnumerator LifeUpdate() {
         while(true) {
             if(life <= 0) {
+                StopCoroutine("TintSprite");
                 StopCoroutine("hitFeedback");
 
                 anim.SetTrigger("Death");
