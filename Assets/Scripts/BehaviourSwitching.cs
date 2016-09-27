@@ -27,7 +27,7 @@ public class BehaviourSwitching : MonoBehaviour {
     }
 	
     void OnBecameVisible () {
-        //VisibilityChanged(true);
+        VisibilityChanged(true);
     }
 
     void OnBecameInvisible () {
@@ -38,7 +38,7 @@ public class BehaviourSwitching : MonoBehaviour {
         isIdle = !isVisible;
         reactionTimer = reactionDuration;
 
-        if (!isReactionStarted && gameObject.activeSelf) {
+        if (!isReactionStarted && gameObject.activeInHierarchy) {
             StartCoroutine(ReactionDelay());
         }
     }
