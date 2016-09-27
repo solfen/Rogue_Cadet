@@ -27,7 +27,7 @@ public class BehaviourSwitching : MonoBehaviour {
     }
 	
     void OnBecameVisible () {
-        VisibilityChanged(true);
+        //VisibilityChanged(true);
     }
 
     void OnBecameInvisible () {

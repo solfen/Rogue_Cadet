@@ -23,6 +23,12 @@ public class BossRoom {
     public bool canPop = true;
 }
 
+public class GraphRoom {
+    public Vector2 pos = new Vector2();
+    public List<GraphRoom> roomsConnected;
+    public Room roomPrefab { get; set; }
+}
+
 public class DungeonGenerator : MonoBehaviour {
 
     public List<Transform> roomsParent;
@@ -35,22 +41,31 @@ public class DungeonGenerator : MonoBehaviour {
     public float secondsBetweenInstanciation = 2;
 
     private World world;
-    private Room previousRoom;
-    private List<Room> graphRooms = new List<Room>();
-    private int previousExitIndex;
-    private int previousZoneIndex = 0;
-    private Vector2 roomPos = Vector3.zero;
-    private Vector2 nextRoomPos = Vector3.zero;
-    private Vector3 roomWorldPos;
+    private GraphRoom currentRoom;
+    private Exit currentExit;
+    private List<GraphRoom> graph;
+    private List<GraphRoom> firstDepthGrag;
+    private int currentZoneIndex;
     private int currentRoomsNb;
-    private bool deadEndAdded = false;
+    private Vector2 nextRoomPos = Vector3.zero;
+    private Vector3 roomWorldPos = new Vector3();
+    private bool deadEndAdded;
     private List<RoomList> roomList;
+    private IEnumerable<int> roomListIndexes;
 
     // Use this for initialization
-    void Start () {
+    void Start() {
         world = World.instance;
-        roomPos = startingPos;
-        roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
+
+        float time = Time.realtimeSinceStartup;
+        CreateRoomGraph();
+        Debug.Log(Time.realtimeSinceStartup - time);
+
+        StartCoroutine(InstantiateRooms());
+    }
+
+    private void CreateRoomGraph() {
+        world.InitMap();
 
         for (int i = 0; i < bossRooms.Count; i++) {
             if (world.isNewGame) {
@@ -59,45 +74,53 @@ public class DungeonGenerator : MonoBehaviour {
             bossRooms[i].canPop = PlayerPrefs.GetInt("Defeated_Boss" + i) == 0;
         }
 
-        previousRoom = Instantiate(startingRoom, roomWorldPos, Quaternion.identity, roomsParent[previousZoneIndex]) as Room;
-        graphRooms.Add(previousRoom);
-        previousExitIndex = 0; //assumes that the starting room only has one exit
-        MarkMapWithRoom(roomPos, roomPos + previousRoom.size);
+        graph = new List<GraphRoom>((int)(world.worldSize.x * world.worldSize.y));
+        firstDepthGrag = new List<GraphRoom>((int)(world.worldSize.x * world.worldSize.y));
+        currentZoneIndex = 0;
+        currentRoomsNb = 0;
+        deadEndAdded = false;
 
-        StartCoroutine(Generation());
+        CreateRoom(startingPos, startingRoom);
+        currentExit = currentRoom.roomPrefab.exits[0]; //assumes that the starting room only has one exit
+
+        GenerateGraph();
+
+       /*if(!AddBosses()) {
+            CreateRoomGraph();
+        }*/
     }
 
-    IEnumerator Generation() {
-        //float time = Time.realtimeSinceStartup;
+    private void GenerateGraph() {
         do {
-           if (secondsBetweenInstanciation > 0)
-                yield return new WaitForSeconds(secondsBetweenInstanciation);
-
            if(!deadEndAdded && currentRoomsNb >= minRoomsBeforeDeadEnd) {
                 deadEndAdded = true;
                 zoneRooms.AddRange(deadEndRooms);
             }
 
-            GetNextZone((int)(roomPos.x + previousRoom.exits[previousExitIndex].pos.x), (int)(roomPos.y + previousRoom.exits[previousExitIndex].pos.y));
+            GetNextZone((int)(currentRoom.pos.x + currentExit.pos.x), (int)(currentRoom.pos.y + currentExit.pos.y));
             GenerateRoom();
 
-        } while (graphRooms.Count > 1);
-
-        AddBosses();
-
-        yield return null;
-        //Debug.Log(Time.realtimeSinceStartup - time);
+        } while (firstDepthGrag.Count != 1);
     }
-       
+    
+    IEnumerator InstantiateRooms() {
+        for (int i = 0; i < graph.Count; i++) {
+            roomWorldPos.Set(graph[i].pos.x * world.roomBaseSize.x, graph[i].pos.y * world.roomBaseSize.y, 0);
+            Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[world.map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]);
 
+            if (secondsBetweenInstanciation > 0) {
+                yield return new WaitForSeconds(secondsBetweenInstanciation);
+            }
+        }
+    }
     private void GenerateRoom() {
         List<int> roomsToCheck = new List<int>();
-        roomsToCheck.AddRange(System.Linq.Enumerable.Range(0, roomList.Count)); // so that we have a list like [0,1,2,3 ... count-1]
+        roomsToCheck.AddRange(roomListIndexes); 
         while(roomsToCheck.Count > 0) {
             int i = roomsToCheck[Random.Range(0, roomsToCheck.Count)];
-            Room randomRoom = roomList[i].rooms[Random.Range(0, roomList[i].rooms.Count)];
+            Room randomRoom = roomList[i].rooms[Random.Range(0, roomList[i].rooms.Count)]; //misleading name. it's a random configuration of the same Room type
             for (int j = 0; j < randomRoom.exits.Count; j++) {
-                if (randomRoom.exits[j].dir * -1 == previousRoom.exits[previousExitIndex].dir) {
+                if (randomRoom.exits[j].dir * -1 == currentExit.dir) {
                     // ok it's complicated. I'm pretty sure there's an easier way to do that.
                     // basicly it set the new pos of the room. Since the previous room exit gives the possition of the next room it should be easy right? WRONG
                     // because I have to take into acount the offset of the chosen exit of the new room
@@ -107,20 +130,14 @@ public class DungeonGenerator : MonoBehaviour {
                     // now I can do a simple substraction and get the offset!
                     // man I really suck at those things...
 
-                    nextRoomPos.x = roomPos.x + previousRoom.exits[previousExitIndex].pos.x - ((previousRoom.exits[previousExitIndex].pos.x + randomRoom.exits[j].pos.x) - (previousRoom.exits[previousExitIndex].pos.x - 1 * previousRoom.exits[previousExitIndex].dir.x)); 
-                    nextRoomPos.y = roomPos.y + previousRoom.exits[previousExitIndex].pos.y - ((previousRoom.exits[previousExitIndex].pos.y + randomRoom.exits[j].pos.y) - (previousRoom.exits[previousExitIndex].pos.y - 1 * previousRoom.exits[previousExitIndex].dir.y));
+                    nextRoomPos.x = currentRoom.pos.x + currentExit.pos.x - ((currentExit.pos.x + randomRoom.exits[j].pos.x) - (currentExit.pos.x - 1 * currentExit.dir.x)); 
+                    nextRoomPos.y = currentRoom.pos.y + currentExit.pos.y - ((currentExit.pos.y + randomRoom.exits[j].pos.y) - (currentExit.pos.y - 1 * currentExit.dir.y));
 
-                   if(RoomHasPlace(nextRoomPos, nextRoomPos + randomRoom.size)) {
-                        previousRoom.exits[previousExitIndex].connected = true;
-                        currentRoomsNb++;
-                        roomPos.Set(nextRoomPos.x, nextRoomPos.y);
-                        MarkMapWithRoom(roomPos, roomPos + randomRoom.size);
+                   if(RoomHasPlace(nextRoomPos, randomRoom.size)) {
+                        CreateRoom(nextRoomPos, randomRoom);
 
-                        roomWorldPos.Set(roomPos.x * world.roomBaseSize.x, roomPos.y * world.roomBaseSize.y, 0);
-                        previousRoom = Instantiate(randomRoom, roomWorldPos, Quaternion.identity, roomsParent[previousZoneIndex]) as Room;
-                        previousRoom.pos.Set(roomPos.x, roomPos.y);
-                        previousRoom.exits[j].connected = true;
-                        graphRooms.Add(previousRoom);
+                        currentRoom.roomsConnected.Add(firstDepthGrag[firstDepthGrag.Count - 2]);
+                        firstDepthGrag[firstDepthGrag.Count - 2].roomsConnected.Add(currentRoom);
 
                         GetUnconnectedExit();
                         return;
@@ -131,38 +148,45 @@ public class DungeonGenerator : MonoBehaviour {
             roomsToCheck.Remove(i);
         }
 
-        previousRoom.exits[previousExitIndex].connected = true;
+        world.map[(int)(currentRoom.pos.x + currentExit.pos.x), (int)(currentRoom.pos.y + currentExit.pos.y)].notBuildableFlag = true;
         GetUnconnectedExit();
     }
 
-    private void AddBosses() { //WILL be changed
+    private void CreateRoom(Vector2 pos, Room roomPrefab) {
+        currentRoom = new GraphRoom();
+        currentRoom.pos.Set(pos.x, pos.y);
+        currentRoom.roomsConnected = new List<GraphRoom>(roomPrefab.exits.Count);
+        currentRoom.roomPrefab = roomPrefab;
+        graph.Add(currentRoom);
+        firstDepthGrag.Add(currentRoom);
+        MarkMapWithRoom(pos, roomPrefab.size);
+        currentRoomsNb++;
+    }
+
+    private bool AddBosses() { //WILL be changed
         for (int i = 0; i < bossRooms.Count; i++) {
             if (!bossRooms[i].canPop) {
                 continue;
             }
 
-            Room[] rooms = roomsParent[bossRooms[i].zoneIndex].GetComponentsInChildren<Room>();
-            int index = FindBossRoom(i, rooms);
+            int index = FindBossRoom(i);
             if(index != -1) {
                 Destroy(rooms[index].enemiesParent.gameObject);
                 GameObject boss = Instantiate(bossRooms[i].boss, rooms[index].transform, false) as GameObject;
                 boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
                 bossRooms[i].canPop = false;
             }
-            else if(bossRooms[i].roomSize.x > 1) {
-                bossRooms[i].roomSize.x = 1;
-                i--;
-            }
             else {
-                Application.LoadLevel(0);
-                return;
+                return false;
             }
         }
+
+        return true;
     }
 
-    private int FindBossRoom(int i, Room[] rooms) {
-        for (int j = 0; j < rooms.Length; j++) {
-            if (rooms[j].size == bossRooms[i].roomSize) {
+    private int FindBossRoom(int i) {
+        for (int j = 0; j < graph.Count; j++) {
+            if (world.map[(int)graph[j].pos.x, (int)graph[j].pos.y].zoneType == bossRooms[i].zoneIndex && graph[j].roomPrefab.size == bossRooms[i].roomSize) {
                 return j;
             }
         }
@@ -170,49 +194,67 @@ public class DungeonGenerator : MonoBehaviour {
         return -1;
     }
 
-    private void GetNextZone(int x, int y) {   
+    private void GetNextZone(int x, int y) {
         if (x >= 0 && x < world.worldSize.x && y >= 0 && y < world.worldSize.y) {
-            previousZoneIndex = world.map[x, y].zoneType;
-            roomList = zoneRooms[previousZoneIndex].roomList;
+            currentZoneIndex = world.map[x, y].zoneType;
+            roomList = zoneRooms[currentZoneIndex].roomList;
+            roomListIndexes = System.Linq.Enumerable.Range(0, roomList.Count); // so that we have a list like [0,1,2,3 ... count-1]
         }
     }
 
     private void GetUnconnectedExit() {
 
         List<int> exitsTocheck = new List<int>();
-        exitsTocheck.AddRange(System.Linq.Enumerable.Range(0, previousRoom.exits.Count));
+        exitsTocheck.AddRange(System.Linq.Enumerable.Range(0, currentRoom.roomPrefab.exits.Count));
         while (exitsTocheck.Count > 0) {
-            previousExitIndex = exitsTocheck[Random.Range(0, exitsTocheck.Count)];
-            Exit exit = previousRoom.exits[previousExitIndex];
-            int x = (int)(roomPos.x + exit.pos.x);
-            int y = (int)(roomPos.y + exit.pos.y);
-            exit.connected = exit.connected || x < 0 || x >= world.worldSize.x || y < 0 || y >= world.worldSize.y || world.map[x, y].hasRoom;
-            if (!exit.connected) {
-                return;
+            int selectedIndex = exitsTocheck[Random.Range(0, exitsTocheck.Count)];
+            currentExit = currentRoom.roomPrefab.exits[selectedIndex];
+            int x = (int)(currentRoom.pos.x + currentExit.pos.x);
+            int y = (int)(currentRoom.pos.y + currentExit.pos.y);
+
+            if(x >= 0 && x < world.worldSize.x && y >= 0 && y < world.worldSize.y && !world.map[x, y].notBuildableFlag) {
+                GraphRoom nextRoom = world.map[x, y].room;
+                if (nextRoom == null) {
+                    return;
+                }
+                else if(!currentRoom.roomsConnected.Contains(nextRoom) || !nextRoom.roomsConnected.Contains(currentRoom)) {
+                    int wantedExitPosX = x + (int)currentExit.dir.x * - 1;
+                    int wantedExitPosY = y + (int)currentExit.dir.y * - 1;
+                    
+                    for(int i = 0; i < nextRoom.roomPrefab.exits.Count; i++) {
+                        int exitX = (int)(nextRoom.pos.x + nextRoom.roomPrefab.exits[i].pos.x);
+                        int exitY = (int)(nextRoom.pos.y + nextRoom.roomPrefab.exits[i].pos.y);
+
+                        if(wantedExitPosX == exitX && wantedExitPosY == exitY) {
+                            currentRoom.roomsConnected.Add(nextRoom);
+                            nextRoom.roomsConnected.Add(currentRoom);
+                        }
+                    }
+                }
             }
 
-            exitsTocheck.Remove(previousExitIndex);
+            exitsTocheck.Remove(selectedIndex);
         }
 
         ReturnToPreviousRoom();
-        if(graphRooms.Count > 1)
+        if(firstDepthGrag.Count > 1)
             GetUnconnectedExit();
     }
 
     private void ReturnToPreviousRoom() {
-        graphRooms.Remove(previousRoom);
-        if(graphRooms.Count > 1) {
-            previousRoom = graphRooms[graphRooms.Count - 1];
-            roomPos.Set(previousRoom.pos.x, previousRoom.pos.y);
+        firstDepthGrag.Remove(currentRoom);
+        if (firstDepthGrag.Count > 1) {
+            currentRoom = firstDepthGrag[firstDepthGrag.Count - 1];
         }
     }
 
-    private bool RoomHasPlace(Vector2 posStart, Vector2 posEnd) {
+    private bool RoomHasPlace(Vector2 posStart, Vector2 size) {
+        Vector2 posEnd = posStart + size;
         for (int x = (int)posStart.x; x < posEnd.x; x++) {
             for (int y = (int)posStart.y; y < posEnd.y; y++) {
                 if(x < 0 || x >= world.worldSize.x
                 || y < 0 || y >= world.worldSize.y
-                || world.map[x, y].hasRoom) {
+                || world.map[x, y].room != null) {
                     return false;
                 }
             }
@@ -221,10 +263,11 @@ public class DungeonGenerator : MonoBehaviour {
         return true;
     }
 
-    private void MarkMapWithRoom(Vector2 posStart, Vector2 posEnd) {
+    private void MarkMapWithRoom(Vector2 posStart, Vector2 size) {
+        Vector2 posEnd = posStart + size;
         for (int x = (int)posStart.x; x < posEnd.x; x++) {
             for (int y = (int)posStart.y; y < posEnd.y; y++) {
-                world.map[x, y].hasRoom = true;
+                world.map[x, y].room = currentRoom;
             }
         }
     }

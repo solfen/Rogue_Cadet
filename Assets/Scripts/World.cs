@@ -14,7 +14,8 @@ public class Zone {
 [System.Serializable]
 public class Sector {
     public int zoneType;
-    public bool hasRoom;
+    public bool notBuildableFlag = false;
+    public GraphRoom room;
 }
 
 public class World : MonoBehaviour {
@@ -38,30 +39,32 @@ public class World : MonoBehaviour {
         instance = this;
 
         //roomBaseSize = new Vector2(Camera.main.orthographicSize * 2 * Camera.main.aspect, Camera.main.orthographicSize * 2);
+        InitMap();
+        worldUnitysize.Set(worldSize.x * backgroundSize.x, worldSize.y * backgroundSize.y);
 
+        //TODO: check if map has null sectors.
+    }
+
+    public void InitMap() {
         map = new Sector[(int)worldSize.x, (int)worldSize.y];
 
-        for(int i = 0; i < zones.Count; i++) {
-            for(int j = 0; j < zones[i].size.x; j++) {
-                for(int k = 0; k < zones[i].size.y; k++) {
+        for (int i = 0; i < zones.Count; i++) {
+            for (int j = 0; j < zones[i].size.x; j++) {
+                for (int k = 0; k < zones[i].size.y; k++) {
                     Sector currentSector = new Sector();
                     currentSector.zoneType = i;
 
-                    int x = ((int)zones[i].position.x) +j;
+                    int x = ((int)zones[i].position.x) + j;
                     int y = ((int)zones[i].position.y) + k;
-                    if(x >= worldSize.x || y >= worldSize.y) {
+                    if (x >= worldSize.x || y >= worldSize.y) {
                         Debug.LogError("ERROR: zone " + zones[i].name + " bigger than world");
                         return;
                     }
 
-                    map[x,y] = currentSector;
+                    map[x, y] = currentSector;
                 }
             }
         }
-
-        worldUnitysize.Set(worldSize.x * backgroundSize.x, worldSize.y * backgroundSize.y);
-
-        //TODO: check if map has null sectors.
     }
 
 }

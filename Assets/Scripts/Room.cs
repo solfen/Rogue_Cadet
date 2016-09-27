@@ -6,8 +6,6 @@ using UnityEngine;
 public class Exit {
     public Vector2 pos;
     public Vector2 dir;
-    [HideInInspector]
-    public bool connected = false;
 }
 
 public class Room : MonoBehaviour {
