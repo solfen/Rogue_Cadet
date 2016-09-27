@@ -28,10 +28,6 @@ public class Enemy : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if(life <= 0) {
-            return;
-        }
-
         if (other.tag == "Player") {
             life -= other.GetComponent<Player>().meleeDamage;
             StartCoroutine("hitFeedback");
@@ -75,6 +71,7 @@ public class Enemy : MonoBehaviour {
                 spriteRender.color = Color.white;
                 world.enemies.Remove(this);
                 world.Score.KilledEnemy(this);
+                GetComponent<Rigidbody2D>().simulated = false; //remove from physics
                 Destroy(gameObject, 0.4f);
 
                 StopCoroutine("LifeUpdate");
