@@ -163,7 +163,7 @@ public class DungeonGenerator : MonoBehaviour {
         currentRoomsNb++;
     }
 
-    private bool AddBosses() { //WILL be changed
+    /*private bool AddBosses() { //WILL be changed
         for (int i = 0; i < bossRooms.Count; i++) {
             if (!bossRooms[i].canPop) {
                 continue;
@@ -171,8 +171,8 @@ public class DungeonGenerator : MonoBehaviour {
 
             int index = FindBossRoom(i);
             if(index != -1) {
-                Destroy(rooms[index].enemiesParent.gameObject);
-                GameObject boss = Instantiate(bossRooms[i].boss, rooms[index].transform, false) as GameObject;
+               // Destroy(rooms[index].enemiesParent.gameObject);
+                //GameObject boss = Instantiate(bossRooms[i].boss, rooms[index].transform, false) as GameObject;
                 boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
                 bossRooms[i].canPop = false;
             }
@@ -182,7 +182,7 @@ public class DungeonGenerator : MonoBehaviour {
         }
 
         return true;
-    }
+    }*/
 
     private int FindBossRoom(int i) {
         for (int j = 0; j < graph.Count; j++) {
