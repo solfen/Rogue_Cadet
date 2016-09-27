@@ -9,14 +9,20 @@ public class Bullet : MonoBehaviour {
 
     private Vector3 direction;
     private Transform _transform;
+    //private Rigidbody2D _rigidbody;
 
 	void Start () {
         _transform = GetComponent<Transform>();
+        //_rigidbody = GetComponent<Rigidbody2D>();
     }
 
     void Update() {
         _transform.position += direction * speed * Time.deltaTime;
     }
+
+   /* void FixedUpdate() {
+        _rigidbody.MovePosition(_rigidbody.position + direction * speed * Time.deltaTime);
+    }*/
 
     void OnBecameInvisible() {
         Destroy(gameObject);
