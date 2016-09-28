@@ -15,10 +15,11 @@ public class Player : MonoBehaviour {
 
     private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
-    private Vector3 newPos;
     private Animator anim;
     private SpriteRenderer spriteRender;
     private bool isDead = false;
+    private GraphRoom currentRoom;
+    private GraphRoom newRoom;
 
     private float invincibiltyTimer;
 
@@ -36,6 +37,12 @@ public class Player : MonoBehaviour {
     void FixedUpdate() {
         Turn();
         Move();
+
+        newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
+        if(newRoom != currentRoom) {
+            MiniMap.instance.OnPlayerEnterRoom(newRoom);
+        }
+        currentRoom = newRoom;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -78,7 +85,6 @@ public class Player : MonoBehaviour {
         direction.y = -Input.GetAxisRaw("Vertical2");
 
         if(direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
-            //_rigidBody.MoveRotation(Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle);
             _rigidBody.rotation = Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle;
         }
     }

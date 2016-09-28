@@ -61,6 +61,7 @@ public class DungeonGenerator : MonoBehaviour {
         CreateRoomGraph();
         Debug.Log(Time.realtimeSinceStartup - time);
 
+        MiniMap.instance.OnGraphCreated(graph);
         StartCoroutine(InstantiateRooms());
     }
 
