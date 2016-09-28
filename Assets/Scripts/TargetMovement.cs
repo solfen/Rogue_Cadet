@@ -9,16 +9,18 @@ public class TargetMovement : BaseMovement {
 
     private Transform player;
     private Vector3 currentDir;
-    private Vector3 intialDir;
     private float initalSpeed = 0;
+    private Quaternion offset;
 	
     void OnEnable() {
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
+        offset = Quaternion.Euler(0, 0, angleOffset);
         currentDir = player.position - transform.position;
-        currentDir = Quaternion.Euler(0, 0, angleOffset) * currentDir;
+        currentDir = offset * currentDir;
+        currentDir.Normalize();
 
-        if(initalSpeed == 0) {
+        if (initalSpeed == 0) {
             initalSpeed = speed;
         }
         speed = initalSpeed;
@@ -31,11 +33,12 @@ public class TargetMovement : BaseMovement {
 
         if (updateDir) {
             currentDir = player.position - _transform.position;
-            currentDir = Quaternion.Euler(0, 0, angleOffset) * currentDir;
+            currentDir = offset * currentDir;
+            currentDir.Normalize();
         }
 
         _transform.up = -(player.position - _transform.position); // "hack" to make it face the player
-        _transform.position += currentDir.normalized * speed * Time.deltaTime;
+        _transform.position += currentDir * speed * Time.deltaTime;
     }
 
     void OnTriggerEnter2D(Collider2D other) {

@@ -54,7 +54,6 @@ public class Player : MonoBehaviour {
             case "Bullet":
                 Damage(other.gameObject.GetComponent<Bullet>().damage);
             break;
-
         }
 
         World.instance.Score.PlayerHit();
