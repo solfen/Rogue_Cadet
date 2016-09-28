@@ -11,9 +11,11 @@ public class DeathScreen : MonoBehaviour {
     [SerializeField]
     private int levelToLoad = 1;
     private Animator anim;
+    private AudioSource sound;
 
     void Awake() {
         instance = this;
+        sound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         anim.enabled = false;
     }
@@ -30,5 +32,6 @@ public class DeathScreen : MonoBehaviour {
         float score = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), World.instance.Score.score);
         PlayerPrefs.SetFloat("HighScore", score);
         highScore.text = "High score: " + score;
+        sound.Play();
     }
 }

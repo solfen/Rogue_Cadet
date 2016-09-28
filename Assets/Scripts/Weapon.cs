@@ -17,6 +17,7 @@ public class Weapon : MonoBehaviour {
     public float shotInterval = 0.25f;
     public float damageMultiplier = 1;
     public List<ShotConfig> bullets = new List<ShotConfig>();
+    public AudioSource sound;
 
     private bool isTriggerd = false;
     private float timer;
@@ -33,6 +34,10 @@ public class Weapon : MonoBehaviour {
             for(int i = 0; i < bullets.Count; i++) {
                 Bullet bullet = Instantiate(bullets[i].bulletPrefab, bullets[i].origin.position, Quaternion.Euler(0, 0, bullets[i].angle-90)) as Bullet;
                 bullet.Init(bullets[i].origin.rotation.eulerAngles.z + bullets[i].angle, bullets[i].targetPlayer ? player : null, damageMultiplier);
+            }
+
+            if(sound != null) {
+                sound.Play();
             }
 
             timer = shotInterval;
