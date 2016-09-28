@@ -12,19 +12,21 @@ public class Enemy : MonoBehaviour {
     private float hitFeedbakcDuration;
     [SerializeField]
     private float spriteTintDuration = 0.16f;
+    [SerializeField]
+    private GenericSoundsEnum explosionSound;
+    [SerializeField]
+    private Collectible drop;
 
     private World world;
     private SpriteRenderer spriteRender;
     private Animator anim;
     private Color initialColor;
-    private AudioSource explosion;
 
     void Start() {
         world = World.instance;
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
-        explosion = GetComponent<AudioSource>();
         world.enemies.Add(this);
         StartCoroutine("LifeUpdate");
     }
@@ -72,8 +74,9 @@ public class Enemy : MonoBehaviour {
                 anim.SetTrigger("Death");
                 spriteRender.color = Color.white;
                 GetComponent<Rigidbody2D>().simulated = false; //remove from physics
-                if(explosion != null) {
-                    explosion.Play();
+                SoundManager.instance.PlaySound(explosionSound);
+                if(drop != null) {
+                    drop.Pop();
                 }
 
                 world.enemies.Remove(this);
