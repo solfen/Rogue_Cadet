@@ -39,4 +39,8 @@ public class Score : MonoBehaviour {
         comboDownTimer = comboDownInterval;
         ScoreUI.instance.UpdateCombo(combo);
     }
+
+    public void CollectibleTaken(float value) {
+        score += value;
+    }
 }
