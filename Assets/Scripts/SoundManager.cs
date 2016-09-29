@@ -6,7 +6,9 @@ public enum GenericSoundsEnum {
     COIN_PICKUP,
     EXPLOSION_1,
     EXPLOSION_2,
-    EXPLOSION_3
+    EXPLOSION_3,
+    ERROR,
+    ACTIVATE
 }
 
 [System.Serializable]

@@ -23,12 +23,16 @@ public class SpecialPower : MonoBehaviour {
 	void Update () {
         coolDownTimer -= Time.deltaTime;
 
-        if (coolDownTimer < 0 && mana >= manaCost && Input.GetButtonDown("SpecialPower")) {
-            power.Activate();
-            coolDownTimer = coolDownDuration;
-            mana -= manaCost;
-            Debug.Log("caca");
-            PowerUI.instance.OnUsePower(this);
+        if(Input.GetButtonDown("SpecialPower")) {
+            if (coolDownTimer < 0 && mana >= manaCost) {
+                power.Activate();
+                coolDownTimer = coolDownDuration;
+                mana -= manaCost;
+                PowerUI.instance.OnUsePower(this);
+            }
+            else {
+                SoundManager.instance.PlaySound(GenericSoundsEnum.ERROR);
+            }
         }
 	}
 }

@@ -33,5 +33,6 @@ public class PowerUI : MonoBehaviour {
         }
 
         specialLoad.value = 1;
+        SoundManager.instance.PlaySound(GenericSoundsEnum.ACTIVATE);
     }
 }
