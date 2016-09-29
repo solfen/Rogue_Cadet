@@ -34,9 +34,15 @@ public class World : MonoBehaviour {
     public List<Enemy> enemies;
     [HideInInspector]
     public Score Score;
+    public List<Weapon> weapons;
+    public List<GameObject> bombs; 
 
     void Awake() {
         instance = this;
+
+        if (isNewGame) {
+            PlayerPrefs.DeleteAll();
+        }
 
         //roomBaseSize = new Vector2(Camera.main.orthographicSize * 2 * Camera.main.aspect, Camera.main.orthographicSize * 2);
         InitMap();

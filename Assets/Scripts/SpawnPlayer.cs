@@ -9,7 +9,7 @@ public class SpawnPlayer : MonoBehaviour {
 
     void Awake () {
         if(GameObject.FindGameObjectWithTag("Player") == null) {
-            string currentType = PlayerPrefs.GetString("selectedShip", "Barbarian");
+            string currentType = PlayerPrefs.GetString("selectedShip", "Knight");
             for (int i = 0; i < shipTypesList.Count; i++) {
                 if(shipTypesList[i].typeName == currentType) {
                     Instantiate(shipTypesList[i]);

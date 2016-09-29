@@ -15,6 +15,9 @@ public class Player : MonoBehaviour {
     public Vector2 hitboxPos;
     public Vector2 hitboxSize;
 
+    public float hitboxUpgradeSizeReduce;
+    public float lifeUpgradeRaise;
+
     private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
     private Animator anim;
@@ -23,14 +26,25 @@ public class Player : MonoBehaviour {
     private GraphRoom currentRoom;
     private GraphRoom newRoom;
     private BoxCollider2D _collider;
+    private Color initalColor;
 
     private float invincibiltyTimer;
 
     void Start() {
+        //Mana_Upgrade 
+        hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
+        maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
+
+        if(PlayerPrefs.HasKey("Equiped_Bomb")) {
+            Instantiate(World.instance.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
+        }
+        Instantiate(World.instance.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
+
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
+        initalColor = spriteRender.color;
         life = maxLife;
         _collider.offset = hitboxPos;
         _collider.size = hitboxSize;
@@ -47,7 +61,9 @@ public class Player : MonoBehaviour {
         newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
         if(newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
-            PowerBomb.instance.OnPlayerEnterRoom(newRoom);
+            if(PowerBomb.instance != null) {
+                PowerBomb.instance.OnPlayerEnterRoom(newRoom);
+            }
         }
         currentRoom = newRoom;
     }
@@ -102,13 +118,13 @@ public class Player : MonoBehaviour {
 
         invincibiltyTimer -= Time.deltaTime;
         if (invincibiltyTimer < 0) {
-            spriteRender.color = Color.white;
+            spriteRender.color = initalColor;
         }
     }
 
     private void Die() {
         anim.SetTrigger("Death");
-        spriteRender.color = Color.white;
+        spriteRender.color = initalColor;
         isDead = true;
         DeathScreen.instance.OnPlayerDeath();
         Destroy(gameObject, 0.4f);

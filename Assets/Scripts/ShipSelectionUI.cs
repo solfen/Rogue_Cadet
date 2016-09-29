@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class ShipSelectionUI : MonoBehaviour {
 
-    public Test test;
+    public GameObject firstUpgradeItem;
+    public EventSystem eventSystem;
+    public ShopUI shopUI;
 
     [SerializeField]
     private Animator transitionAnimator;
@@ -24,17 +27,17 @@ public class ShipSelectionUI : MonoBehaviour {
         for (int i = 0; i < shipTypesList.Count; i++) {
             ships.Add(shipTypesList[i].typeName, shipTypesList[i]);
         }
-
-        test.test = "caca";
     }
 	
     public void SelectShip(string name) {
         selectedShip = ships[name];
-        statText.text = "Health: " + selectedShip.maxLife + " / Attack: x" + selectedShip.GetComponentInChildren<Weapon>().damageMultiplier;
+        statText.text = "Health: " + selectedShip.maxLife /*+ " / Attack: x" + selectedShip.GetComponentInChildren<Weapon>().damageMultiplier*/;
     }
 
     public void ValidateSelection() {
+        shopUI.enabled = true;
         PlayerPrefs.SetString("selectedShip", selectedShip.typeName);
         transitionAnimator.SetTrigger("Transition");
+        eventSystem.SetSelectedGameObject(firstUpgradeItem);
     }
 }

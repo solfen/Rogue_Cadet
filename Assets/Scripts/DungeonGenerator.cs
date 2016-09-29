@@ -70,9 +70,6 @@ public class DungeonGenerator : MonoBehaviour {
         world.InitMap();
 
         for (int i = 0; i < bossRooms.Count; i++) {
-            if (world.isNewGame) {
-                PlayerPrefs.SetInt("Defeated_Boss" + i, 0);
-            }
             bossRooms[i].canPop = PlayerPrefs.GetInt("Defeated_Boss" + i) == 0;
         }
 

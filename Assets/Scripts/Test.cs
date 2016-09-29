@@ -6,4 +6,5 @@ using UnityEngine;
 public class Test : ScriptableObject {
 
     public string test = "rest";
+    public Weapon weapon;
 }

@@ -41,6 +41,6 @@ public class Score : MonoBehaviour {
     }
 
     public void CollectibleTaken(float value) {
-        score += value;
+        score += value * combo;
     }
 }
