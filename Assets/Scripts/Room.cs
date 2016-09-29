@@ -14,6 +14,7 @@ public class Room : MonoBehaviour {
     public Vector2 size;
     public List<EnemyPack> possibleEnemies;
     public Transform enemiesParent;
+    public Transform bulletsParent;
     [HideInInspector]
     public Vector2 pos = new Vector2();
     
@@ -29,6 +30,7 @@ public class Room : MonoBehaviour {
                 enemy = Instantiate(enemies[i].Enemy, enemiesParent, false) as GameObject;
                 enemy.transform.localPosition = enemies[i].position;
                 enemy.transform.localRotation = enemies[i].rotation;
+                enemy.GetComponent<Weapon>().bulletsParent = bulletsParent;
             }
         }
     }
