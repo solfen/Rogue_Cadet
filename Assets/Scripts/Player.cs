@@ -12,6 +12,8 @@ public class Player : MonoBehaviour {
     public float life;
     public float rotationMinAngle;
     public float rotationDeadZone = 0.5f;
+    public Vector2 hitboxPos;
+    public Vector2 hitboxSize;
 
     private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
@@ -20,14 +22,18 @@ public class Player : MonoBehaviour {
     private bool isDead = false;
     private GraphRoom currentRoom;
     private GraphRoom newRoom;
+    private BoxCollider2D _collider;
 
     private float invincibiltyTimer;
 
     void Start() {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _collider = GetComponent<BoxCollider2D>();
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
         life = maxLife;
+        _collider.offset = hitboxPos;
+        _collider.size = hitboxSize;
     }
 
 	void Update () {
