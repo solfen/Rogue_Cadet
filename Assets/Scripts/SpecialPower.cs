@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(ISpecialPower))]
 public class SpecialPower : MonoBehaviour {
 
     public float mana;
