@@ -19,7 +19,7 @@ public class PowerUI : MonoBehaviour {
 	
     public void OnUsePower(SpecialPower power) {
         manaText.text = "Special mana: " + power.mana + "/" + power.maxMana;
-        StartCoroutine(FillLoadBar(power.coolDownDuration));
+        StartCoroutine(FillLoadBar(power.coolDownTimer));
     }
 
     IEnumerator FillLoadBar(float duration) {

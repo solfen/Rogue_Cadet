@@ -47,6 +47,7 @@ public class Player : MonoBehaviour {
         newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
         if(newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
+            PowerBomb.instance.OnPlayerEnterRoom(newRoom);
         }
         currentRoom = newRoom;
     }

@@ -27,6 +27,7 @@ public class GraphRoom {
     public Vector2 pos = new Vector2();
     public List<GraphRoom> roomsConnected;
     public Room roomPrefab { get; set; }
+    public Room roomInstance;
 }
 
 public class DungeonGenerator : MonoBehaviour {
@@ -107,7 +108,7 @@ public class DungeonGenerator : MonoBehaviour {
     IEnumerator InstantiateRooms() {
         for (int i = 0; i < graph.Count; i++) {
             roomWorldPos.Set(graph[i].pos.x * world.roomBaseSize.x, graph[i].pos.y * world.roomBaseSize.y, 0);
-            Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[world.map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]);
+            graph[i].roomInstance = Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[world.map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]) as Room;
 
             if (secondsBetweenInstanciation > 0) {
                 yield return new WaitForSeconds(secondsBetweenInstanciation);

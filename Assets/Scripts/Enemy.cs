@@ -33,14 +33,17 @@ public class Enemy : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Player") {
-            life -= other.GetComponent<Player>().meleeDamage;
-            StartCoroutine("hitFeedback");
+            Hit(other.GetComponent<Player>().meleeDamage);
         }
         else if (other.tag == "PlayerBullet") {
-            life -= other.GetComponent<Bullet>().damage;
-            StartCoroutine("hitFeedback");
+            Hit(other.GetComponent<Bullet>().damage);
         }
 
+    }
+
+    public void Hit(float damage) {
+        life -= damage;
+        StartCoroutine("hitFeedback");
     }
 
     IEnumerator hitFeedback() {

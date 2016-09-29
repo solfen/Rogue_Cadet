@@ -7,32 +7,44 @@ public class SpecialPower : MonoBehaviour {
     public float maxMana;
     public float manaCost;
     public float coolDownDuration;
+    public string button;
+    public bool isBomb = false; //tmp
 
     [HideInInspector]
     public float mana;
 
-    private float coolDownTimer = 0;
+    public float coolDownTimer = 0;
     private ISpecialPower power;
 
     void Start () {
         power = GetComponent<ISpecialPower>();
         mana = maxMana;
+        NotifyUI();
     }
 
 	// Update is called once per frame
 	void Update () {
         coolDownTimer -= Time.deltaTime;
 
-        if(Input.GetButtonDown("SpecialPower")) {
+        if(Input.GetButtonDown(button)) {
             if (coolDownTimer < 0 && mana >= manaCost) {
                 power.Activate();
                 coolDownTimer = coolDownDuration;
                 mana -= manaCost;
-                PowerUI.instance.OnUsePower(this);
+                NotifyUI();
             }
             else {
                 SoundManager.instance.PlaySound(GenericSoundsEnum.ERROR);
             }
         }
 	}
+
+    private void NotifyUI() {
+        if (isBomb) {
+            BombUI.instance.OnUsePower(this);
+        }
+        else {
+            PowerUI.instance.OnUsePower(this);
+        }
+    }
 }

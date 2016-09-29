@@ -30,7 +30,11 @@ public class Room : MonoBehaviour {
                 enemy = Instantiate(enemies[i].Enemy, enemiesParent, false) as GameObject;
                 enemy.transform.localPosition = enemies[i].position;
                 enemy.transform.localRotation = enemies[i].rotation;
-                enemy.GetComponent<Weapon>().bulletsParent = bulletsParent;
+
+                Weapon weapon = enemy.GetComponent<Weapon>();
+                if(weapon != null) {
+                    weapon.bulletsParent = bulletsParent;
+                }
             }
         }
     }
