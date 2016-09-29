@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class SpecialPower : MonoBehaviour {
 
-    public float mana;
+    public float maxMana;
     public float manaCost;
     public float coolDownDuration;
+
+    [HideInInspector]
+    public float mana;
 
     private float coolDownTimer = 0;
     private ISpecialPower power;
 
     void Start () {
         power = GetComponent<ISpecialPower>();
+        mana = maxMana;
     }
 
 	// Update is called once per frame
@@ -23,6 +27,8 @@ public class SpecialPower : MonoBehaviour {
             power.Activate();
             coolDownTimer = coolDownDuration;
             mana -= manaCost;
+            Debug.Log("caca");
+            PowerUI.instance.OnUsePower(this);
         }
 	}
 }
