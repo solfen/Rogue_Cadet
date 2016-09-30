@@ -76,27 +76,31 @@ public class World : MonoBehaviour {
     }
 
     public void OnPlayerOnPlayerEnterRoom(GraphRoom room) {
-        for(int i = activeRooms.Count-1; i >= 0; i--) {
-            activeRooms[i].SetActive(false);
-            activeRooms.RemoveAt(i);
-        }
-
-        room.roomInstance.gameObject.SetActive(true);
-        activeRooms.Add(room.roomInstance.gameObject);
+        List<GameObject> newActiveRooms = new List<GameObject>();
 
         int endX = (int)(room.pos.x + room.roomPrefab.size.x);
         int endY = (int)(room.pos.y + room.roomPrefab.size.y);
         GameObject testRoom;
         for (int i = (int)room.pos.x-1; i <= endX; i++) {
             for (int j = (int)room.pos.y - 1; j <= endY; j++) {
-                if(i >= 0 && i < worldSize.x && j >= 0 && j < worldSize.y) {
+                if(i >= 0 && i < worldSize.x && j >= 0 && j < worldSize.y && map[i, j].room != null) {
                     testRoom = map[i, j].room.roomInstance.gameObject;
                     
                     if (!activeRooms.Contains(testRoom)) {
                         testRoom.SetActive(true);
                         activeRooms.Add(testRoom);
                     }
+                    if(!newActiveRooms.Contains(testRoom)) {
+                        newActiveRooms.Add(testRoom);
+                    }
                 }
+            }
+        }
+
+        for (int i = activeRooms.Count - 1; i >= 0; i--) {
+            if(!newActiveRooms.Contains(activeRooms[i])) {
+                activeRooms[i].SetActive(false);
+                activeRooms.RemoveAt(i);
             }
         }
     }
