@@ -42,5 +42,6 @@ public class Score : MonoBehaviour {
 
     public void CollectibleTaken(float value) {
         score += value * combo;
+        ScoreUI.instance.UpdateScore(score);
     }
 }
