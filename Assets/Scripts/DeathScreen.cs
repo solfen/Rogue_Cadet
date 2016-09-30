@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class DeathScreen : MonoBehaviour {
 
     public static DeathScreen instance;
+    public Text scoreText;
     public Text highScore;
 
     [SerializeField]
@@ -30,10 +31,15 @@ public class DeathScreen : MonoBehaviour {
     public void OnPlayerDeath() {
         anim.enabled = true;
         enabled = true;
-        float score = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), World.instance.Score.score);
-        PlayerPrefs.SetFloat("HighScore", score);
-        PlayerPrefs.SetFloat("Money", World.instance.Score.score);
-        highScore.text = "High score: " + score + "$";
+        float score = World.instance.Score.score;
+        float highscore = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), score);
+
+        PlayerPrefs.SetFloat("HighScore", highscore);
+        PlayerPrefs.SetFloat("Money", PlayerPrefs.GetFloat("Money", 0) + score);
+
+        scoreText.text = "Score: " + score + "$";
+        highScore.text = "High score: " + highscore + "$";
+
         sound.Play();
     }
 }
