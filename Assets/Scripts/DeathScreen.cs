@@ -37,7 +37,7 @@ public class DeathScreen : MonoBehaviour {
         PlayerPrefs.SetFloat("HighScore", highscore);
         PlayerPrefs.SetFloat("Money", PlayerPrefs.GetFloat("Money", 0) + score);
 
-        scoreText.text = "Score: " + score + "$";
+        scoreText.text = "Run money: " + score + "$";
         highScore.text = "High score: " + highscore + "$";
 
         sound.Play();
