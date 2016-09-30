@@ -34,7 +34,6 @@ public class Player : MonoBehaviour {
         //Mana_Upgrade 
         hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
         maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
-
         if(PlayerPrefs.HasKey("Equiped_Bomb")) {
             Instantiate(World.instance.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
         }
@@ -57,16 +56,7 @@ public class Player : MonoBehaviour {
     void FixedUpdate() {
         Turn();
         Move();
-
-        newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
-        if(newRoom != currentRoom) {
-            MiniMap.instance.OnPlayerEnterRoom(newRoom);
-            if(PowerBomb.instance != null) {
-                PowerBomb.instance.OnPlayerEnterRoom(newRoom);
-            }
-            World.instance.OnPlayerOnPlayerEnterRoom(newRoom);
-        }
-        currentRoom = newRoom;
+        SetCurrentRoom();
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -95,6 +85,7 @@ public class Player : MonoBehaviour {
         }
     }
 
+
     private void Move() {
         direction.x = Input.GetAxisRaw("Horizontal");
         direction.y = Input.GetAxisRaw("Vertical");
@@ -110,6 +101,18 @@ public class Player : MonoBehaviour {
         if(direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
             _rigidBody.rotation = Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle;
         }
+    }
+
+    private void SetCurrentRoom() {
+        newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
+        if (newRoom != currentRoom) {
+            MiniMap.instance.OnPlayerEnterRoom(newRoom);
+            if (PowerBomb.instance != null) {
+                PowerBomb.instance.OnPlayerEnterRoom(newRoom);
+            }
+            World.instance.OnPlayerOnPlayerEnterRoom(newRoom);
+        }
+        currentRoom = newRoom;
     }
 
     private void LifeUpdate() {
