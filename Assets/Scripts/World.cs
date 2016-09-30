@@ -35,7 +35,9 @@ public class World : MonoBehaviour {
     [HideInInspector]
     public Score Score;
     public List<Weapon> weapons;
-    public List<GameObject> bombs; 
+    public List<GameObject> bombs;
+
+    private List<GameObject> activeRooms = new List<GameObject>();
 
     void Awake() {
         instance = this;
@@ -68,6 +70,32 @@ public class World : MonoBehaviour {
                     }
 
                     map[x, y] = currentSector;
+                }
+            }
+        }
+    }
+
+    public void OnPlayerOnPlayerEnterRoom(GraphRoom room) {
+        for(int i = activeRooms.Count-1; i >= 0; i--) {
+            activeRooms[i].SetActive(false);
+            activeRooms.RemoveAt(i);
+        }
+
+        room.roomInstance.gameObject.SetActive(true);
+        activeRooms.Add(room.roomInstance.gameObject);
+
+        int endX = (int)(room.pos.x + room.roomPrefab.size.x);
+        int endY = (int)(room.pos.y + room.roomPrefab.size.y);
+        GameObject testRoom;
+        for (int i = (int)room.pos.x-1; i <= endX; i++) {
+            for (int j = (int)room.pos.y - 1; j <= endY; j++) {
+                if(i >= 0 && i < worldSize.x && j >= 0 && j < worldSize.y) {
+                    testRoom = map[i, j].room.roomInstance.gameObject;
+                    
+                    if (!activeRooms.Contains(testRoom)) {
+                        testRoom.SetActive(true);
+                        activeRooms.Add(testRoom);
+                    }
                 }
             }
         }

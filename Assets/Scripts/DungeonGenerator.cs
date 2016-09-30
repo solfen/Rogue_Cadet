@@ -106,6 +106,7 @@ public class DungeonGenerator : MonoBehaviour {
         for (int i = 0; i < graph.Count; i++) {
             roomWorldPos.Set(graph[i].pos.x * world.roomBaseSize.x, graph[i].pos.y * world.roomBaseSize.y, 0);
             graph[i].roomInstance = Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[world.map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]) as Room;
+            graph[i].roomInstance.gameObject.SetActive(false);
 
             if (secondsBetweenInstanciation > 0) {
                 yield return new WaitForSeconds(secondsBetweenInstanciation);

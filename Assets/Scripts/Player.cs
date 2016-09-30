@@ -64,6 +64,7 @@ public class Player : MonoBehaviour {
             if(PowerBomb.instance != null) {
                 PowerBomb.instance.OnPlayerEnterRoom(newRoom);
             }
+            World.instance.OnPlayerOnPlayerEnterRoom(newRoom);
         }
         currentRoom = newRoom;
     }
