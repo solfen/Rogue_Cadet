@@ -7,6 +7,8 @@ public class Player : MonoBehaviour {
     public string typeName;
     public float speed = 5f;
     public float maxLife = 100f;
+    public float maxMana = 100f;
+    public float damageMultiplier = 1f;
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
     public float life;
@@ -17,6 +19,7 @@ public class Player : MonoBehaviour {
 
     public float hitboxUpgradeSizeReduce;
     public float lifeUpgradeRaise;
+    public float manaUpgradeRaise;
 
     private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
@@ -31,10 +34,10 @@ public class Player : MonoBehaviour {
     private float invincibiltyTimer;
 
     void Start() {
-        //Mana_Upgrade 
         hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
         maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
-        if(PlayerPrefs.HasKey("Equiped_Bomb")) {
+        maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
+        if (PlayerPrefs.HasKey("Equiped_Bomb")) {
             Instantiate(World.instance.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
         }
         Instantiate(World.instance.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);

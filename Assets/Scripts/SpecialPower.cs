@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class SpecialPower : MonoBehaviour {
 
-    public float maxMana;
     public float manaCost;
     public float coolDownDuration;
     public string button;
@@ -12,12 +11,15 @@ public class SpecialPower : MonoBehaviour {
 
     [HideInInspector]
     public float mana;
+    [HideInInspector]
+    public float maxMana;
 
     public float coolDownTimer = 0;
     private ISpecialPower power;
 
     void Start () {
         power = GetComponent<ISpecialPower>();
+        maxMana = transform.parent.GetComponent<Player>().maxMana; //tmp
         mana = maxMana;
         NotifyUI();
     }

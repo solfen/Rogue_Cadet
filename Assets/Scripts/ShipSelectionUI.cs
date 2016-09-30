@@ -12,7 +12,6 @@ public class ShipSelectionUI : MonoBehaviour {
 
     [SerializeField]
     private Animator transitionAnimator;
-
     [SerializeField]
     private List<Player> shipTypesList;
     [SerializeField]
@@ -31,7 +30,7 @@ public class ShipSelectionUI : MonoBehaviour {
 	
     public void SelectShip(string name) {
         selectedShip = ships[name];
-        statText.text = "Health: " + selectedShip.maxLife /*+ " / Attack: x" + selectedShip.GetComponentInChildren<Weapon>().damageMultiplier*/;
+        statText.text = "Health: " + selectedShip.maxLife + "% / Damage: " + ((int)selectedShip.damageMultiplier*100) + "% / Mana: " + selectedShip.maxMana + "%";
     }
 
     public void ValidateSelection() {

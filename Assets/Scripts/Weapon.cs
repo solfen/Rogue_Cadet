@@ -16,16 +16,17 @@ public class Weapon : MonoBehaviour {
     public bool autoFire;
     public bool useController = false;
     public float shotInterval = 0.25f;
-    public float damageMultiplier = 1;
     public List<ShotConfig> bullets = new List<ShotConfig>();
     public AudioSource sound;
 
     private bool isTriggerd = false;
     private float timer;
     private Transform player;
+    private float damageMultiplier = 1;
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        damageMultiplier = transform.parent.GetComponent<Player>() != null ? transform.parent.GetComponent<Player>().damageMultiplier : damageMultiplier; //tmp
     }
 	
     void Update () {
