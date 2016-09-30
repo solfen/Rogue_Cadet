@@ -26,7 +26,9 @@ public class Weapon : MonoBehaviour {
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").transform;
-        damageMultiplier = transform.parent.GetComponent<Player>() != null ? transform.parent.GetComponent<Player>().damageMultiplier : damageMultiplier; //tmp
+        if(transform.parent != null && transform.parent.GetComponent<Player>() != null) {
+            damageMultiplier = transform.parent.GetComponent<Player>().damageMultiplier;
+        }
     }
 	
     void Update () {
