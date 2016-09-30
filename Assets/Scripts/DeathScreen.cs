@@ -21,7 +21,8 @@ public class DeathScreen : MonoBehaviour {
     }
 
     void Update () {
-        if(Input.GetButtonDown("Restart")) {
+        if(Input.GetButtonDown("Start")) {
+            InputMapUI.instance.gameObject.SetActive(false);
             Application.LoadLevel(levelToLoad);
         }
     }

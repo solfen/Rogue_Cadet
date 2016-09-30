@@ -55,8 +55,8 @@ public class ShopUI : MonoBehaviour {
         if(isOpen && Input.GetButtonDown("Cancel")) {
             CloseShop();
         }
-        if(Input.GetButtonDown("Restart")) {
-            Application.LoadLevel(0);
+        if(Input.GetButtonDown("Start")) {
+            InputMapUI.instance.Open();
         }
     }
 

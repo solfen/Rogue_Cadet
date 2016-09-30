@@ -111,6 +111,8 @@ public class DungeonGenerator : MonoBehaviour {
                 yield return new WaitForSeconds(secondsBetweenInstanciation);
             }
         }
+
+        InputMapUI.instance.OnLoaded();
     }
     private void GenerateRoom() {
         List<int> roomsToCheck = new List<int>();
