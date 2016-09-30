@@ -16,9 +16,8 @@ public class ZoneRooms {
 
 [System.Serializable]
 public class BossRoom {
-    public GameObject boss;
-    public Vector2 roomSize;
-    public int zoneIndex;
+    public List<Room> roomsBasePrefab;
+    public List<Room> roomsBoss;
     [HideInInspector]
     public bool canPop = true;
 }
@@ -60,7 +59,7 @@ public class DungeonGenerator : MonoBehaviour {
 
         float time = Time.realtimeSinceStartup;
         CreateRoomGraph();
-        Debug.Log(Time.realtimeSinceStartup - time);
+        Debug.Log((Time.realtimeSinceStartup - time)*1000);
 
         MiniMap.instance.OnGraphCreated(graph);
         StartCoroutine(InstantiateRooms());
@@ -84,9 +83,9 @@ public class DungeonGenerator : MonoBehaviour {
 
         GenerateGraph();
 
-       /*if(!AddBosses()) {
+       if(!TryAddBosses()) {
             CreateRoomGraph();
-        }*/
+        }
     }
 
     private void GenerateGraph() {
@@ -163,35 +162,32 @@ public class DungeonGenerator : MonoBehaviour {
         currentRoomsNb++;
     }
 
-    /*private bool AddBosses() { //WILL be changed
-        for (int i = 0; i < bossRooms.Count; i++) {
-            if (!bossRooms[i].canPop) {
-                continue;
-            }
-
-            int index = FindBossRoom(i);
-            if(index != -1) {
-               // Destroy(rooms[index].enemiesParent.gameObject);
-                //GameObject boss = Instantiate(bossRooms[i].boss, rooms[index].transform, false) as GameObject;
-                boss.transform.localPosition = new Vector3(boss.transform.localPosition.x * (bossRooms[i].roomSize.x / 2), boss.transform.localPosition.y, boss.transform.localPosition.z); //really ugly WILL be changed
-                bossRooms[i].canPop = false;
-            }
-            else {
-                return false;
+    private bool TryAddBosses() {
+        for (int i = bossRooms.Count-1; i >= 0; i--) {
+            if (bossRooms[i].canPop) {
+                if(TrySetBossRoom(i)) {
+                    bossRooms[i].canPop = false;
+                }
+                else {
+                    return false;
+                }
             }
         }
 
         return true;
-    }*/
+    }
 
-    private int FindBossRoom(int i) {
-        for (int j = 0; j < graph.Count; j++) {
-            if (world.map[(int)graph[j].pos.x, (int)graph[j].pos.y].zoneType == bossRooms[i].zoneIndex && graph[j].roomPrefab.size == bossRooms[i].roomSize) {
-                return j;
+    private bool TrySetBossRoom(int i) {
+        for(int k = 0; k < bossRooms[i].roomsBasePrefab.Count; k++) {
+            for (int j = graph.Count-1; j >= 0 ; j--) {
+                if (graph[j].roomPrefab == bossRooms[i].roomsBasePrefab[k]) {
+                    graph[j].roomPrefab = bossRooms[i].roomsBoss[k];
+                    return true;
+                }
             }
         }
 
-        return -1;
+        return false;
     }
 
     private void GetNextZone(int x, int y) {
