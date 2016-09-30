@@ -30,7 +30,7 @@ public class ShipSelectionUI : MonoBehaviour {
 	
     public void SelectShip(string name) {
         selectedShip = ships[name];
-        statText.text = "Health: " + selectedShip.maxLife + "% / Damage: " + ((int)selectedShip.damageMultiplier*100) + "% / Mana: " + selectedShip.maxMana + "%";
+        statText.text = "Health: " + selectedShip.maxLife + "% | Damage: " + ((int)(selectedShip.damageMultiplier*100)) + "% | Mana: " + selectedShip.maxMana + "%";
     }
 
     public void ValidateSelection() {
