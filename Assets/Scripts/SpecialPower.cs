@@ -11,7 +11,6 @@ public class SpecialPower : MonoBehaviour {
 
     [HideInInspector]
     public float mana;
-    [HideInInspector]
     public float maxMana;
 
     public float coolDownTimer = 0;
@@ -19,7 +18,9 @@ public class SpecialPower : MonoBehaviour {
 
     void Start () {
         power = GetComponent<ISpecialPower>();
-        maxMana = transform.parent.GetComponent<Player>().maxMana; //tmp
+        if(!isBomb) {
+            maxMana = transform.parent.GetComponent<Player>().maxMana; //tmp
+        }
         mana = maxMana;
         NotifyUI();
     }

@@ -12,7 +12,6 @@ public class Player : MonoBehaviour {
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
     public float life;
-    public float rotationMinAngle;
     public float rotationDeadZone = 0.5f;
     public Vector2 hitboxPos;
     public Vector2 hitboxSize;
@@ -22,6 +21,7 @@ public class Player : MonoBehaviour {
     public float manaUpgradeRaise;
 
     private Rigidbody2D _rigidBody;
+    private Transform _transform;
     private Vector3 direction = Vector3.zero;
     private Animator anim;
     private SpriteRenderer spriteRender;
@@ -30,22 +30,27 @@ public class Player : MonoBehaviour {
     private GraphRoom newRoom;
     private BoxCollider2D _collider;
     private Color initalColor;
+    private World world;
 
     private float invincibiltyTimer;
 
     void Start() {
-        hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
-        maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
-        maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
-        if (PlayerPrefs.HasKey("Equiped_Bomb")) {
-            Instantiate(World.instance.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
-        }
-        Instantiate(World.instance.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
-
+        world = World.instance;
+        _transform = GetComponent<Transform>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
+
+        hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
+        maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
+        maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
+        if (PlayerPrefs.HasKey("Equiped_Bomb")) {
+            Instantiate(world.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
+            BombUI.instance.gameObject.SetActive(true);
+        }
+        Instantiate(world.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
+
         initalColor = spriteRender.color;
         life = maxLife;
         _collider.offset = hitboxPos;
@@ -73,7 +78,7 @@ public class Player : MonoBehaviour {
             break;
         }
 
-        World.instance.Score.PlayerHit();
+        world.Score.PlayerHit();
     }
 
     void OnTriggerStay2D(Collider2D other) {
@@ -90,30 +95,36 @@ public class Player : MonoBehaviour {
 
 
     private void Move() {
-        direction.x = Input.GetAxisRaw("Horizontal");
-        direction.y = Input.GetAxisRaw("Vertical");
+        direction.x = Input.GetAxisRaw("MoveX");
+        direction.y = Input.GetAxisRaw("MoveY");
+
         _rigidBody.velocity = direction * speed;
 
         anim.SetFloat("XSpeed", direction.x);
     }
 
     private void Turn() {
-        direction.x = -Input.GetAxisRaw("Horizontal2");
-        direction.y = -Input.GetAxisRaw("Vertical2");
+        if (world.useGamedad) {
+            direction.x = Input.GetAxisRaw("AimX");
+            direction.y = -Input.GetAxisRaw("AimY");
+        }
+        else {
+            direction =  Input.mousePosition - Camera.main.WorldToScreenPoint(_transform.position);
+        }
 
-        if(direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
-            _rigidBody.rotation = Mathf.Floor((Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg) / rotationMinAngle) * rotationMinAngle;
+        if(!world.useGamedad || direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
+            _rigidBody.rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         }
     }
 
     private void SetCurrentRoom() {
-        newRoom = World.instance.map[(int)Mathf.Floor(transform.position.x / World.instance.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / World.instance.roomBaseSize.y)].room;
+        newRoom = world.map[(int)Mathf.Floor(transform.position.x / world.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / world.roomBaseSize.y)].room;
         if (newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
             if (PowerBomb.instance != null) {
                 PowerBomb.instance.OnPlayerEnterRoom(newRoom);
             }
-            World.instance.OnPlayerOnPlayerEnterRoom(newRoom);
+            world.OnPlayerOnPlayerEnterRoom(newRoom);
         }
         currentRoom = newRoom;
     }

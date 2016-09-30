@@ -36,6 +36,8 @@ public class World : MonoBehaviour {
     public Score Score;
     public List<Weapon> weapons;
     public List<GameObject> bombs;
+    [HideInInspector]
+    public bool useGamedad = false;
 
     private List<GameObject> activeRooms = new List<GameObject>();
 
@@ -50,6 +52,9 @@ public class World : MonoBehaviour {
         InitMap();
         worldUnitysize.Set(worldSize.x * backgroundSize.x, worldSize.y * backgroundSize.y);
 
+        if(Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "") {
+            useGamedad = true;
+        }
         //TODO: check if map has null sectors.
     }
 
