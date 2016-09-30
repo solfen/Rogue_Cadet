@@ -60,8 +60,9 @@ public class ShopUI : MonoBehaviour {
         }
     }
 
-    public void OpenShop(int category) { 
-        eventSystem.SetSelectedGameObject(firstShopItem);
+    public void OpenShop(int category) {
+        if(InputMapUI.instance.isGamepad)
+            eventSystem.SetSelectedGameObject(firstShopItem);
 
         currentCategory = category;
         UpdateItems();
@@ -71,7 +72,8 @@ public class ShopUI : MonoBehaviour {
     }
 
     private void CloseShop() {
-        eventSystem.SetSelectedGameObject(firstCategoryItem);
+        if (InputMapUI.instance.isGamepad)
+            eventSystem.SetSelectedGameObject(firstCategoryItem);
         anim.SetTrigger("CloseShop");
         isOpen = false;
     }

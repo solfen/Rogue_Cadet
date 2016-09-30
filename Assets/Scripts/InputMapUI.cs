@@ -11,11 +11,14 @@ public class InputMapUI : MonoBehaviour {
     public Image inputImage;
     public Text text;
 
+    public bool isGamepad;
+
     private Animator anim;
     private bool isLoaded = false;
 
     void Awake () {
-        inputImage.sprite = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "" ? gamepadSprite : keyboardSprite;
+        isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
+        inputImage.sprite = isGamepad ? gamepadSprite : keyboardSprite;
         anim = GetComponent<Animator>();
         instance = this;
     }
@@ -30,7 +33,6 @@ public class InputMapUI : MonoBehaviour {
 	}
 
     public void Open() {
-        Debug.Log("caca");
         anim.SetTrigger("Open");
         Time.timeScale = 0;
     }

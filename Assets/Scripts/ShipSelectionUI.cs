@@ -37,6 +37,8 @@ public class ShipSelectionUI : MonoBehaviour {
         shopUI.enabled = true;
         PlayerPrefs.SetString("selectedShip", selectedShip.typeName);
         transitionAnimator.SetTrigger("Transition");
-        eventSystem.SetSelectedGameObject(firstUpgradeItem);
+        if(InputMapUI.instance.isGamepad) {
+            eventSystem.SetSelectedGameObject(firstUpgradeItem);
+        }
     }
 }
