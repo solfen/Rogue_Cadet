@@ -33,7 +33,7 @@ public class DeathScreen : MonoBehaviour {
         float score = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), World.instance.Score.score);
         PlayerPrefs.SetFloat("HighScore", score);
         PlayerPrefs.SetFloat("Money", World.instance.Score.score);
-        highScore.text = "High score: " + score;
+        highScore.text = "High score: " + score + "$";
         sound.Play();
     }
 }
