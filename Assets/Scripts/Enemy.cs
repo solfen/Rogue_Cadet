@@ -28,7 +28,6 @@ public class Enemy : MonoBehaviour {
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
         world.enemies.Add(this);
-        StartCoroutine("LifeUpdate");
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -38,7 +37,6 @@ public class Enemy : MonoBehaviour {
         else if (other.tag == "PlayerBullet") {
             Hit(other.GetComponent<Bullet>().damage);
         }
-
     }
 
     public void Hit(float damage) {
@@ -68,28 +66,24 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    IEnumerator LifeUpdate() {
-        while(true) {
-            if(life <= 0) {
-                StopCoroutine("TintSprite");
-                StopCoroutine("hitFeedback");
+    void Update() {
+        if(life <= 0) {
+            StopCoroutine("TintSprite");
+            StopCoroutine("hitFeedback");
 
-                anim.SetTrigger("Death");
-                spriteRender.color = Color.white;
-                GetComponent<Rigidbody2D>().simulated = false; //remove from physics
-                SoundManager.instance.PlaySound(explosionSound);
-                if(drop != null) {
-                    drop.Pop();
-                }
-
-                world.enemies.Remove(this);
-                world.Score.KilledEnemy(this);
-                Destroy(gameObject, 0.4f);
-
-                StopCoroutine("LifeUpdate");
+            anim.SetTrigger("Death");
+            spriteRender.color = Color.white;
+            GetComponent<Rigidbody2D>().simulated = false; //remove from physics
+            SoundManager.instance.PlaySound(explosionSound);
+            if(drop != null) {
+                drop.Pop();
             }
 
-            yield return null;
+            world.enemies.Remove(this);
+            world.Score.KilledEnemy(this);
+            Destroy(gameObject, 0.4f);
+
+            enabled = false;
         }
     } 
 }
