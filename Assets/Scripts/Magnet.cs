@@ -18,7 +18,7 @@ public class Magnet : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (attracted) {
+        if (attracted && playerTransform != null) {
             direction = playerTransform.position - _transform.position;
             _transform.position += direction.normalized * speed * Time.deltaTime;
         }

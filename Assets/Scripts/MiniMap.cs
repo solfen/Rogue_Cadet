@@ -44,16 +44,15 @@ public class MiniMap : MonoBehaviour {
     }
 
     void Update() {
-        if (playerTransform == null) {
-            enabled = false;
+        if (playerTransform != null) {
+            roomsParent.localPosition = -playerTransform.position * scale;
+
+            if(Input.GetButtonDown("Map")) {
+                currentMapSize = currentMapSize == smallMapSize ? bigMapSize : smallMapSize;
+                _rectTransform.sizeDelta = currentMapSize;
+            }
         }
 
-        roomsParent.localPosition = -playerTransform.position * scale;
-
-        if(Input.GetButtonDown("Map")) {
-            currentMapSize = currentMapSize == smallMapSize ? bigMapSize : smallMapSize;
-            _rectTransform.sizeDelta = currentMapSize;
-        }
     }
 
     public void OnGraphCreated(List<GraphRoom> graph) {

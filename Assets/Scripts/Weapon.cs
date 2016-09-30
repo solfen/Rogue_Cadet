@@ -32,7 +32,7 @@ public class Weapon : MonoBehaviour {
     void Update () {
         isTriggerd = useController && Input.GetButton("MainShot");
 
-        if (timer <= 0 && (autoFire || isTriggerd)) {
+        if (timer <= 0 && (autoFire || isTriggerd) && player != null) {
             for(int i = 0; i < bullets.Count; i++) {
                 Bullet bullet = Instantiate(bullets[i].bulletPrefab, bullets[i].origin.position, Quaternion.Euler(0, 0, bullets[i].angle-90), bulletsParent) as Bullet;
                 bullet.Init(bullets[i].origin.rotation.eulerAngles.z + bullets[i].angle, bullets[i].targetPlayer ? player : null, damageMultiplier);

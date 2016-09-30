@@ -28,6 +28,7 @@ public class TargetMovement : BaseMovement {
 
 	void Update () {
         if(player == null) {
+            enabled = false;
             return;
         }
 
