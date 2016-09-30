@@ -47,7 +47,6 @@ public class Player : MonoBehaviour {
         maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
         if (PlayerPrefs.HasKey("Equiped_Bomb")) {
             Instantiate(world.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
-            BombUI.instance.gameObject.SetActive(true);
         }
         Instantiate(world.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
 
@@ -71,14 +70,15 @@ public class Player : MonoBehaviour {
         switch(other.tag) {
             case "Enemy":
                 Damage(other.gameObject.GetComponent<Enemy>().meleeDamage);
+                world.Score.PlayerHit();
             break;
 
             case "Bullet":
                 Damage(other.gameObject.GetComponent<Bullet>().damage);
+                world.Score.PlayerHit();
             break;
         }
 
-        world.Score.PlayerHit();
     }
 
     void OnTriggerStay2D(Collider2D other) {

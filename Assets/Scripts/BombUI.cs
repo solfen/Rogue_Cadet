@@ -13,6 +13,8 @@ public class BombUI : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         instance = this;
+        if(!PlayerPrefs.HasKey("Equiped_Bomb"))
+            gameObject.SetActive(false);
 	}
 
     public void OnUsePower(SpecialPower bomb) {

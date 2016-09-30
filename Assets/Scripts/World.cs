@@ -43,6 +43,7 @@ public class World : MonoBehaviour {
 
     void Awake() {
         instance = this;
+        Time.timeScale = 0;
 
         if (isNewGame) {
             PlayerPrefs.DeleteAll();
