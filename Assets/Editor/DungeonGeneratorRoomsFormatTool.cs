@@ -6,7 +6,7 @@ using UnityEditor;
 [ExecuteInEditMode]
 public class DungeonGeneratorRoomsFormatTool : MonoBehaviour {
 
-    public DungeonGenerator generator;
+    public Dungeon generator;
     public int zone;
     public bool isDeadEnd;
     public List<Room> rooms;

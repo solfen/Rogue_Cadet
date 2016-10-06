@@ -19,7 +19,7 @@ public class Collectible : MonoBehaviour {
     }
 
     void OnTriggerEnter2D() {
-        World.instance.Score.CollectibleTaken(value);
+        EventDispatcher.DispatchEvent(Events.COLLECTIBLE_TAKEN, this);
         SoundManager.instance.PlaySound(sound);
         Destroy(gameObject);
     }

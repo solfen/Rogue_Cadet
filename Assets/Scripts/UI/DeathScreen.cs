@@ -28,14 +28,9 @@ public class DeathScreen : MonoBehaviour {
         }
     }
 
-    public void OnPlayerDeath() {
+    public void OnPlayerDeath(float score, float highscore) {
         anim.enabled = true;
         enabled = true;
-        float score = World.instance.Score.score;
-        float highscore = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), score);
-
-        PlayerPrefs.SetFloat("HighScore", highscore);
-        PlayerPrefs.SetFloat("Money", PlayerPrefs.GetFloat("Money", 0) + score);
 
         scoreText.text = "Run money: " + score + "$";
         highScore.text = "High score: " + highscore + "$";

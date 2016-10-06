@@ -13,8 +13,19 @@ public class Score : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        World.instance.Score = this;
         comboDownTimer = comboDownInterval;
+        EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, CollectibleTaken);
+        EventDispatcher.AddEventListener(Events.ENEMY_DIED, KilledEnemy);
+        EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayerHit);
+    }
+
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.COLLECTIBLE_TAKEN, CollectibleTaken);
+        EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, KilledEnemy);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, PlayerHit);
+
     }
 
     void Update () {
@@ -22,31 +33,42 @@ public class Score : MonoBehaviour {
         if(comboDownTimer <= 0) {
             combo = Mathf.Max(1, combo - 1);
             comboDownTimer = comboDownInterval;
-            ScoreUI.instance.UpdateCombo(combo);
-            Debug.Log("Inactive! combo down: " + combo);
 
+            ScoreUI.instance.UpdateCombo(combo);
         }
     }
 
-    public void KilledEnemy(Enemy enemy) {
-        score += enemy.score * combo;
+    public void KilledEnemy(object enemy) {
+        float scoreToAdd = ((Enemy)enemy).score;
+
+        score += scoreToAdd * combo;
         combo = Mathf.Min(maxCombo, combo+1);
-        Debug.Log("Kill! combo raise: " + combo);
         comboDownTimer = comboDownInterval;
+
         ScoreUI.instance.UpdateScore(score);
         ScoreUI.instance.UpdateCombo(combo);
     }
 
-    public void PlayerHit() {
+    public void PlayerHit(object useless) {
         combo = Mathf.Max(1, combo - 1);
-        Debug.Log("Hit! combo down: " + combo);
 
         comboDownTimer = comboDownInterval;
         ScoreUI.instance.UpdateCombo(combo);
     }
 
-    public void CollectibleTaken(float value) {
+    public void CollectibleTaken(object collectible) {
+        float value = ((Collectible)collectible).value;
+
         score += value * combo;
         ScoreUI.instance.UpdateScore(score);
+    }
+
+    public void OnPlayerDeath(object useless) {
+        float highscore = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), score);
+
+        PlayerPrefs.SetFloat("HighScore", highscore);
+        PlayerPrefs.SetFloat("Money", PlayerPrefs.GetFloat("Money", 0) + score);
+
+        DeathScreen.instance.OnPlayerDeath(score, highscore);
     }
 }

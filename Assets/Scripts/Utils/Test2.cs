@@ -9,8 +9,8 @@ public class Test2 : MonoBehaviour {
 
 	void Start () {
         //GetComponent<SpriteRenderer>().color = Color.red;
-        EventDispatcher.AddEventListener(Events.TEST, OnTest);
-        EventDispatcher.DispatchEvent(Events.TEST, this);
+        //EventDispatcher.AddEventListener(Events.TEST, OnTest);
+        //EventDispatcher.DispatchEvent(Events.TEST, this);
     }
 
     private void OnTest(object emiter) {

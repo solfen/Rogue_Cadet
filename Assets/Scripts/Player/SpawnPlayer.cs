@@ -5,6 +5,9 @@ using UnityEngine;
 public class SpawnPlayer : MonoBehaviour {
 
     [SerializeField]
+    private Dungeon dungeon;
+
+    [SerializeField]
     private List<Player> shipTypesList;
 
     void Awake () {
@@ -12,7 +15,8 @@ public class SpawnPlayer : MonoBehaviour {
             string currentType = PlayerPrefs.GetString("selectedShip", "Knight");
             for (int i = 0; i < shipTypesList.Count; i++) {
                 if(shipTypesList[i].typeName == currentType) {
-                    Instantiate(shipTypesList[i]);
+                    Player player = Instantiate(shipTypesList[i]) as Player;
+                    player.Init(dungeon);
                 }
             }
         }

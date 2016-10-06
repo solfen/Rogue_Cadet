@@ -32,17 +32,14 @@ public class Enemy : MonoBehaviour {
     [SerializeField]
     private Collectible drop;
 
-    private World world;
     private SpriteRenderer spriteRender;
     private Animator anim;
     private Color initialColor;
 
     void Start() {
-        world = World.instance;
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
-        world.enemies.Add(this);
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -94,8 +91,7 @@ public class Enemy : MonoBehaviour {
                 drop.Pop();
             }
 
-            world.enemies.Remove(this);
-            world.Score.KilledEnemy(this);
+            EventDispatcher.DispatchEvent(Events.ENEMY_DIED, this);
             Destroy(gameObject, 0.4f);
 
             enabled = false;

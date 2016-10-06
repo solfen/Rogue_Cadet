@@ -5,6 +5,8 @@ using UnityEngine;
 public class MiniMap : MonoBehaviour {
     public static MiniMap instance;
 
+    public GameData gameData;
+    public Dungeon dungeon;
     public RectTransform roomPrefab;
     public RectTransform exitPrefab;
     public Transform roomsParent;
@@ -23,7 +25,6 @@ public class MiniMap : MonoBehaviour {
     private Vector2 bigMapSize;
     private Vector2 currentMapSize;
     private Transform playerTransform;
-    private World world;
 
     // Use this for initialization
     void Awake () {
@@ -34,11 +35,10 @@ public class MiniMap : MonoBehaviour {
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         _rectTransform = GetComponent<RectTransform>();
 
-        world = World.instance;
-        roomBaseSize = world.roomBaseSize * scale;
+        roomBaseSize = gameData.roomBaseSize * scale;
 
         smallMapSize.Set(smallMapSize.x * roomBaseSize.x, smallMapSize.y * roomBaseSize.y);
-        bigMapSize = new Vector2(world.worldSize.x * roomBaseSize.x, world.worldSize.y * roomBaseSize.y);
+        bigMapSize = new Vector2(gameData.worldSize.x * roomBaseSize.x, gameData.worldSize.y * roomBaseSize.y);
         _rectTransform.sizeDelta = smallMapSize;
         currentMapSize = smallMapSize;
     }
@@ -70,7 +70,7 @@ public class MiniMap : MonoBehaviour {
                 int x = (int)(graph[i].pos.x + graph[i].roomPrefab.exits[j].pos.x);
                 int y = (int)(graph[i].pos.y + graph[i].roomPrefab.exits[j].pos.y);
 
-                if (x >= 0 && x < world.worldSize.x && y >= 0 && y < world.worldSize.y && graph[i].roomsConnected.Contains(world.map[x,y].room)) {
+                if (x >= 0 && x < gameData.worldSize.x && y >= 0 && y < gameData.worldSize.y && graph[i].roomsConnected.Contains(dungeon.map[x,y].room)) {
                     currentExitPos.Set(Mathf.Max(0,graph[i].roomPrefab.exits[j].pos.x) * roomBaseSize.x + 0.5f * roomBaseSize.x * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y), Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.y) * roomBaseSize.y + 0.5f * roomBaseSize.y * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x), 0);
                     currentExitSize.Set(roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y)), roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x)));
 

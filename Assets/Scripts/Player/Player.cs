@@ -2,7 +2,10 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-    
+
+    public GameData gameData;
+    [HideInInspector]
+    public Dungeon dungeon;
     public Transform sprite;
     public string typeName;
     public float speed = 5f;
@@ -30,12 +33,10 @@ public class Player : MonoBehaviour {
     private GraphRoom newRoom;
     private BoxCollider2D _collider;
     private Color initalColor;
-    private World world;
 
     private float invincibiltyTimer;
 
     void Start() {
-        world = World.instance;
         _transform = GetComponent<Transform>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _collider = GetComponent<BoxCollider2D>();
@@ -46,14 +47,18 @@ public class Player : MonoBehaviour {
         maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
         maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
         if (PlayerPrefs.HasKey("Equiped_Bomb")) {
-            Instantiate(world.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
+            Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
         }
-        Instantiate(world.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
+        Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
 
         initalColor = spriteRender.color;
         life = maxLife;
         _collider.offset = hitboxPos;
         _collider.size = hitboxSize;
+    }
+
+    public void Init(Dungeon dungeonRef) {
+        dungeon = dungeonRef;
     }
 
 	void Update () {
@@ -70,12 +75,12 @@ public class Player : MonoBehaviour {
         switch(other.tag) {
             case "Enemy":
                 Damage(other.gameObject.GetComponent<Enemy>().meleeDamage);
-                world.Score.PlayerHit();
+                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
             break;
 
             case "Bullet":
                 Damage(other.gameObject.GetComponent<Bullet>().damage);
-                world.Score.PlayerHit();
+                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
             break;
         }
 
@@ -104,7 +109,7 @@ public class Player : MonoBehaviour {
     }
 
     private void Turn() {
-        if (world.useGamedad) {
+        if (InputManager.useGamedad) {
             direction.x = Input.GetAxisRaw("AimX");
             direction.y = -Input.GetAxisRaw("AimY");
         }
@@ -112,19 +117,19 @@ public class Player : MonoBehaviour {
             direction =  Input.mousePosition - Camera.main.WorldToScreenPoint(_transform.position);
         }
 
-        if(!world.useGamedad || direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
+        if(!InputManager.useGamedad || direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
             _rigidBody.rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         }
     }
 
     private void SetCurrentRoom() {
-        newRoom = world.map[(int)Mathf.Floor(transform.position.x / world.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / world.roomBaseSize.y)].room;
+        newRoom = dungeon.map[(int)Mathf.Floor(transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / gameData.roomBaseSize.y)].room;
         if (newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
             if (PowerBomb.instance != null) {
                 PowerBomb.instance.OnPlayerEnterRoom(newRoom);
             }
-            world.OnPlayerOnPlayerEnterRoom(newRoom);
+            EventDispatcher.DispatchEvent(Events.PLAYER_ENTER_ROOM, newRoom);
         }
         currentRoom = newRoom;
     }
@@ -144,7 +149,7 @@ public class Player : MonoBehaviour {
         anim.SetTrigger("Death");
         spriteRender.color = initalColor;
         isDead = true;
-        DeathScreen.instance.OnPlayerDeath();
+        EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
         Destroy(gameObject, 0.4f);
     }
 }
