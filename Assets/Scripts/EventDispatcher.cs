@@ -14,9 +14,6 @@ public static class EventDispatcher {
         { Events.TEST,  null }
     };
 
-    public delegate void TestTest();
-    public static event TestTest eventt;
-
     public static void AddEventListener(Events type, EventHandler method) {
         events[type] += method;
     }
@@ -30,5 +27,4 @@ public static class EventDispatcher {
             events[type](sender);
         }
     }
-
 }

@@ -114,6 +114,7 @@ public class DungeonGenerator : MonoBehaviour {
 
         InputMapUI.instance.OnLoaded();
     }
+
     private void GenerateRoom() {
         List<int> roomsToCheck = new List<int>();
         roomsToCheck.AddRange(roomListIndexes); 
