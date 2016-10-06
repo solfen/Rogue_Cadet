@@ -74,6 +74,7 @@ public class Dungeon : MonoBehaviour {
     private List<GameObject> activeRooms = new List<GameObject>();
 
     void Start() {
+        Time.timeScale = 0;
         float time = Time.realtimeSinceStartup;
         CreateRoomGraph();
         Debug.Log((Time.realtimeSinceStartup - time)*1000);
