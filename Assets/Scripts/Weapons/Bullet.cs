@@ -7,22 +7,16 @@ public class Bullet : MonoBehaviour {
     public float damage;
     public float maxDistance;
 
-    private Vector3 direction;
-    private Transform _transform;
-    //private Rigidbody2D _rigidbody;
+    private Vector2 direction;
+    private Rigidbody2D _rigidbody;
 
 	void Start () {
-        _transform = GetComponent<Transform>();
-        //_rigidbody = GetComponent<Rigidbody2D>();
+        _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    void Update() {
-        _transform.position += direction * speed * Time.deltaTime;
-    }
-
-   /* void FixedUpdate() {
+    void FixedUpdate() {
         _rigidbody.MovePosition(_rigidbody.position + direction * speed * Time.deltaTime);
-    }*/
+    }
 
     void OnBecameInvisible() {
         Destroy(gameObject);
