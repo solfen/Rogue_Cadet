@@ -15,16 +15,12 @@ public class Room : MonoBehaviour {
     public List<EnemyPack> possibleEnemies;
     public Transform enemiesParent;
     public Transform bulletsParent;
-    public CompositeCollider2D _collider;
+
     [HideInInspector]
     public Vector2 pos = new Vector2();
     
     private Transform _transform;
     private GameObject enemy;
-
-    void OnEnable() {
-        _collider.enabled = true;
-    }
 
     void Start() {
         _transform = GetComponent<Transform>();

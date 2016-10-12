@@ -6,7 +6,6 @@ public class Bullet : MonoBehaviour {
     public float speed;
     public float damage;
     public float maxDistance;
-    public Collider2D _collider;
 
     [HideInInspector]
     public Bullet nextAvailable = null; // for the pool linked list

@@ -61,8 +61,9 @@ public class ShopUI : MonoBehaviour {
     }
 
     public void OpenShop(int category) {
-        if(InputMapUI.instance.isGamepad)
+        if(InputMapUI.instance.isGamepad) {
             eventSystem.SetSelectedGameObject(firstShopItem);
+        }
 
         currentCategory = category;
         UpdateItems();

@@ -25,6 +25,7 @@ public class MiniMap : MonoBehaviour {
     private Vector2 bigMapSize;
     private Vector2 currentMapSize;
     private Transform playerTransform;
+    private RectTransform roomparentTransform;
 
     // Use this for initialization
     void Awake () {
@@ -33,6 +34,7 @@ public class MiniMap : MonoBehaviour {
 
     void Start() {
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        roomparentTransform = roomsParent.GetComponent<RectTransform>();
         _rectTransform = GetComponent<RectTransform>();
 
         roomBaseSize = gameData.roomBaseSize * scale;
@@ -45,9 +47,9 @@ public class MiniMap : MonoBehaviour {
 
     void Update() {
         if (playerTransform != null) {
-            roomsParent.localPosition = -playerTransform.position * scale;
+            roomparentTransform.anchoredPosition = -playerTransform.position * scale;
 
-            if(Input.GetButtonDown("Map")) {
+            if (Input.GetButtonDown("Map")) {
                 currentMapSize = currentMapSize == smallMapSize ? bigMapSize : smallMapSize;
                 _rectTransform.sizeDelta = currentMapSize;
             }

@@ -27,7 +27,6 @@ public class EnemyPackCreationTool : MonoBehaviour {
 
             EnemyPack pack = new EnemyPack();
             pack.probabilityMultiplier = packProbaMultiplier;
-            pack.zone = zone;
             pack.name = packName;
 
             for (int i = 0; i < enemyPack.transform.childCount; i++) {

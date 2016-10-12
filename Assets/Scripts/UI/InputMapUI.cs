@@ -22,13 +22,14 @@ public class InputMapUI : MonoBehaviour {
         anim = GetComponent<Animator>();
         instance = this;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
 		if(Input.GetButtonDown("Start") && isLoaded) {
             anim.SetTrigger("Close");
             isLoaded = false;
             Time.timeScale = 1;
+            Debug.Log("coucouc");
         }
 	}
 

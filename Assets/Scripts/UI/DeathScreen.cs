@@ -23,7 +23,7 @@ public class DeathScreen : MonoBehaviour {
 
     void Update () {
         if(Input.GetButtonDown("Start")) {
-            InputMapUI.instance.gameObject.SetActive(false);
+            InputMapUI.instance.gameObject.SetActive(false); //BAD! JUST SPENT 30MIN TRYING TO FIND THAT
             Application.LoadLevel(levelToLoad);
         }
     }

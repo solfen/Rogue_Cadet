@@ -13,7 +13,6 @@ public class EnemyInstantiation {
 public class EnemyPack {
     public string name;
     public List<EnemyInstantiation> enemies = new List<EnemyInstantiation>();
-    public int zone;
     public float probabilityMultiplier = 1f;
 }
 

@@ -8,7 +8,6 @@ public class Zone {
     [Tooltip("In number of backgrounds")]
     public Vector2 position;
     public Vector2 size;
-    public GameObject backgroundsPrefab;
 }
 
 [System.Serializable]

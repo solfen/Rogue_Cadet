@@ -4,8 +4,6 @@ using System.Collections;
 public class Player : MonoBehaviour {
 
     public GameData gameData;
-    [HideInInspector]
-    public Dungeon dungeon;
     public Transform sprite;
     public string typeName;
     public float speed = 5f;
@@ -23,6 +21,8 @@ public class Player : MonoBehaviour {
     public float lifeUpgradeRaise;
     public float manaUpgradeRaise;
 
+    [SerializeField]
+    private Dungeon dungeon;
     private Rigidbody2D _rigidBody;
     private Transform _transform;
     private Vector3 direction = Vector3.zero;
