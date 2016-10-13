@@ -19,12 +19,9 @@ public class Room : MonoBehaviour {
     [HideInInspector]
     public Vector2 pos = new Vector2();
     
-    private Transform _transform;
     private GameObject enemy;
 
     void Start() {
-        _transform = GetComponent<Transform>();
-
         if (possibleEnemies.Count > 0) {
             List<EnemyInstantiation> enemies = possibleEnemies[Random.Range(0, possibleEnemies.Count)].enemies;
             for (int i = 0; i < enemies.Count; i++) {

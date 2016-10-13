@@ -14,15 +14,12 @@ public class BehaviourSwitching : MonoBehaviour {
     public float reactionDuration = 1f;
     public List<BehaviourSwitch> behavioursToSwitch;
 
-    private Transform _transform;
     private bool isIdle = true;
     private float reactionTimer;
     private bool isReactionStarted = false;
 
 	// Use this for initialization
 	void Start () {
-        _transform = GetComponent<Transform>();
-
         SwitchBehaviour();
     }
 	
