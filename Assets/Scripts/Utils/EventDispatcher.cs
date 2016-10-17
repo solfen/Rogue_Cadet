@@ -5,9 +5,11 @@ using UnityEngine;
 public enum Events {
     COLLECTIBLE_TAKEN,
     ENEMY_DIED,
+    PLAYER_CREATED,
     PLAYER_DIED,
     PLAYER_HIT,
-    PLAYER_ENTER_ROOM
+    PLAYER_ENTER_ROOM,
+    BULLET_VOLLEY_FIRED
 }
 
 public static class EventDispatcher {
@@ -16,9 +18,11 @@ public static class EventDispatcher {
     private static Dictionary<Events, EventHandler> events = new Dictionary<Events, EventHandler> { //are values kept between scenes ?
         { Events.COLLECTIBLE_TAKEN,  null },
         { Events.ENEMY_DIED,  null },
+        { Events.PLAYER_CREATED,  null },
         { Events.PLAYER_DIED,  null },
         { Events.PLAYER_HIT,  null },
         { Events.PLAYER_ENTER_ROOM,  null },
+        { Events.BULLET_VOLLEY_FIRED,  null },
 
     };
 

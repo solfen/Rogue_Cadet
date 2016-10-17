@@ -4,10 +4,12 @@ using UnityEngine;
 
 public static class BulletsFactory {
 
-    private static Dictionary<Bullet, Bullet> firstAvailable = new Dictionary<Bullet, Bullet>(4); // dict<prefab, bullets>
+    private static Dictionary<Bullet, Bullet> firstAvailable = new Dictionary<Bullet, Bullet>(4); // dict<prefab, bullet>
 
-    public static void SpawnBullet(Bullet prefab, Vector3 pos, Transform parent, float angle, float dmgMultiplier, Transform target = null) {
-        if(!firstAvailable.ContainsKey(prefab)) {
+    public static void SpawnBullet(BulletStats bulletstats, Vector3 pos, Vector2 dir) {
+        Bullet prefab = bulletstats.prefab;
+
+        if (!firstAvailable.ContainsKey(prefab)) {
             firstAvailable.Add(prefab, null);
         }
 
@@ -16,7 +18,7 @@ public static class BulletsFactory {
             firstAvailable[prefab].gameObject.SetActive(false);
         }
 
-        firstAvailable[prefab].Init(prefab, parent, pos, angle, dmgMultiplier, target);
+        firstAvailable[prefab].Init(bulletstats, pos, dir);
         firstAvailable[prefab] = firstAvailable[prefab].nextAvailable;
     }
 

@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum GenericSoundsEnum {
+    NONE,
     COIN_PICKUP,
     EXPLOSION_1,
     EXPLOSION_2,
     EXPLOSION_3,
     ERROR,
-    ACTIVATE
+    ACTIVATE,
+    WEAPON_SHOT_1
 }
 
 [System.Serializable]
@@ -29,6 +31,16 @@ public class SoundManager : MonoBehaviour {
         for(int i = 0; i < soundsList.Count; i++) {
             sounds.Add(soundsList[i].key, soundsList[i].value);
         }
+
+        EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
+    }
+
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
+    }
+
+    private void PlayBulletSound(object fountain) {
+        PlaySound(((BulletFountain)fountain).volleySound);
     }
 	
     public void PlaySound(GenericSoundsEnum sound) {

@@ -3,54 +3,58 @@ using System.Collections;
 
 public class Bullet : MonoBehaviour {
 
-    public float speed;
-    public float damage;
-    public float maxDistance;
 
     [HideInInspector]
     public Bullet nextAvailable = null; // for the pool linked list
+    [HideInInspector]
+    public float damage;
 
     private Vector2 direction;
     private Rigidbody2D _rigidbody;
+    private Transform _transform;
     private Bullet prefab;
+    private float speed;
+    private bool destroyOutScreen;
 
-	void Start () {
+	void Awake () {
         _rigidbody = GetComponent<Rigidbody2D>();
+        _transform = GetComponent<Transform>();
     }
 
-    void FixedUpdate() {
-        _rigidbody.MovePosition(_rigidbody.position + direction * speed * Time.deltaTime);
+    public void Init(BulletStats stats, Vector3 pos, Vector2 dir) {
+        _transform.parent = stats.parent;
+        prefab = stats.prefab;
+        damage = stats.damage;
+        speed = stats.speed;
+        destroyOutScreen = stats.destroyOutScreen;
+
+        _transform.position = pos;
+        _transform.up = dir;
+        direction = dir;
+
+        gameObject.SetActive(true);
+        _rigidbody.velocity = direction * speed;
+
+        if(stats.lifeTime > 0) {
+            StartCoroutine(KillTime(stats.lifeTime));
+        }
     }
 
-    void OnBecameInvisible() {
+    void OnBecameInvisible () {
+        if (gameObject.activeSelf && destroyOutScreen) {
+            gameObject.SetActive(false);
+            BulletsFactory.BulletDeath(prefab, this);
+        }
+    }
+
+    void OnTriggerEnter2D () {
         gameObject.SetActive(false);
         BulletsFactory.BulletDeath(prefab, this);
     }
 
-    public void Init(Bullet _prefab, Transform parent, Vector3 pos, float angle, float dmgMultiplier, Transform target = null) {
-        Transform _transform = GetComponent<Transform>();
-
-        _transform.parent = parent;
-        _transform.position = pos;
-        prefab = _prefab;
-        damage *= dmgMultiplier;
-
-        if (target != null) {
-            direction = target.position - _transform.position;
-            direction.Normalize();
-            _transform.rotation = Quaternion.Inverse(target.rotation);
-        }
-        else {
-            transform.rotation = Quaternion.Euler(0, 0, angle-90);
-
-            angle *= Mathf.Deg2Rad;
-            direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
-        }
-
-        gameObject.SetActive(true);
-    }
-
-    void OnTriggerEnter2D() {
+    IEnumerator KillTime(float time) {
+        yield return new WaitForSeconds(time);
         gameObject.SetActive(false);
+        BulletsFactory.BulletDeath(prefab, this);
     }
 }
