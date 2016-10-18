@@ -40,7 +40,9 @@ public class SoundManager : MonoBehaviour {
     }
 
     private void PlayBulletSound(object fountain) {
-        PlaySound(((BulletFountain)fountain).volleySound);
+        GenericSoundsEnum sound = ((BulletFountain)fountain).volleySound;
+        if (sound != GenericSoundsEnum.NONE)
+            PlaySound(sound);
     }
 	
     public void PlaySound(GenericSoundsEnum sound) {
