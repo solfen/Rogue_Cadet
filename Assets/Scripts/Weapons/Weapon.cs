@@ -18,7 +18,9 @@ public class Weapon : MonoBehaviour {
     private float damageMultiplier = 1;
     public bool isFiring { get; private set; }
     private bool newFireState = false;
-    private float fireTimer = 0;
+    private float fireTimer;
+    private float timeMultiplier = -1;
+    private bool isCoolDown = false;
 
     void Awake() {
         EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
@@ -49,12 +51,18 @@ public class Weapon : MonoBehaviour {
     }
 	
     void Update () {
-        fireTimer += Time.deltaTime;
+        fireTimer += Time.deltaTime * timeMultiplier;
+        if(!isCoolDown && fireTimer >= maxFireDuration) {
+            isCoolDown = true;
+            StartCoroutine(CoolDown());
+        }
 
-        newFireState = (autoFire || (useController && Input.GetButton("MainShot"))) && ( (isFiring && fireTimer < maxFireDuration) || (!isFiring && fireTimer > coolDownDuration));
+        newFireState = !isCoolDown && (autoFire || (useController && Input.GetButton("MainShot"))) && fireTimer < maxFireDuration;
 
         if(isFiring != newFireState) {
-            fireTimer = 0;
+            fireTimer = Mathf.Max(0, fireTimer);
+            timeMultiplier *= -1;
+
             isFiring = newFireState;
             SetFiring(isFiring);
         }
@@ -65,5 +73,17 @@ public class Weapon : MonoBehaviour {
             bulletsFountains[i].SetFiring(fire);
         }
     }
-	
+
+    IEnumerator CoolDown() {
+        float timer = coolDownDuration;
+        while(timer > 0) {
+            timer -= Time.deltaTime;
+            yield return null;
+        }
+
+        isCoolDown = false;
+        fireTimer = 0;
+    }
+
+
 }
