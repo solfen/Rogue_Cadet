@@ -38,7 +38,7 @@ public class TargetMovement : BaseMovement {
             currentDir.Normalize();
         }
 
-        _transform.up = -(player.position - _transform.position); // "hack" to make it face the player
+        _transform.up =  _transform.position - player.position; // "hack" to make it face the player
         _transform.position += currentDir * speed * Time.deltaTime;
     }
 
