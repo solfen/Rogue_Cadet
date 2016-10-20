@@ -5,6 +5,7 @@ using UnityEngine;
 public class Test2 : MonoBehaviour {
 
     public string test = "caca";
+    public PathFinding pathfinder;
 	// Use this for initialization
 
 	void Start () {
@@ -20,7 +21,8 @@ public class Test2 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log(GetComponentInChildren<Rigidbody2D>().IsSleeping());
+            pathfinder.FindPath(new Vector2(0, 0), new Vector2(9, 9));
+            //Debug.Log(GetComponentInChildren<Rigidbody2D>().IsSleeping());
         }
 	}
 }
