@@ -5,6 +5,7 @@ public class TargetMovement : BaseMovement {
 
     [Range(0,360)]
     public float angleOffset;
+    public Vector3 posOffset;
     public bool updateDir;
     public float minObstacleDist = 2f;
     public float emergencyDistance = 4;
@@ -32,7 +33,7 @@ public class TargetMovement : BaseMovement {
         playerMask = playerMask | eyesMask;
 
         offset = Quaternion.Euler(0, 0, angleOffset);
-        currentDir = player.position - transform.position;
+        currentDir = player.position + posOffset - transform.position;
         currentDir = offset * currentDir;
         currentDir.Normalize();
 
@@ -56,7 +57,7 @@ public class TargetMovement : BaseMovement {
 
     IEnumerator LaserEyes() {
         while (true) {
-            currentDir = player.position - _transform.position;
+            currentDir = player.position + posOffset - _transform.position;
             currentDir = offset * currentDir;
 
             //Debug.DrawRay(_transform.position, currentDir, Color.red);
@@ -84,7 +85,7 @@ public class TargetMovement : BaseMovement {
             }
 
             currentDir.Normalize();
-           // Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
+            //Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
 
             yield return new WaitForSeconds(laserInterval);
         }
