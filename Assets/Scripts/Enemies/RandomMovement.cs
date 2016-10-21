@@ -12,18 +12,20 @@ public class RandomMovement : BaseMovement {
     private Vector3 currentDir;
     private float angle;
     private float timer = 0;
-	
-	void Update() {
-        if(timer <= 0) {
+
+    void Update() {
+        timer -= Time.deltaTime;
+
+        if (timer <= 0) {
             angle = Random.Range(minRandAngle, maxRandAngle) * Mathf.Deg2Rad;
             currentDir.Set(Mathf.Cos(angle), Mathf.Sin(angle), 0);
 
             timer = changeAngleInterval;
         }
+    }
 
-        _transform.position += currentDir * speed * Time.deltaTime;
-
-        timer -= Time.deltaTime;
+    void FixedUpdate() {
+        _rigidbody.velocity = currentDir * speed;
     }
 
     void OnTriggerEnter2D(Collider2D other) {

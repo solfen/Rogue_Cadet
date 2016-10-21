@@ -5,16 +5,10 @@ using System.Collections.Generic;
 [System.Serializable]
 public class BehaviourLifeSwitch {
     public Behaviour script;
-    [Tooltip("inclusive")]
-    [Range(0,1)]
-    public float minLifePercent;
-    [Tooltip("exclusive")]
-    [Range(0,1)]
-    public float maxLifePercent;
-    //[HideInInspector]
-    public float minLife;
-    //[HideInInspector]
-    public float maxLife;
+    [Tooltip("inclusive")] [Range(0,1)] public float minLifePercent;
+    [Tooltip("exclusive")] [Range(0,1)] public float maxLifePercent;
+    [HideInInspector] public float minLife;
+    [HideInInspector] public float maxLife;
 }
 
 [RequireComponent(typeof(Enemy))]

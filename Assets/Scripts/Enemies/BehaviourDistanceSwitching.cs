@@ -56,7 +56,7 @@ public class BehaviourDistanceSwitching : MonoBehaviour {
             }
         }
 
-        //.DrawRay(_transform.position, (player.position - _transform.position).normalized * detectionDistance, Color.red);
+        //DrawRay(_transform.position, (player.position - _transform.position).normalized * detectionDistance, Color.red);
     }
 
     IEnumerator ReactionDelay() {

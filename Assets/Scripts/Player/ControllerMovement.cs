@@ -7,12 +7,7 @@ public class ControllerMovement : BaseMovement {
 
     [SerializeField] private Animator anim;
 
-    private Rigidbody2D _rigidBody;
     private Vector3 direction = Vector3.zero;
-
-    void Start() {
-        _rigidBody = GetComponent<Rigidbody2D>(); // tmp Base Movement will take care of it
-    }
 
     void FixedUpdate() {
         Move();
@@ -23,7 +18,7 @@ public class ControllerMovement : BaseMovement {
         direction.x = Input.GetAxisRaw("MoveX");
         direction.y = Input.GetAxisRaw("MoveY");
 
-        _rigidBody.velocity = direction * speed;
+        _rigidbody.velocity = direction * speed;
 
         anim.SetFloat("XSpeed", direction.x);
     }
@@ -38,7 +33,7 @@ public class ControllerMovement : BaseMovement {
         }
 
         if (!InputManager.useGamedad || direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
-            _rigidBody.rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+            _rigidbody.rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
         }
     }
 }

@@ -17,12 +17,12 @@ public class WaypointsMovement : BaseMovement {
         SelectNewPoint();
     }
 
-    void Update() {
+    void FixedUpdate() {
         if(Vector3.Distance(_transform.position, wayPoints[currentPoint]) < 0.1f) {
             SelectNewPoint();
         }
 
-        _transform.position += direction * speed * Time.deltaTime;
+        _rigidbody.velocity = direction * speed;
     }
 
     void OnTriggerEnter2D(Collider2D other) {

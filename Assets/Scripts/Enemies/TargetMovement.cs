@@ -15,7 +15,6 @@ public class TargetMovement : BaseMovement {
     public float laserInterval = 0.5f;
 
     private Transform player;
-    private Rigidbody2D _rigidBody;
     private Vector3 currentDir;
     private Quaternion offset;
     private Quaternion leftEyeQuat;
@@ -23,8 +22,24 @@ public class TargetMovement : BaseMovement {
     private int eyesMask = 1 << 13;
     private int playerMask = 1 << 10;
 
-    void Start() {
-        _rigidBody = GetComponent<Rigidbody2D>();
+    void Awake() {
+        EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
+        EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        enabled = false;
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+    }
+
+    private void OnPlayerCreation(object _player) {
+        player = ((Player)_player).GetComponent<Transform>();
+        enabled = true;
+    }
+
+    private void OnPlayerDeath(object useless) {
+        enabled = false;
     }
 
     void OnEnable() {
@@ -50,7 +65,7 @@ public class TargetMovement : BaseMovement {
         }
 
         _transform.up =  _transform.position - player.position; // "hack" to make it face the player
-        _rigidBody.velocity = currentDir * speed;
+        _rigidbody.velocity = currentDir * speed;
     }
 
     IEnumerator LaserEyes() {
