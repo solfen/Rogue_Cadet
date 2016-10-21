@@ -11,15 +11,21 @@ public class TeleportationMovement : BaseMovement {
     public Animator anim;
 
     private int currentPoint = 0;
+    private float timer = 0;
+    private bool isTeleporting = false;
 
     void Start() {
-        StartCoroutine(TeleportLoop());
+        timer = teleportInterval;
     }
 
-    IEnumerator TeleportLoop() {
-        while(true) {
-            yield return new WaitForSeconds(teleportInterval);
-            anim.SetTrigger("Teleport");
+    void Update() {
+        if(!isTeleporting) {
+            timer -= Time.deltaTime;
+            if(timer <= 0) {
+                anim.SetTrigger("Teleport");
+                isTeleporting = true;
+                timer = teleportInterval;
+            }
         }
     }
 
@@ -32,6 +38,8 @@ public class TeleportationMovement : BaseMovement {
             currentPoint = (currentPoint + 1) % points.Count;
             _transform.position = points[currentPoint];
         }
+
+        isTeleporting = false;
     }
 
     void OnTriggerEnter2D(Collider2D other) {
