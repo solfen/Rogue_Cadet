@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 [System.Serializable]
-public class BehaviourSwitch {
+public class BehaviourVisibleSwitch {
     public Behaviour script;
     public bool inIdle;
-    public bool inAttack;
+    public bool inVisible;
 }
 
-public class BehaviourSwitching : MonoBehaviour {
+public class BehaviourVisibilitySwitching : MonoBehaviour {
 
     public float reactionDuration = 1f;
-    public List<BehaviourSwitch> behavioursToSwitch;
+    public List<BehaviourVisibleSwitch> behavioursToSwitch;
 
     private bool isIdle = true;
     private float reactionTimer;
@@ -54,7 +54,7 @@ public class BehaviourSwitching : MonoBehaviour {
 
     private void SwitchBehaviour() {
         for(int i = 0; i < behavioursToSwitch.Count; i++) {
-            behavioursToSwitch[i].script.enabled = (behavioursToSwitch[i].inIdle && isIdle) || (behavioursToSwitch[i].inAttack && !isIdle);
+            behavioursToSwitch[i].script.enabled = (behavioursToSwitch[i].inIdle && isIdle) || (behavioursToSwitch[i].inVisible && !isIdle);
         }
     }
 
