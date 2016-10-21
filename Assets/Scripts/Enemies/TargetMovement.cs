@@ -6,7 +6,6 @@ public class TargetMovement : BaseMovement {
     [Range(0,360)]
     public float angleOffset;
     public Vector3 posOffset;
-    public bool updateDir;
     public float minObstacleDist = 2f;
     public float emergencyDistance = 4;
     public Transform leftEye;
@@ -37,9 +36,8 @@ public class TargetMovement : BaseMovement {
         currentDir = offset * currentDir;
         currentDir.Normalize();
 
-        if (updateDir) {
-            StartCoroutine(LaserEyes());
-        }
+        StartCoroutine(LaserEyes());
+        
 
         leftEyeQuat = Quaternion.Euler(0, 0, eyeAngle);
         rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
@@ -100,9 +98,6 @@ public class TargetMovement : BaseMovement {
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Wall") {
             _transform.position -= currentDir.normalized * speed * Time.deltaTime * 5;
-            if(!updateDir) {
-                speed = 0;
-            }
         }
     }
 
