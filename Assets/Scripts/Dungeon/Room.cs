@@ -8,6 +8,20 @@ public class Exit {
     public Vector2 dir;
 }
 
+[System.Serializable]
+public class EnemyInstantiation {
+    public GameObject Enemy;
+    public Vector3 position;
+    public Quaternion rotation;
+}
+
+[System.Serializable]
+public class EnemyPack {
+    public string name;
+    public List<EnemyInstantiation> enemies = new List<EnemyInstantiation>();
+    public float probabilityMultiplier = 1f;
+}
+
 public class Room : MonoBehaviour {
 
     public List<Exit> exits;
