@@ -6,12 +6,11 @@ public class Bullet : MonoBehaviour {
 
     [HideInInspector]
     public Bullet nextAvailable = null; // for the pool linked list
-    [HideInInspector]
-    public float damage;
 
     private Vector2 direction;
     private Rigidbody2D _rigidbody;
     private Transform _transform;
+    private DamageDealer damager;
     private Bullet prefab;
     private float speed;
     private bool destroyOutScreen;
@@ -19,18 +18,19 @@ public class Bullet : MonoBehaviour {
 	void Awake () {
         _rigidbody = GetComponent<Rigidbody2D>();
         _transform = GetComponent<Transform>();
+        damager = GetComponent<DamageDealer>();
     }
 
     public void Init(BulletStats stats, Vector3 pos, Vector2 dir) {
         _transform.parent = stats.parent;
         prefab = stats.prefab;
-        damage = stats.damage;
+        damager.damage = stats.damage;
         speed = stats.speed;
         destroyOutScreen = stats.destroyOutScreen;
 
         _transform.position = pos;
         _transform.up = dir;
-        direction = dir;
+        direction = dir; 
 
         gameObject.SetActive(true);
         _rigidbody.velocity = direction * speed;

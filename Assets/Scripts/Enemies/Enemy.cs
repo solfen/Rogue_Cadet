@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
-    public float meleeDamage;
     public float life;
     public float score;
 
@@ -25,11 +24,9 @@ public class Enemy : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        if (other.tag == "Player") {
-            Hit(other.GetComponent<Player>().meleeDamage);
-        }
-        else if (other.tag == "PlayerBullet") {
-            Hit(other.GetComponent<Bullet>().damage);
+        DamageDealer damager = other.GetComponent<DamageDealer>();
+        if (damager != null) {
+            Hit(damager.damage);
         }
     }
 

@@ -67,18 +67,11 @@ public class Player : MonoBehaviour {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
-        switch(other.tag) {
-            case "Enemy":
-                Damage(other.gameObject.GetComponent<Enemy>().meleeDamage);
-                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
-            break;
-
-            case "Bullet":
-                Damage(other.gameObject.GetComponent<Bullet>().damage);
-                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
-            break;
+        DamageDealer damager = other.GetComponent<DamageDealer>();
+        if (damager != null) {
+            Damage(damager.damage);
+            EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
         }
-
     }
 
     void OnTriggerStay2D(Collider2D other) {
