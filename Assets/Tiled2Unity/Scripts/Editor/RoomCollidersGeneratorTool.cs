@@ -63,6 +63,7 @@ public class RoomCollidersGeneratorTool : Tiled2Unity.ICustomTiledImporter {
             //Debug.Log("x: " + colliders[i].x + " y: " + colliders[i].y + " w: " + colliders[i].width + " h: " + colliders[i].height);
         }
 
+        collidersObj.layer = LayerMask.NameToLayer("Walls");
         collidersObj.transform.parent = layer.transform;
     }
 
