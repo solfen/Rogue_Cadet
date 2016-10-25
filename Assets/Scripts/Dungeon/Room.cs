@@ -24,7 +24,7 @@ public class EnemyPack {
 
 public class Room : MonoBehaviour {
 
-    public List<Exit> exits;
+    public List<Exit> exits = new List<Exit>();
     public Vector2 size;
     public List<EnemyPack> possibleEnemies;
     public Transform enemiesParent;
