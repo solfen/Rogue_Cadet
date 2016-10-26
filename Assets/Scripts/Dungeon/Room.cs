@@ -17,11 +17,13 @@ public class EnemyPack {
 
 public class Room : MonoBehaviour {
 
-    public List<Exit> exits = new List<Exit>();
+    public Transform enemiesParent;
+    [Header("Dungeon data")]
     public Vector2 size;
+    public List<Exit> exits = new List<Exit>();
+    [Header("Enemies configuration")]
     [Tooltip("One container is selected at random at start")]
     public List<EnemyPack> enemiesContainers;
-    public Transform enemiesParent;
 
     [HideInInspector]
     public Vector2 pos = new Vector2();
