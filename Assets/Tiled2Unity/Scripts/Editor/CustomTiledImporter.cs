@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using Tiled2Unity;
 
 public class ColliderInfo {
     public float x;
@@ -10,30 +11,32 @@ public class ColliderInfo {
     public float height;
 }
 
-[Tiled2Unity.CustomTiledImporterAttribute]
-public class CustomTiledImporter : Tiled2Unity.ICustomTiledImporter {
+[CustomTiledImporterAttribute]
+public class CustomTiledImporter : ICustomTiledImporter {
 
     private List<ColliderInfo> colliders = new List<ColliderInfo>();
-    private Vector2 roomSize;
 
     private bool CheckColliderPos(int i, float tileWidth, float tileHeight) {
         return colliders[i].x > 0 && colliders[i].x + colliders[i].width < tileWidth && colliders[i].y > 0 && colliders[i].y < tileHeight;
     }
 
     public void CustomizePrefab(GameObject prefab) {
-        Tiled2Unity.TiledMap map = prefab.GetComponent<Tiled2Unity.TiledMap>();
 
+        float mapWidth = prefab.GetComponent<TiledMap>().NumTilesWide;
+        float mapHeight = prefab.GetComponent<TiledMap>().NumTilesHigh;
+
+        //"hack" so that the parent becomes a children
         GameObject newTiledObj = Object.Instantiate(prefab) as GameObject;
         newTiledObj.name = "TiledMap";
-
-        Object.DestroyImmediate(prefab.GetComponent<Tiled2Unity.TiledMap>());
+        Object.DestroyImmediate(prefab.GetComponent<TiledMap>());
         for (int i = prefab.transform.childCount - 1; i >= 0; i--) {
             Object.DestroyImmediate(prefab.transform.GetChild(i).gameObject);
         }
         newTiledObj.transform.parent = prefab.transform;
 
+        //Create a room component and automate the boring stuff
         Room room = prefab.AddComponent<Room>();
-        room.size = new Vector2(map.NumTilesWide / 60, map.NumTilesHigh / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
+        room.size = new Vector2(mapWidth / 60, mapHeight / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
 
         GameObject enemiesGameObject = new GameObject("Enemies");
         enemiesGameObject.transform.parent = prefab.transform;
@@ -43,13 +46,14 @@ public class CustomTiledImporter : Tiled2Unity.ICustomTiledImporter {
         bulletsGameObject.transform.parent = prefab.transform;
         room.bulletsParent = bulletsGameObject.transform;
 
+        //room exits search and save
         for (int i = 0; i < colliders.Count; i++) {
-            if (CheckColliderPos(i, map.NumTilesWide, map.NumTilesHigh)) {
+            if (CheckColliderPos(i, mapWidth, mapHeight)) {
                 continue;
             }
 
             for (int j = 0; j < colliders.Count; j++) {
-                if (!CheckColliderPos(j, map.NumTilesWide, map.NumTilesHigh) && i != j) {
+                if (!CheckColliderPos(j, mapWidth, mapHeight) && i != j) {
                     if (colliders[i].width > colliders[i].height && colliders[j].width > colliders[j].height // same axis check
                     && colliders[i].y == colliders[j].y && colliders[i].x < colliders[j].x) { // pos check
                         Exit exit = new Exit();
