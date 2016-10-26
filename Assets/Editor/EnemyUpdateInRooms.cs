@@ -19,6 +19,7 @@ public class EnemyUpdateInRooms {
 
         if (rooms.Count < 1) {
             Debug.LogError("No rooms at " + roomsPaths[0] + ". Make sure it's the right path");
+            return;
         }
 
         int cpt = 0;
