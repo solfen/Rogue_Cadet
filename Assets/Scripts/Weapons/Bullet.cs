@@ -40,21 +40,27 @@ public class Bullet : MonoBehaviour {
         }
     }
 
+    void Die() {
+        gameObject.SetActive(false);
+        BulletsFactory.BulletDeath(prefab, this);
+    }
+
     void OnBecameInvisible () {
         if (gameObject.activeSelf && destroyOutScreen) {
-            gameObject.SetActive(false);
-            BulletsFactory.BulletDeath(prefab, this);
+            Die();
         }
     }
 
     void OnTriggerEnter2D () {
-        gameObject.SetActive(false);
-        BulletsFactory.BulletDeath(prefab, this);
+        Die();
     }
 
     IEnumerator KillTime(float time) {
         yield return new WaitForSeconds(time);
-        gameObject.SetActive(false);
-        BulletsFactory.BulletDeath(prefab, this);
+        Die();
+    }
+
+    public void BombKill() {
+        Die();
     }
 }

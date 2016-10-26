@@ -42,10 +42,6 @@ public class CustomTiledImporter : ICustomTiledImporter {
         enemiesGameObject.transform.parent = prefab.transform;
         room.enemiesParent = enemiesGameObject.transform;
 
-        GameObject bulletsGameObject = new GameObject("Bullets");
-        bulletsGameObject.transform.parent = prefab.transform;
-        room.bulletsParent = bulletsGameObject.transform;
-
         //room exits search and save
         for (int i = 0; i < colliders.Count; i++) {
             if (CheckColliderPos(i, mapWidth, mapHeight)) {

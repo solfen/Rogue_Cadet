@@ -10,17 +10,24 @@ public class PowerBomb : MonoBehaviour, ISpecialPower {
     public bool destroyBullets = true;
     public Animator explosion;
 
+    private Transform bulletsParent;
     private Room currentRoom;
 
     void Awake() {
         instance = this;
     }
 
+    void Start() {
+        bulletsParent = GameObject.FindGameObjectWithTag("BulletsContainer").transform;
+        if(bulletsParent != null) {
+            Debug.LogError("No bullet parent! Bomb can't work");
+        }
+    }
+
     public void Activate() {
-        if (destroyBullets) {
-            int bulletsCount = currentRoom.bulletsParent.childCount;
-            for (int i = bulletsCount - 1; i >= 0; i--) {
-                GameObject.Destroy(currentRoom.bulletsParent.GetChild(i).gameObject);
+        if (destroyBullets && bulletsParent != null) {
+            for (int i = bulletsParent.childCount - 1; i >= 0; i--) {
+                bulletsParent.GetChild(i).GetComponent<Bullet>().BombKill();
             }
         }
 

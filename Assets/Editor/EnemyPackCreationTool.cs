@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 
 [ExecuteInEditMode]
-public class EnemyPackCreationTool : MonoBehaviour {
+public class EnemyPackCreationTool {
 
     public Room associatedRoom;
     public List<GameObject> enemiesPrefab;
@@ -16,32 +16,28 @@ public class EnemyPackCreationTool : MonoBehaviour {
 
     private Dictionary<string, GameObject> prefabDictionary;
 
-	// Update is called once per frame
-	void Update () {
-        if (EditorUtility.DisplayDialog("Add new pack ?", "You sure? Have you check all the variables?", "Yeah, yeah shut up.", "I'm so stupid! Thanks!")) {
+    [MenuItem("Tools/Save Enemy Pack _F5")]
+    private static void SaveEnemiesPacks() {
+        Room room = Selection.activeTransform.root.GetComponent<Room>();
+        room.enemiesContainers.Clear();
 
-            prefabDictionary = new Dictionary<string, GameObject>();
-            for (int i = 0; i < enemiesPrefab.Count; i++) {
-                prefabDictionary.Add(enemiesPrefab[i].name, enemiesPrefab[i]);
-            }
-
+        for (int i = 0; i < room.enemiesParent.childCount; i++) {
+            Transform enemiesContainer = room.enemiesParent.GetChild(i);
             EnemyPack pack = new EnemyPack();
-            pack.probabilityMultiplier = packProbaMultiplier;
-            pack.name = packName;
 
-            for (int i = 0; i < enemyPack.transform.childCount; i++) {
-                EnemyInstantiation enemy = new EnemyInstantiation();
-                Transform obj = enemyPack.transform.GetChild(i);
-                enemy.Enemy = prefabDictionary[obj.name.Substring(0, 6)]; // will not work when there's more than 9 enemiesTypes
-                enemy.position = obj.localPosition;
-                enemy.rotation = obj.localRotation;
-                pack.enemies.Add(enemy);
-            }
+            pack.probabilityMultiplier = 1;
+            pack.name = enemiesContainer.name;
+            pack.container = enemiesContainer.gameObject;
 
-            associatedRoom.possibleEnemies.Add(pack);
-            EditorUtility.SetDirty(associatedRoom);
+            room.enemiesContainers.Add(pack);
         }
 
-        enabled = false;
-	}
+        PrefabUtility.ReplacePrefab(room.gameObject, PrefabUtility.GetPrefabParent(room.gameObject), ReplacePrefabOptions.ConnectToPrefab);
+    }
+
+    [MenuItem("Tools/Save Enemy Pack _F5", true)]
+    private static bool SavePackMenuItemValidation() {
+        return Selection.activeTransform != null
+            && Selection.activeTransform.root.GetComponent<Room>() != null;
+    }
 }

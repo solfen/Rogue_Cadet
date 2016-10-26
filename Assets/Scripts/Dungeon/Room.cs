@@ -9,16 +9,9 @@ public class Exit {
 }
 
 [System.Serializable]
-public class EnemyInstantiation {
-    public GameObject Enemy;
-    public Vector3 position;
-    public Quaternion rotation;
-}
-
-[System.Serializable]
 public class EnemyPack {
     public string name;
-    public List<EnemyInstantiation> enemies = new List<EnemyInstantiation>();
+    public GameObject container;
     public float probabilityMultiplier = 1f;
 }
 
@@ -26,26 +19,21 @@ public class Room : MonoBehaviour {
 
     public List<Exit> exits = new List<Exit>();
     public Vector2 size;
-    public List<EnemyPack> possibleEnemies;
+    [Tooltip("One container is selected at random at start")]
+    public List<EnemyPack> enemiesContainers;
     public Transform enemiesParent;
-    public Transform bulletsParent;
 
     [HideInInspector]
     public Vector2 pos = new Vector2();
-    
-    private GameObject enemy;
 
     void Start() {
-        if (possibleEnemies.Count > 0) {
-            List<EnemyInstantiation> enemies = possibleEnemies[Random.Range(0, possibleEnemies.Count)].enemies;
-            for (int i = 0; i < enemies.Count; i++) {
-                enemy = Instantiate(enemies[i].Enemy, enemiesParent, false) as GameObject;
-                enemy.transform.localPosition = enemies[i].position;
-                enemy.transform.localRotation = enemies[i].rotation;
+        if (enemiesContainers.Count > 0) {
+            GameObject selectedContainer = enemiesContainers[Random.Range(0, enemiesContainers.Count)].container;
+            selectedContainer.SetActive(true);
 
-                Weapon weapon = enemy.GetComponent<Weapon>();
-                if(weapon != null) {
-                    weapon.bulletsParent = bulletsParent;
+            for (int i = enemiesContainers.Count-1; i >= 0; i--) {
+                if(enemiesContainers[i].container != selectedContainer) {
+                    Destroy(enemiesContainers[i].container);
                 }
             }
         }
