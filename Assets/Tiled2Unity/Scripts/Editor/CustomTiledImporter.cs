@@ -21,7 +21,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     public void CustomizePrefab(GameObject prefab) {
-
+        GameObject existingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Tiled2Unity/Prefabs/" + prefab.name + ".prefab");
         float mapWidth = prefab.GetComponent<TiledMap>().NumTilesWide;
         float mapHeight = prefab.GetComponent<TiledMap>().NumTilesHigh;
 
@@ -36,6 +36,13 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
         //Create a room component and automate the boring stuff
         Room room = prefab.AddComponent<Room>();
+        if(existingPrefab != null) {
+            room.zoneIndex = existingPrefab.GetComponent<Room>().zoneIndex;
+        }
+        else {
+            Debug.Log("New Room. Don't forget to add it to the dungeon!");
+        }
+
         room.size = new Vector2(mapWidth / 60, mapHeight / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
 
         GameObject enemiesGameObject = new GameObject("Enemies");
@@ -117,5 +124,4 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
         currentCollider.height = y - currentCollider.y;
     }
-
 }

@@ -26,7 +26,8 @@ public class RoomList { //rooms that have the same exits and size
 public class ZoneRooms {
     public string name;
     public int zoneIndex;
-    public List<RoomList> roomList;
+    [Tooltip("A room config is a list of rooms that share the same exits")]
+    public List<RoomList> roomConfigs = new List<RoomList>();
 }
 
 [System.Serializable]
@@ -47,17 +48,26 @@ public class GraphRoom {
 public class Dungeon : MonoBehaviour {
 
     public Sector[,] map;
-    public List<Transform> roomsParent;
+
+    [Header("Starting")]
     public Vector2 startingPos;
     public Room startingRoom;
-    public List<ZoneRooms> zoneRooms; 
-    public List<ZoneRooms> deadEndRooms;
-    public List<BossRoom> bossRooms;
-    public int minRoomsBeforeDeadEnd = 10;
-    public float secondsBetweenInstanciation = 2;
 
-    [SerializeField]
-    private GameData gameData;
+    [Header("Rooms organization")]
+    [Tooltip("Where rooms will be instanciated. Ordered by zone index")]
+    public List<Transform> roomsParent;
+    [Tooltip("Rooms are ordered by zone, then by exits")]
+    public List<ZoneRooms> zoneRooms = new List<ZoneRooms>(); 
+    [Tooltip("Rooms that have only one exit")]
+    public List<ZoneRooms> deadEndRooms = new List<ZoneRooms>();
+    public List<BossRoom> bossRooms;
+
+    [Header("Misc")]
+    [Tooltip("To avoid having too small dungeon. Dead end are not possible before this number of rooms")]
+    public int minRoomsBeforeDeadEnd = 10;
+    [Tooltip("For debug only. Set to 0 for build.")]
+    public float secondsBetweenInstanciation = 1;
+    [SerializeField] private GameData gameData;
 
     private GraphRoom currentRoom;
     private Exit currentExit;
@@ -240,7 +250,7 @@ public class Dungeon : MonoBehaviour {
     private void GetNextZone(int x, int y) {
         if (x >= 0 && x < gameData.worldSize.x && y >= 0 && y < gameData.worldSize.y) {
             currentZoneIndex = map[x, y].zoneType;
-            roomList = zoneRooms[currentZoneIndex].roomList;
+            roomList = zoneRooms[currentZoneIndex].roomConfigs;
             roomListIndexes = System.Linq.Enumerable.Range(0, roomList.Count); // so that we have a list like [0,1,2,3 ... count-1]
         }
     }

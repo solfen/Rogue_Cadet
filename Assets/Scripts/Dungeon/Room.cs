@@ -19,6 +19,7 @@ public class Room : MonoBehaviour {
 
     public Transform enemiesParent;
     [Header("Dungeon data")]
+    public int zoneIndex;
     public Vector2 size;
     public List<Exit> exits = new List<Exit>();
     [Header("Enemies configuration")]
