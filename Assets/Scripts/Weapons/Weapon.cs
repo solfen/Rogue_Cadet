@@ -29,7 +29,10 @@ public class Weapon : MonoBehaviour {
 
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-        bulletsParent = bulletsParent != null ? bulletsParent : GameObject.FindGameObjectWithTag("BulletsContainer").transform;
+        if(bulletsParent != null) {
+            GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
+            bulletsParent = find != null ? find.transform : bulletsParent;
+        }
     }
 
     void OnDestroy () {

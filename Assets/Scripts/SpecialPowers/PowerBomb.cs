@@ -18,10 +18,13 @@ public class PowerBomb : MonoBehaviour, ISpecialPower {
     }
 
     void Start() {
-        bulletsParent = GameObject.FindGameObjectWithTag("BulletsContainer").transform;
-        if(bulletsParent != null) {
+        GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
+        if(find == null) {
             Debug.LogError("No bullet parent! Bomb can't work");
+            return;
         }
+
+        bulletsParent = find.transform;
     }
 
     public void Activate() {
