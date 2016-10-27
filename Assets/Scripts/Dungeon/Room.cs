@@ -12,7 +12,6 @@ public class Exit {
 public class EnemyPack {
     public string name;
     public GameObject container;
-    public float probabilityMultiplier = 1f;
 }
 
 public class Room : MonoBehaviour {

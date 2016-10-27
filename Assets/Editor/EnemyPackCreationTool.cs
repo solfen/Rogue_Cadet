@@ -11,7 +11,6 @@ public class EnemyPackCreationTool {
             Transform enemiesContainer = room.enemiesParent.GetChild(i);
             EnemyPack pack = new EnemyPack();
 
-            pack.probabilityMultiplier = 1;
             pack.name = enemiesContainer.name;
             pack.container = enemiesContainer.gameObject;
 
