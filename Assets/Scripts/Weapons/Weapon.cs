@@ -61,7 +61,7 @@ public class Weapon : MonoBehaviour {
             StartCoroutine(CoolDown());
         }
 
-        newFireState = !isCoolDown && (autoFire || (useController && Input.GetButton("MainShot"))) && fireTimer < maxFireDuration;
+        newFireState = !isCoolDown && (autoFire || (useController && (Input.GetButtonDown("MainShot") || Input.GetAxis("MainShot") < -0.5f))) && fireTimer < maxFireDuration;
 
         if(isFiring != newFireState) {
             fireTimer = Mathf.Max(0, fireTimer);
