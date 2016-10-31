@@ -8,6 +8,7 @@ public class BulletStats {
     public Bullet prefab;
     public float speed;
     public float damage;
+    [Tooltip("Infinite if <= 0")]
     public float lifeTime;
     public bool destroyOutScreen;
 }

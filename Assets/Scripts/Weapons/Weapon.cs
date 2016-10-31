@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour {
 
-    public Transform bulletsParent;
 
     [Header("Weapon Properties")]
     [SerializeField] private bool autoFire;
@@ -15,6 +14,7 @@ public class Weapon : MonoBehaviour {
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
 
     private Transform player;
+    private Transform bulletsParent;
     private float damageMultiplier = 1;
     public bool isFiring { get; private set; }
     private bool newFireState = false;
@@ -29,10 +29,9 @@ public class Weapon : MonoBehaviour {
 
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-        if(bulletsParent != null) {
-            GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
-            bulletsParent = find != null ? find.transform : bulletsParent;
-        }
+        GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
+        if(find != null)
+            bulletsParent = find.transform;
     }
 
     void OnDestroy () {
