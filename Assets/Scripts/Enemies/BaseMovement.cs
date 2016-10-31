@@ -8,7 +8,7 @@ public class BaseMovement : MonoBehaviour {
     protected Transform _transform;
 
     // Use this for initialization
-    void Awake () {
+    protected virtual void Awake () {
         _rigidbody = GetComponent<Rigidbody2D>();
         _transform = GetComponent<Transform>();
     }

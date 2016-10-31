@@ -22,10 +22,15 @@ public class TargetMovement : BaseMovement {
     private int eyesMask = 1 << 13;
     private int playerMask = 1 << 10;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-        enabled = false;
+
+        playerMask = playerMask | eyesMask;
+        leftEyeQuat = Quaternion.Euler(0, 0, eyeAngle);
+        rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
+        offset = Quaternion.Euler(0, 0, angleOffset);
     }
 
     void OnDestroy() {
@@ -35,7 +40,6 @@ public class TargetMovement : BaseMovement {
 
     private void OnPlayerCreation(object _player) {
         player = ((Player)_player).GetComponent<Transform>();
-        enabled = true;
     }
 
     private void OnPlayerDeath(object useless) {
@@ -43,27 +47,10 @@ public class TargetMovement : BaseMovement {
     }
 
     void OnEnable() {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-        playerMask = playerMask | eyesMask;
-
-        offset = Quaternion.Euler(0, 0, angleOffset);
-        currentDir = player.position + posOffset - transform.position;
-        currentDir = offset * currentDir;
-        currentDir.Normalize();
-
         StartCoroutine(LaserEyes());
-        
-
-        leftEyeQuat = Quaternion.Euler(0, 0, eyeAngle);
-        rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
     }
 
 	void FixedUpdate () {
-        if(player == null) {
-            enabled = false;
-            return;
-        }
-
         _transform.up =  _transform.position - player.position; // "hack" to make it face the player
         _rigidbody.velocity = currentDir * speed;
     }
