@@ -33,10 +33,12 @@ public class SoundManager : MonoBehaviour {
         }
 
         EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
+        EventDispatcher.AddEventListener(Events.ENEMY_DIED, PlayExplosionSound);
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
+        EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, PlayExplosionSound);
     }
 
     private void PlayBulletSound(object fountain) {
@@ -44,7 +46,13 @@ public class SoundManager : MonoBehaviour {
         if (sound != GenericSoundsEnum.NONE)
             PlaySound(sound);
     }
-	
+
+    private void PlayExplosionSound(object enemy) {
+        GenericSoundsEnum sound = ((Enemy)enemy).explosionSound;
+        if (sound != GenericSoundsEnum.NONE)
+            PlaySound(sound);
+    }
+
     public void PlaySound(GenericSoundsEnum sound) {
         sounds[sound].Play();
     }

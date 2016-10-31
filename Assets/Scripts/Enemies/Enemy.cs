@@ -6,11 +6,11 @@ public class Enemy : MonoBehaviour {
 
     public float life;
     public float score;
+    public GenericSoundsEnum explosionSound;
 
     [SerializeField] private float hitFeedbackDuration;
     [SerializeField] private float spriteColorChangeDuration = 0.16f;
     [SerializeField] private Color tintColor;
-    [SerializeField] private GenericSoundsEnum explosionSound;
     [SerializeField] private Collectible drop;
 
     private SpriteRenderer spriteRender;
@@ -69,8 +69,7 @@ public class Enemy : MonoBehaviour {
 
         anim.SetTrigger("Death");
         spriteRender.color = Color.white;
-        GetComponent<Rigidbody2D>().simulated = false; //remove from physics
-        SoundManager.instance.PlaySound(explosionSound);
+        GetComponent<Rigidbody2D>().simulated = false; //remove from 
         if (drop != null) {
             drop.Pop();
         }
