@@ -5,6 +5,7 @@ public class TargetMovement : BaseMovement {
 
     [Range(0,360)]
     public float angleOffset;
+    public float distanceOffset;
     public Vector3 posOffset;
     public float minObstacleDist = 2f;
     public float emergencyDistance = 4;
@@ -58,11 +59,12 @@ public class TargetMovement : BaseMovement {
     IEnumerator LaserEyes() {
         while (true) {
             currentDir = player.position + posOffset - _transform.position;
+            currentDir -= currentDir.normalized * distanceOffset;
             currentDir = offset * currentDir;
 
-            //Debug.DrawRay(_transform.position, currentDir, Color.red);
-            //Debug.DrawRay(leftEye.position, (leftEyeQuat * currentDir).normalized * eyesLength, Color.yellow, laserInterval);
-            //Debug.DrawRay(rightEye.position, (rightEyeQuat * currentDir).normalized * eyesLength, Color.yellow, laserInterval);
+            Debug.DrawRay(_transform.position, currentDir, Color.red);
+            Debug.DrawRay(leftEye.position, (leftEyeQuat * currentDir).normalized * eyesLength, Color.yellow, laserInterval);
+            Debug.DrawRay(rightEye.position, (rightEyeQuat * currentDir).normalized * eyesLength, Color.yellow, laserInterval);
 
             RaycastHit2D playerHit = Physics2D.Raycast(_transform.position, currentDir, eyesLength, playerMask);
             if(playerHit.collider == null || playerHit.collider.tag != "Player") {
@@ -85,7 +87,7 @@ public class TargetMovement : BaseMovement {
             }
 
             currentDir.Normalize();
-            //Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
+            Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
 
             yield return new WaitForSeconds(laserInterval);
         }
