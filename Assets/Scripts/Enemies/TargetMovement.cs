@@ -44,7 +44,7 @@ public class TargetMovement : BaseMovement {
     }
 
     private void OnPlayerDeath(object useless) {
-        enabled = false;
+        gameObject.SetActive(false);
     }
 
     void OnEnable() {
