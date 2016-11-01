@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class WaypointsMovement : BaseMovement {
 
     public List<Vector3> wayPoints;
-    private int currentPoint = 0;
+    private int currentPoint = -1;
     private Vector3 direction;
 
     // Use this for initialization
