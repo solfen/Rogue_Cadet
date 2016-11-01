@@ -15,7 +15,7 @@ public class BulletPattern : ScriptableObject {
     public float angleStart;
     public float delayBetweenBullets;
     public float angleBetweenBullets;
-    public float angleMax;
     public float angleMin;
+    public float angleMax;
     public float angleMultiplierAtMax = -1;
 }

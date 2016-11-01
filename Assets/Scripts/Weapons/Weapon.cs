@@ -60,7 +60,7 @@ public class Weapon : MonoBehaviour {
             StartCoroutine(CoolDown());
         }
 
-        newFireState = !isCoolDown && (autoFire || (useController && (Input.GetButtonDown("MainShot") || Input.GetAxis("MainShot") < -0.5f))) && fireTimer < maxFireDuration;
+        newFireState = !isCoolDown && (autoFire || (useController && (Input.GetButton("MainShot") || Input.GetAxis("MainShot") < -0.5f))) && fireTimer < maxFireDuration;
 
         if(isFiring != newFireState) {
             fireTimer = Mathf.Max(0, fireTimer);
@@ -71,7 +71,7 @@ public class Weapon : MonoBehaviour {
         }
     }
 
-    public void SetFiring(bool fire) {
+    private void SetFiring(bool fire) {
         for (int i = 0; i < bulletsFountains.Count; i++) {
             bulletsFountains[i].SetFiring(fire);
         }

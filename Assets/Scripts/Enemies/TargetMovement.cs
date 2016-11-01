@@ -16,7 +16,7 @@ public class TargetMovement : BaseMovement {
     public float laserInterval = 0.5f;
 
     private Transform player;
-    private Vector3 currentDir;
+    private Vector3 currentDir = new Vector3();
     private Quaternion offset;
     private Quaternion leftEyeQuat;
     private Quaternion rightEyeQuat;
@@ -48,7 +48,8 @@ public class TargetMovement : BaseMovement {
     }
 
     void OnEnable() {
-        StartCoroutine(LaserEyes());
+        if(speed > 0)
+            StartCoroutine(LaserEyes());
     }
 
 	void FixedUpdate () {
