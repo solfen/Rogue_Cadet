@@ -54,7 +54,7 @@ public class BehaviourVisibilitySwitching : MonoBehaviour {
 
     private void SwitchBehaviour() {
         for(int i = 0; i < behavioursToSwitch.Count; i++) {
-            behavioursToSwitch[i].script.enabled = (behavioursToSwitch[i].inIdle && isIdle) || (behavioursToSwitch[i].inVisible && !isIdle);
+            ((ISwitchable)behavioursToSwitch[i].script).SwitchState((behavioursToSwitch[i].inIdle && isIdle) || (behavioursToSwitch[i].inVisible && !isIdle));
         }
     }
 

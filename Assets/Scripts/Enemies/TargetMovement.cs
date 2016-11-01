@@ -32,6 +32,24 @@ public class TargetMovement : BaseMovement {
         leftEyeQuat = Quaternion.Euler(0, 0, eyeAngle);
         rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
         offset = Quaternion.Euler(0, 0, angleOffset);
+
+        enabled = false;
+        canSwitch = false;
+    }
+
+    public override void SwitchState(bool state) {
+        if (!canSwitch) {
+            return;
+        }
+
+        if (speed > 0) {
+            if (state)
+                StartCoroutine("LaserEyes");
+            else
+                StopCoroutine("LaserEyes");
+        }
+
+        enabled = state;
     }
 
     void OnDestroy() {
@@ -41,15 +59,12 @@ public class TargetMovement : BaseMovement {
 
     private void OnPlayerCreation(object _player) {
         player = ((Player)_player).GetComponent<Transform>();
+        canSwitch = true;
     }
 
     private void OnPlayerDeath(object useless) {
-        gameObject.SetActive(false);
-    }
-
-    void OnEnable() {
-        if(speed > 0)
-            StartCoroutine(LaserEyes());
+        SwitchState(false);
+        canSwitch = false;
     }
 
 	void FixedUpdate () {

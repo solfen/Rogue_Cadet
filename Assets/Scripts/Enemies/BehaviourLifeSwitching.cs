@@ -28,7 +28,7 @@ public class BehaviourLifeSwitching : MonoBehaviour {
     // Update is called once per frame
     void Update () {
 	    for(int i = 0; i < behavioursToSwitch.Count; i++) {
-            behavioursToSwitch[i].script.enabled = bearer.life >= behavioursToSwitch[i].minLife && bearer.life < behavioursToSwitch[i].maxLife;
+            ((ISwitchable)behavioursToSwitch[i].script).SwitchState(bearer.life >= behavioursToSwitch[i].minLife && bearer.life < behavioursToSwitch[i].maxLife);
         }
 	}
 }
