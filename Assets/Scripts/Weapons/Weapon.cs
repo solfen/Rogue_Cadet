@@ -4,55 +4,41 @@ using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour {
 
-
     [Header("Weapon Properties")]
     [SerializeField] private bool autoFire;
-    [SerializeField] private bool useController = false;
     [SerializeField] private float maxFireDuration;
     [SerializeField] private float coolDownDuration;
     [Header("Fountains")]
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
 
-    private Transform player;
     private Transform bulletsParent;
-    private float damageMultiplier = 1;
     public bool isFiring { get; private set; }
     private bool newFireState = false;
     private float fireTimer;
     private float timeMultiplier = -1;
     private bool isCoolDown = false;
-
-    void Awake() {
-        EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
-        enabled = false;
-    }
+    private bool isInput = false;
 
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
         if(find != null)
             bulletsParent = find.transform;
-    }
-
-    void OnDestroy () {
-        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
-        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-    }
-
-    private void OnPlayerCreation(object _player) {
-        player = ((Player)_player).GetComponent<Transform>();
 
         for (int i = 0; i < bulletsFountains.Count; i++) {
-            bulletsFountains[i].Init(player, bulletsParent, damageMultiplier);
+            bulletsFountains[i].Init(null, bulletsParent);
         }
+    }
 
-        enabled = true;
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
     }
 
     private void OnPlayerDeath(object useless) {
         enabled = false;
+        SetFiring(false);
     }
-	
+
     void Update () {
         fireTimer += Time.deltaTime * timeMultiplier;
         if(!isCoolDown && fireTimer >= maxFireDuration) {
@@ -60,7 +46,8 @@ public class Weapon : MonoBehaviour {
             StartCoroutine(CoolDown());
         }
 
-        newFireState = !isCoolDown && (autoFire || (useController && (Input.GetButton("MainShot") || Input.GetAxis("MainShot") < -0.5f))) && fireTimer < maxFireDuration;
+        isInput = autoFire || Input.GetButton("MainShot") || Input.GetAxis("MainShot") < -0.5f;
+        newFireState = !isCoolDown && isInput && fireTimer < maxFireDuration;
 
         if(isFiring != newFireState) {
             fireTimer = Mathf.Max(0, fireTimer);

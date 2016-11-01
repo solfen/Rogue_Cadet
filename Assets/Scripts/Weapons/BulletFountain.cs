@@ -23,9 +23,8 @@ public class BulletFountain : MonoBehaviour {
     private IEnumerator routine = null;
     private Transform playerPos;
 
-    public void Init(Transform _playerPos, Transform bulletParent, float dmgMultiplier) {
+    public void Init(Transform _playerPos, Transform bulletParent) {
         playerPos = _playerPos;
-        bulletStats.damage *= dmgMultiplier;
         bulletStats.parent = bulletParent;
     }
 
