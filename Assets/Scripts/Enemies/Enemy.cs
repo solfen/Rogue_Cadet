@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour {
     public float life;
     public float score;
     public GenericSoundsEnum explosionSound;
+    public SpawnEnemies deathSpawn;
 
     [SerializeField] private float hitFeedbackDuration;
     [SerializeField] private float spriteColorChangeDuration = 0.16f;
@@ -72,6 +73,9 @@ public class Enemy : MonoBehaviour {
         GetComponent<Rigidbody2D>().simulated = false; //remove from 
         if (drop != null) {
             drop.Pop();
+        }
+        if(deathSpawn != null) {
+            deathSpawn.enabled = true;
         }
 
         EventDispatcher.DispatchEvent(Events.ENEMY_DIED, this);

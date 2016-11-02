@@ -11,30 +11,29 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
     private Transform bulletsParent;
     private bool canSwitch = false;
 
-    void Awake() {
-        EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
-    }
-
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-        GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
-        if (find != null)
-            bulletsParent = find.transform;
-    }
 
-    void OnDestroy() {
-        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
-        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-    }
-
-    private void OnPlayerCreation(object _player) {
-        player = ((Player)_player).GetComponent<Transform>();
+        GameObject go = GameObject.FindGameObjectWithTag("Player");
+        if (go == null) {
+            enabled = false;
+            return;
+        }
+        player = go.GetComponent<Transform>();
 
         for (int i = 0; i < bulletsFountains.Count; i++) {
             bulletsFountains[i].Init(player, bulletsParent);
         }
 
+        GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
+        if (find != null)
+            bulletsParent = find.transform;
+
         canSwitch = true;
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
     }
 
     private void OnPlayerDeath(object useless) {

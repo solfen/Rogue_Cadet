@@ -23,9 +23,8 @@ public class TargetMovement : BaseMovement {
     private int eyesMask = 1 << 13;
     private int playerMask = 1 << 10;
 
-    protected override void Awake() {
+    protected override void Awake () {
         base.Awake();
-        EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
 
         playerMask = playerMask | eyesMask;
@@ -33,8 +32,14 @@ public class TargetMovement : BaseMovement {
         rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
         offset = Quaternion.Euler(0, 0, angleOffset);
 
-        enabled = false;
-        canSwitch = false;
+        GameObject go = GameObject.FindGameObjectWithTag("Player");
+        if (go == null) {
+            enabled = false;
+            canSwitch = false;
+            return;
+        }
+
+        player = go.GetComponent<Transform>();
     }
 
     public override void SwitchState(bool state) {
@@ -53,13 +58,7 @@ public class TargetMovement : BaseMovement {
     }
 
     void OnDestroy() {
-        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
-    }
-
-    private void OnPlayerCreation(object _player) {
-        player = ((Player)_player).GetComponent<Transform>();
-        canSwitch = true;
     }
 
     private void OnPlayerDeath(object useless) {
