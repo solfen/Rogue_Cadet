@@ -36,7 +36,7 @@ public class SaveRoomToDungeonTool {
         List<RoomList> roomConfigs = zone[newRoom.zoneIndex].roomConfigs;
         for (int i = 0; i < roomConfigs.Count; i++) {
             if (roomConfigs[i].rooms.Contains(newRoom)) {
-                Debug.Log("Room NOT added. Zone: " + newRoom.zoneIndex + " Room config: " + i);
+                Debug.LogWarning("Room NOT added. Zone: " + newRoom.zoneIndex + " Room config: " + i);
                 return;
             }
 
