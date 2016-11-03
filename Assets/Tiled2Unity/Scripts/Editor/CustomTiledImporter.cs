@@ -109,6 +109,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
         }
 
         collidersObj.layer = LayerMask.NameToLayer("Walls");
+        collidersObj.tag = "Wall";
         collidersObj.transform.parent = layer.transform;
     }
 
