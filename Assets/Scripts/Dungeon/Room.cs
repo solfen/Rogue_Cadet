@@ -16,6 +16,7 @@ public class EnemyPack {
 
 public class Room : MonoBehaviour {
 
+    public bool debug;
     public Transform enemiesParent;
     [Header("Dungeon data")]
     public int zoneIndex;
@@ -29,6 +30,9 @@ public class Room : MonoBehaviour {
     public Vector2 pos = new Vector2();
 
     void Start() {
+        if (debug)
+            return;
+
         if (enemiesContainers.Count > 0) {
             GameObject selectedContainer = enemiesContainers[Random.Range(0, enemiesContainers.Count)].container;
             selectedContainer.SetActive(true);

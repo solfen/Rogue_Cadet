@@ -24,6 +24,8 @@ public class SaveRoomToDungeonTool {
             return;
         }
 
+        newRoom.debug = false;
+
         Undo.RecordObject(dungeon, "Add room to dungeon");
 
         List<ZoneRooms> zone = newRoom.exits.Count > 1 ? dungeon.zoneRooms : dungeon.deadEndRooms;
