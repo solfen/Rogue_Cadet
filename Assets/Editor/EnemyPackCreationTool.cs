@@ -15,6 +15,8 @@ public class EnemyPackCreationTool {
             pack.container = enemiesContainer.gameObject;
 
             room.enemiesContainers.Add(pack);
+
+            enemiesContainer.gameObject.SetActive(false);
         }
 
         PrefabUtility.ReplacePrefab(room.gameObject, PrefabUtility.GetPrefabParent(room.gameObject), ReplacePrefabOptions.ConnectToPrefab);
