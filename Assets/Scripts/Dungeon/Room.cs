@@ -16,7 +16,7 @@ public class EnemyPack {
 
 public class Room : MonoBehaviour {
 
-    public bool debug;
+    public bool debug = true;
     public Transform enemiesParent;
     [Header("Dungeon data")]
     public int zoneIndex;
