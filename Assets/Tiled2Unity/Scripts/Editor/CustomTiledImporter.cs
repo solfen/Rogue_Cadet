@@ -44,10 +44,12 @@ public class CustomTiledImporter : ICustomTiledImporter {
         }
 
         room.size = new Vector2(mapWidth / 60, mapHeight / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
+        newTiledObj.transform.position = new Vector3(newTiledObj.transform.position.x, mapHeight, newTiledObj.transform.position.z);
 
         GameObject enemiesGameObject = new GameObject("Enemies");
         enemiesGameObject.transform.parent = prefab.transform;
         room.enemiesParent = enemiesGameObject.transform;
+        enemiesGameObject.transform.position = new Vector3(enemiesGameObject.transform.position.x, mapHeight, enemiesGameObject.transform.position.z);
 
         //room exits search and save
         for (int i = 0; i < colliders.Count; i++) {
