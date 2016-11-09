@@ -9,7 +9,9 @@ public enum Events {
     PLAYER_DIED,
     PLAYER_HIT,
     PLAYER_ENTER_ROOM,
-    BULLET_VOLLEY_FIRED
+    BULLET_VOLLEY_FIRED,
+    DUNGEON_GRAPH_CREATED,
+    GAME_LOADED
 }
 
 public static class EventDispatcher {
@@ -23,6 +25,8 @@ public static class EventDispatcher {
         { Events.PLAYER_HIT,  null },
         { Events.PLAYER_ENTER_ROOM,  null },
         { Events.BULLET_VOLLEY_FIRED,  null },
+        { Events.DUNGEON_GRAPH_CREATED,  null },
+        { Events.GAME_LOADED,  null }
 
     };
 

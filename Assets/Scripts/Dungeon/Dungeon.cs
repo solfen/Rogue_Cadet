@@ -48,6 +48,8 @@ public class GraphRoom {
 public class Dungeon : MonoBehaviour {
 
     public Sector[,] map;
+    [Tooltip("Debug bool. check it to see all the dungeon")]
+    public bool showRoomsAtInstantiation = false;
 
     [Header("Starting")]
     public Vector2 startingPos;
@@ -88,8 +90,10 @@ public class Dungeon : MonoBehaviour {
         CreateRoomGraph();
         Debug.Log((Time.realtimeSinceStartup - time)*1000);
 
-        MiniMap.instance.OnGraphCreated(graph);
+        EventDispatcher.DispatchEvent(Events.DUNGEON_GRAPH_CREATED, graph);
+
         StartCoroutine(InstantiateRooms());
+
         EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
     }
 
@@ -159,14 +163,14 @@ public class Dungeon : MonoBehaviour {
         for (int i = 0; i < graph.Count; i++) {
             roomWorldPos.Set(graph[i].pos.x * gameData.roomBaseSize.x, graph[i].pos.y * gameData.roomBaseSize.y, 0);
             graph[i].roomInstance = Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]) as Room;
-            graph[i].roomInstance.gameObject.SetActive(false);
+            graph[i].roomInstance.gameObject.SetActive(showRoomsAtInstantiation);
 
             if (secondsBetweenInstanciation > 0) {
-                yield return new WaitForSeconds(secondsBetweenInstanciation);
+                yield return new WaitForSecondsRealtime(secondsBetweenInstanciation);
             }
         }
 
-        InputMapUI.instance.OnLoaded();
+        EventDispatcher.DispatchEvent(Events.GAME_LOADED, null);
     }
 
     private void GenerateRoom() {

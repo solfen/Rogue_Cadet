@@ -21,6 +21,11 @@ public class InputMapUI : MonoBehaviour {
         inputImage.sprite = isGamepad ? gamepadSprite : keyboardSprite;
         anim = GetComponent<Animator>();
         instance = this;
+        EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.GAME_LOADED, OnLoaded);
     }
 
     // Update is called once per frame
@@ -38,7 +43,7 @@ public class InputMapUI : MonoBehaviour {
         Time.timeScale = 0;
     }
 
-    public void OnLoaded() {
+    public void OnLoaded(object useless) {
         text.text = "Press start or space";
         isLoaded = true;
     }

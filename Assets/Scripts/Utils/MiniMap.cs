@@ -30,6 +30,11 @@ public class MiniMap : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         instance = this;
+        EventDispatcher.AddEventListener(Events.DUNGEON_GRAPH_CREATED, OnGraphCreated);
+    }
+
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.DUNGEON_GRAPH_CREATED, OnGraphCreated);
     }
 
     void Start() {
@@ -57,7 +62,9 @@ public class MiniMap : MonoBehaviour {
 
     }
 
-    public void OnGraphCreated(List<GraphRoom> graph) {
+    public void OnGraphCreated(object graphObject) {
+        List<GraphRoom> graph = (List<GraphRoom>)graphObject;
+
         for (int i = 0; i < graph.Count; i++) {
             currentPos.Set(graph[i].pos.x * roomBaseSize.x, graph[i].pos.y * roomBaseSize.y, 0);
             currentSize.Set(roomBaseSize.x * graph[i].roomPrefab.size.x, roomBaseSize.y * graph[i].roomPrefab.size.y);
