@@ -178,7 +178,7 @@ public class Dungeon : MonoBehaviour {
             for (int j = 0; j < randomRoom.exits.Count; j++) {
                 if (randomRoom.exits[j].dir * -1 == currentExit.dir) {
                     // ok it's complicated. I'm pretty sure there's an easier way to do that.
-                    // basicly it set the new pos of the room. Since the previous room exit gives the possition of the next room it should be easy right? WRONG
+                    // basicly it set the new pos of the room. Since the previous room exit gives the position of the next room it should be easy right? WRONG
                     // because I have to take into acount the offset of the chosen exit of the new room
                     // and tey don't have the same refenrenctiel at all!
                     // so I calculated the place the current room exit should be (by reversing the dir of the previous room)
