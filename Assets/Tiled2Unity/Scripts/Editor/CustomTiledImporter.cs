@@ -38,6 +38,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
         Room room = prefab.AddComponent<Room>();
         if(existingPrefab != null) {
             room.zoneIndex = existingPrefab.GetComponent<Room>().zoneIndex;
+            room.enemiesContainers = existingPrefab.GetComponent<Room>().enemiesContainers;
         }
         else {
             Debug.Log("New Room. Don't forget to add it to the dungeon!");
@@ -46,7 +47,8 @@ public class CustomTiledImporter : ICustomTiledImporter {
         room.size = new Vector2(mapWidth / 60, mapHeight / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
         newTiledObj.transform.position = new Vector3(newTiledObj.transform.position.x, mapHeight, newTiledObj.transform.position.z);
 
-        GameObject enemiesGameObject = new GameObject("Enemies");
+        GameObject enemiesGameObject = existingPrefab != null ? Object.Instantiate(existingPrefab.transform.GetChild(1).gameObject) : new GameObject(); // enemies overide prevention. GetChild(1) is not a robust way, but it works.
+        enemiesGameObject.name = "Enemies";
         enemiesGameObject.transform.parent = prefab.transform;
         room.enemiesParent = enemiesGameObject.transform;
         enemiesGameObject.transform.position = new Vector3(enemiesGameObject.transform.position.x, mapHeight, enemiesGameObject.transform.position.z);
