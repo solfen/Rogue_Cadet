@@ -30,11 +30,14 @@ public class BulletFountain : MonoBehaviour {
 
     public void SetFiring(bool fire) {
         if(fire) {
-            routine = FireRoutine(); // check if I can do that only at Init
-            StartCoroutine(routine);
+            if(routine == null) {
+                routine = FireRoutine();
+                StartCoroutine(routine);
+            }
         }
         else if(routine != null) {
             StopCoroutine(routine);
+            routine = null;
         }
     }
 
