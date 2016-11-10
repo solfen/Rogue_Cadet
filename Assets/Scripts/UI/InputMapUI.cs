@@ -34,7 +34,6 @@ public class InputMapUI : MonoBehaviour {
             anim.SetTrigger("Close");
             isLoaded = false;
             Time.timeScale = 1;
-            Debug.Log("coucouc");
         }
 	}
 
