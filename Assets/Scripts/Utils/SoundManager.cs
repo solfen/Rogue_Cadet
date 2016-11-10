@@ -54,6 +54,11 @@ public class SoundManager : MonoBehaviour {
     }
 
     public void PlaySound(GenericSoundsEnum sound) {
+        if(!sounds.ContainsKey(sound)) {
+            Debug.LogError("Sound:" + sound.ToString() + " doesn't exists");
+            return;
+        }
+
         sounds[sound].Play();
     }
 }
