@@ -11,7 +11,8 @@ public enum Events {
     PLAYER_ENTER_ROOM,
     BULLET_VOLLEY_FIRED,
     DUNGEON_GRAPH_CREATED,
-    GAME_LOADED
+    GAME_LOADED,
+    WEAPON_READY
 }
 
 public static class EventDispatcher {
@@ -26,7 +27,8 @@ public static class EventDispatcher {
         { Events.PLAYER_ENTER_ROOM,  null },
         { Events.BULLET_VOLLEY_FIRED,  null },
         { Events.DUNGEON_GRAPH_CREATED,  null },
-        { Events.GAME_LOADED,  null }
+        { Events.GAME_LOADED,  null },
+        { Events.WEAPON_READY,  null }
 
     };
 

@@ -6,17 +6,18 @@ public class Weapon : MonoBehaviour {
 
     [Header("Weapon Properties")]
     [SerializeField] private bool autoFire;
-    [SerializeField] private float maxFireDuration;
+    public float maxFireDuration;
     [SerializeField] private float coolDownDuration;
     [Header("Fountains")]
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
 
-    private Transform bulletsParent;
     public bool isFiring { get; private set; }
+    public float fireTimer { get; private set; }
+    public bool isCoolDown { get; private set; }
+
+private Transform bulletsParent;
     private bool newFireState = false;
-    private float fireTimer;
     private float timeMultiplier = -1;
-    private bool isCoolDown = false;
     private bool isInput = false;
 
     void Start() {
@@ -28,6 +29,8 @@ public class Weapon : MonoBehaviour {
         for (int i = 0; i < bulletsFountains.Count; i++) {
             bulletsFountains[i].Init(null, bulletsParent);
         }
+
+        EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
     }
 
     void OnDestroy() {

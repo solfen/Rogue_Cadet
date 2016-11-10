@@ -12,6 +12,7 @@ public class ActivateBlink : MonoBehaviour {
     void Start() {
         timer = target.activeSelf ? activeDuration : inactiveDuration;
     }
+
 	// Update is called once per frame
 	void Update () {
         timer -= Time.deltaTime;
