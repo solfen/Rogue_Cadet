@@ -16,6 +16,7 @@ public class BulletStats {
 public class BulletFountain : MonoBehaviour {
 
     public GenericSoundsEnum volleySound;
+    public ScreenShakeTypes screenShakeType = ScreenShakeTypes.NONE;
     [SerializeField] private BulletPattern pattern;
     [SerializeField] private Transform origin;
     [SerializeField] private BulletStats bulletStats;
