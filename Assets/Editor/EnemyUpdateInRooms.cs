@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class EnemyUpdateInRooms {
 
-    private static string[] roomsPaths = { "Assets/Tiled2Unity/Prefabs", "Assets/Tiled2Unity/Prefabs/Zone1", "Assets/Tiled2Unity/Prefabs/Zone2", "Assets/Tiled2Unity/Prefabs/Zone3" };
+    private static string[] roomsPaths = { "Assets/Prefabs/Rooms", "Assets/Prefabs/Rooms/Zone1", "Assets/Prefabs/Rooms/Zone2", "Assets/Prefabs/Rooms/Zone3" };
 
     [MenuItem("Tools/Update enemy in rooms _F6")]
     private static void UpdateEnemiesRoom() {
@@ -26,7 +26,9 @@ public class EnemyUpdateInRooms {
 
             int cpt = 0;
             for (int j = 0; j < rooms.Count; j++) {
-                Enemy[] enemies = rooms[j].GetComponent<Room>().enemiesParent.GetComponentsInChildren<Enemy>(true);
+                GameObject roomGameObject = Object.Instantiate(rooms[j]);
+                roomGameObject.name = rooms[j].name;
+                Enemy[] enemies = roomGameObject.GetComponent<Room>().enemiesParent.GetComponentsInChildren<Enemy>(true);
                 for (int k = enemies.Length - 1; k >= 0; k--) {
                     if (Regex.IsMatch(enemies[k].name, regex)) {
                         Object.Instantiate(Selection.gameObjects[i], enemies[k].transform.position, enemies[k].transform.rotation, enemies[k].transform.parent);
@@ -35,7 +37,8 @@ public class EnemyUpdateInRooms {
                     }
                 }
 
-                EditorUtility.SetDirty(rooms[j]);
+                PrefabUtility.ReplacePrefab(roomGameObject, rooms[j], ReplacePrefabOptions.ReplaceNameBased);
+                Object.DestroyImmediate(roomGameObject);
             }
 
 
