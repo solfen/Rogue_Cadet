@@ -23,10 +23,12 @@ public class BulletFountain : MonoBehaviour {
 
     private IEnumerator routine = null;
     private Transform playerPos;
+    private float volleyTimer;
 
     public void Init(Transform _playerPos, Transform bulletParent) {
         playerPos = _playerPos;
         bulletStats.parent = bulletParent;
+        volleyTimer = pattern.startDelay;
     }
 
     public void SetFiring(bool fire) {
@@ -43,7 +45,7 @@ public class BulletFountain : MonoBehaviour {
     }
 
     IEnumerator FireRoutine() {
-        float volleyTimer = pattern.startDelay;
+
 
         while (true) {
             if (volleyTimer <= 0) {
