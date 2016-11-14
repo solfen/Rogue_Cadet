@@ -20,6 +20,7 @@ public class BulletFountain : MonoBehaviour {
     [SerializeField] private BulletPattern pattern;
     [SerializeField] private Transform origin;
     [SerializeField] private BulletStats bulletStats;
+    [SerializeField] private GameObject muzzleFlash;
 
     private IEnumerator routine = null;
     private Transform playerPos;
@@ -53,6 +54,9 @@ public class BulletFountain : MonoBehaviour {
                 float angleIncrease = pattern.angleBetweenBullets;
 
                 EventDispatcher.DispatchEvent(Events.BULLET_VOLLEY_FIRED, this);
+                if(muzzleFlash != null) { //TODO maybe not here
+                    StartCoroutine(MuzzleFlash());
+                }
 
                 for (int i = 0; i < pattern.bulletsNb; i++) {
                     Vector3 dir = pattern.targetPlayer ? playerPos.position - origin.position : origin.up;
@@ -81,5 +85,11 @@ public class BulletFountain : MonoBehaviour {
             volleyTimer -= Time.deltaTime;
             yield return null;
         }
+    }
+
+    IEnumerator MuzzleFlash() {
+        muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(0.2f);
+        muzzleFlash.SetActive(false);
     }
 }
