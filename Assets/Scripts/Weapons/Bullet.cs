@@ -2,11 +2,12 @@
 using System.Collections;
 
 public class Bullet : MonoBehaviour {
-
-
     [HideInInspector]
     public Bullet nextAvailable = null; // for the pool linked list
 
+    [SerializeField] private Sprite impactSprite;
+
+    private SpriteRenderer _renderer;
     private Vector2 direction;
     private Rigidbody2D _rigidbody;
     private Transform _transform;
@@ -16,6 +17,7 @@ public class Bullet : MonoBehaviour {
     private bool destroyOutScreen;
 
 	void Awake () {
+        _renderer = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
         _transform = GetComponent<Transform>();
         damager = GetComponent<DamageDealer>();
@@ -40,27 +42,36 @@ public class Bullet : MonoBehaviour {
         }
     }
 
-    void Die() {
+    IEnumerator Die() {
+        _rigidbody.velocity *= 0;
+
+        if (impactSprite != null) {
+            Sprite normalSprite = _renderer.sprite;
+            _renderer.sprite = impactSprite;
+            yield return new WaitForSeconds(0.05f);
+            _renderer.sprite = normalSprite;
+        }
+
         gameObject.SetActive(false);
         BulletsFactory.BulletDeath(prefab, this);
     }
 
     void OnBecameInvisible () {
         if (gameObject.activeSelf && destroyOutScreen) {
-            Die();
+            StartCoroutine(Die());
         }
     }
 
     void OnTriggerEnter2D () {
-        Die();
+        StartCoroutine(Die());
     }
 
     IEnumerator KillTime(float time) {
         yield return new WaitForSeconds(time);
-        Die();
+        StartCoroutine(Die());
     }
 
     public void BombKill() {
-        Die();
+        StartCoroutine(Die());
     }
 }
