@@ -46,12 +46,11 @@ public class BulletFountain : MonoBehaviour {
     }
 
     IEnumerator FireRoutine() {
-
-
         while (true) {
             if (volleyTimer <= 0) {
                 float angleOffset = pattern.angleStart;
                 float angleIncrease = pattern.angleBetweenBullets;
+
 
                 EventDispatcher.DispatchEvent(Events.BULLET_VOLLEY_FIRED, this);
                 if(muzzleFlash != null) { //TODO maybe not here
@@ -59,8 +58,9 @@ public class BulletFountain : MonoBehaviour {
                 }
 
                 for (int i = 0; i < pattern.bulletsNb; i++) {
+                    float randAngle = Random.Range(pattern.angleRandomMin, pattern.angleRandomMax);
                     Vector3 dir = pattern.targetPlayer ? playerPos.position - origin.position : origin.up;
-                    dir = Quaternion.Euler(0, 0, angleOffset) * dir;
+                    dir = Quaternion.Euler(0, 0, angleOffset + randAngle) * dir;
 
                     BulletsFactory.SpawnBullet(bulletStats, origin.position, dir.normalized);
 

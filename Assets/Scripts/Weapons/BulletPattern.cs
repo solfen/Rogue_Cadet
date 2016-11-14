@@ -11,6 +11,10 @@ public class BulletPattern : ScriptableObject {
     [Tooltip("The base angle is toward the player instead of the up transform")]
     public bool targetPlayer;
 
+    [Header("Randomize")]
+    public float angleRandomMin;
+    public float angleRandomMax;
+
     [Header("Bullets Loop")]
     public float angleStart;
     public float delayBetweenBullets;
