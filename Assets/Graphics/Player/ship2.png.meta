@@ -1,19 +1,15 @@
 fileFormatVersion: 2
-guid: 61982f988eec2fa459e9fd4f7eebc3ec
-timeCreated: 1473327606
+guid: f3a0de263ee774e478e14c3b4c2ad0bc
+timeCreated: 1479150555
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: ship_0
-    21300002: ship_1
-    21300004: ship_2
-    21300006: ship_3
-    21300008: ship_4
-    21300010: ship_5
-    21300012: ship_6
-    21300014: ship_7
-    21300016: ship_8
-    21300018: ship_9
+    21300000: ship2_0
+    21300002: ship2_4
+    21300004: ship2_2
+    21300006: ship2_1
+    21300008: ship2_5
+    21300010: ship2_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -50,7 +46,7 @@ TextureImporter:
   allowsAlphaSplitting: 0
   spriteMode: 2
   spriteExtrude: 1
-  spriteMeshType: 0
+  spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
@@ -63,7 +59,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ship_0
+      name: ship2_0
       rect:
         serializedVersion: 2
         x: 0
@@ -71,12 +67,12 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ship_1
+      name: ship2_4
       rect:
         serializedVersion: 2
         x: 16
@@ -84,12 +80,12 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ship_2
+      name: ship2_2
       rect:
         serializedVersion: 2
         x: 32
@@ -97,38 +93,12 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ship_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 24
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 24
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship_5
+      name: ship2_1
       rect:
         serializedVersion: 2
         x: 0
@@ -136,12 +106,12 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ship_6
+      name: ship2_5
       rect:
         serializedVersion: 2
         x: 16
@@ -149,12 +119,12 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: ship_7
+      name: ship2_3
       rect:
         serializedVersion: 2
         x: 32
@@ -162,33 +132,7 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship_8
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship_9
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0

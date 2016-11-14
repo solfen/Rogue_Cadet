@@ -8,10 +8,13 @@ public class ControllerMovement : BaseMovement {
     [SerializeField] private Animator anim;
 
     private Vector3 direction = Vector3.zero;
+    private Vector3 rotation = Vector3.zero;
 
     void FixedUpdate() {
         Move();
         Turn();
+
+        anim.SetFloat("Speed", (rotation + direction).magnitude);
     }
 
     private void Move() {
@@ -20,20 +23,19 @@ public class ControllerMovement : BaseMovement {
 
         _rigidbody.velocity = direction * speed;
 
-        anim.SetFloat("XSpeed", direction.x);
     }
 
     private void Turn() {
         if (InputManager.useGamedad) {
-            direction.x = Input.GetAxisRaw("AimX");
-            direction.y = -Input.GetAxisRaw("AimY");
+            rotation.x = Input.GetAxisRaw("AimX");
+            rotation.y = -Input.GetAxisRaw("AimY");
         }
         else {
-            direction = Input.mousePosition - Camera.main.WorldToScreenPoint(_transform.position);
+            rotation = Input.mousePosition - Camera.main.WorldToScreenPoint(_transform.position);
         }
 
-        if (!InputManager.useGamedad || direction.x > rotationDeadZone || direction.x < -rotationDeadZone || direction.y > rotationDeadZone || direction.y < -rotationDeadZone) {
-            _rigidbody.rotation = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90;
+        if (!InputManager.useGamedad || rotation.x > rotationDeadZone || rotation.x < -rotationDeadZone || rotation.y > rotationDeadZone || rotation.y < -rotationDeadZone) {
+            _rigidbody.rotation = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg - 90;
         }
     }
 }
