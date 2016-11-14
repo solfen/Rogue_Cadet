@@ -141,7 +141,7 @@ public class Dungeon : MonoBehaviour {
 
         GenerateGraph();
 
-       if(!TryAddBosses()) {
+       if(graph.Count < gameData.worldSize.x * gameData.worldSize.y * 0.4 || !TryAddBosses()) {
             CreateRoomGraph();
        }
     }
