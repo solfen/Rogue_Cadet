@@ -35,13 +35,13 @@ public class SoundManager : MonoBehaviour {
 
         EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, PlayExplosionSound);
-        EventDispatcher.AddEventListener(Events.ENEMY_DIED, PlayPlayerExplosionSound);
+        EventDispatcher.AddEventListener(Events.PLAYER_DIED, PlayPlayerExplosionSound);
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
         EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, PlayExplosionSound);
-        EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, PlayPlayerExplosionSound);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, PlayPlayerExplosionSound);
     }
 
     private void PlayBulletSound(object fountain) {

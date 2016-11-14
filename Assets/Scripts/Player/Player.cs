@@ -84,7 +84,7 @@ public class Player : MonoBehaviour {
     private void Damage(float dmg) {
         if (invincibiltyTimer <= 0) {
             life -= dmg;
-            //spriteRender.color = Color.red;
+            spriteRender.color = Color.red;
             invincibiltyTimer = invicibiltyDuration;
         }
     }
