@@ -20,7 +20,8 @@ public class Player : MonoBehaviour {
     public float lifeUpgradeRaise;
     public float manaUpgradeRaise;
 
-    [SerializeField]
+    [SerializeField] private GameObject hitShield;
+
     private Transform _transform;
     private Dungeon dungeon;
     private Animator anim;
@@ -71,7 +72,7 @@ public class Player : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other) {
         DamageDealer damager = other.GetComponent<DamageDealer>();
-        if (damager != null) {
+        if (invincibiltyTimer <= 0 && damager != null) {
             Damage(damager.damage);
             EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
         }
@@ -82,11 +83,10 @@ public class Player : MonoBehaviour {
     }
 
     private void Damage(float dmg) {
-        if (invincibiltyTimer <= 0) {
-            life -= dmg;
-            spriteRender.color = Color.red;
-            invincibiltyTimer = invicibiltyDuration;
-        }
+        life -= dmg;
+        spriteRender.color = Color.red;
+        hitShield.SetActive(true);
+        invincibiltyTimer = invicibiltyDuration;
     }
 
     private void SetCurrentRoom() {
@@ -108,8 +108,9 @@ public class Player : MonoBehaviour {
         }
 
         invincibiltyTimer -= Time.deltaTime;
-        if (invincibiltyTimer < 0) {
+        if (invincibiltyTimer < 0 && hitShield.activeSelf) {
             spriteRender.color = initalColor;
+            hitShield.SetActive(false);
         }
     }
 

@@ -15,6 +15,7 @@ public enum ScreenShakeTypes {
     EXPLOSION,
     SHOT,
     PLAYER_DEATH,
+    PLAYER_HIT
 }
 
 public class ScreenShake : MonoBehaviour {
@@ -35,12 +36,14 @@ public class ScreenShake : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, StartExplosionShake);
         EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, StartFireShake);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, StartPlayerDeathShake);
+        EventDispatcher.AddEventListener(Events.PLAYER_HIT, StartPlayerHitShake);
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, StartExplosionShake);
         EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, StartFireShake);
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, StartPlayerDeathShake);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, StartPlayerHitShake);
     }
 
     private void StartFireShake(object bulletFountain) {
@@ -56,6 +59,10 @@ public class ScreenShake : MonoBehaviour {
 
     public void StartPlayerDeathShake(object useless) {
         StartCoroutine(Shake(configs[ScreenShakeTypes.PLAYER_DEATH]));
+    }
+
+    public void StartPlayerHitShake(object useless) {
+        StartCoroutine(Shake(configs[ScreenShakeTypes.PLAYER_HIT]));
     }
 
     IEnumerator Shake(ScreenShakeConfig config, Vector3? dir = null) {

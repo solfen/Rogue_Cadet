@@ -11,7 +11,8 @@ public enum GenericSoundsEnum {
     ERROR,
     ACTIVATE,
     WEAPON_SHOT_1,
-    PLAYER_EXPLOSION
+    PLAYER_EXPLOSION,
+    PLAYER_HIT
 }
 
 [System.Serializable]
@@ -36,12 +37,14 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, PlayExplosionSound);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, PlayPlayerExplosionSound);
+        EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, PlayBulletSound);
         EventDispatcher.RemoveEventListener(Events.ENEMY_DIED, PlayExplosionSound);
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, PlayPlayerExplosionSound);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
     }
 
     private void PlayBulletSound(object fountain) {
@@ -58,6 +61,10 @@ public class SoundManager : MonoBehaviour {
 
     private void PlayPlayerExplosionSound(object useless) {
         PlaySound(GenericSoundsEnum.PLAYER_EXPLOSION);
+    }
+
+    private void PlayPlayerHitSound(object useless) {
+        PlaySound(GenericSoundsEnum.PLAYER_HIT);
     }
 
     public void PlaySound(GenericSoundsEnum sound) {
