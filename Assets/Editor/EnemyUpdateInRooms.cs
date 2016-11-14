@@ -5,7 +5,7 @@ using UnityEditor;
 
 public class EnemyUpdateInRooms {
 
-    private static string[] roomsPaths = { "Assets/Prefabs/Rooms/Test" }; //{ "Assets/Prefabs/Rooms", "Assets/Prefabs/Rooms/Zone1", "Assets/Prefabs/Rooms/Zone2", "Assets/Prefabs/Rooms/Zone3" };
+    private static string[] roomsPaths = /*{ "Assets/Prefabs/Rooms/Test" };*/ { "Assets/Prefabs/Rooms/Zone0", "Assets/Prefabs/Rooms/Zone1", "Assets/Prefabs/Rooms/Zone2", "Assets/Prefabs/Rooms/Zone3" };
 
     [MenuItem("Tools/Update enemy in rooms _F6")]
     private static void UpdateEnemiesRoom() {

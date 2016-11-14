@@ -21,7 +21,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     public void CustomizePrefab(GameObject prefab) {
-        Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/" + prefab.name + ".prefab");
+        Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone0" + prefab.name + ".prefab"); //!!!!!!!!!!!!!!!!!!! TODO: Tiled custom property to set zone !!!!!!!!!!!!!!!!!
 
         float mapWidth = prefab.GetComponent<TiledMap>().NumTilesWide;
         float mapHeight = prefab.GetComponent<TiledMap>().NumTilesHigh;
