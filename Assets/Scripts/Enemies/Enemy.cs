@@ -79,6 +79,7 @@ public class Enemy : MonoBehaviour {
         }
 
         EventDispatcher.DispatchEvent(Events.ENEMY_DIED, this);
+
         Destroy(gameObject, 0.4f);
 
         enabled = false;

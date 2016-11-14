@@ -21,6 +21,7 @@ public class Player : MonoBehaviour {
     public float manaUpgradeRaise;
 
     [SerializeField]
+    private Transform _transform;
     private Dungeon dungeon;
     private Animator anim;
     private SpriteRenderer spriteRender;
@@ -33,6 +34,7 @@ public class Player : MonoBehaviour {
     private float invincibiltyTimer;
 
     void Start() {
+        _transform = GetComponent<Transform>();
         _collider = GetComponent<BoxCollider2D>();
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
@@ -41,9 +43,9 @@ public class Player : MonoBehaviour {
         maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
         maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
         if (PlayerPrefs.HasKey("Equiped_Bomb")) {
-            Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], transform.position, transform.rotation, transform);
+            Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], _transform.position, _transform.rotation, _transform);
         }
-        Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], transform.position, transform.rotation, transform);
+        Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], _transform.position, _transform.rotation, _transform);
 
         initalColor = spriteRender.color;
         life = maxLife;
@@ -58,7 +60,8 @@ public class Player : MonoBehaviour {
     }
 
 	void Update () {
-        LifeUpdate();
+        if(!isDead)
+            LifeUpdate();
     }
 
     void FixedUpdate() {
@@ -81,13 +84,13 @@ public class Player : MonoBehaviour {
     private void Damage(float dmg) {
         if (invincibiltyTimer <= 0) {
             life -= dmg;
-            spriteRender.color = Color.red;
+            //spriteRender.color = Color.red;
             invincibiltyTimer = invicibiltyDuration;
         }
     }
 
     private void SetCurrentRoom() {
-        newRoom = dungeon.map[(int)Mathf.Floor(transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(transform.position.y / gameData.roomBaseSize.y)].room;
+        newRoom = dungeon.map[(int)Mathf.Floor(_transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(_transform.position.y / gameData.roomBaseSize.y)].room;
         if (newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
             if (PowerBomb.instance != null) {
@@ -99,8 +102,9 @@ public class Player : MonoBehaviour {
     }
 
     private void LifeUpdate() {
-        if(life <= 0 && !isDead) {
+        if(life <= 0) {
             Die();
+            return;
         }
 
         invincibiltyTimer -= Time.deltaTime;
@@ -111,9 +115,12 @@ public class Player : MonoBehaviour {
 
     private void Die() {
         anim.SetTrigger("Death");
-        spriteRender.color = initalColor;
+        spriteRender.color = Color.white;
+        spriteRender.sprite = null;
+        _transform.localScale *= 3;
+        Time.timeScale = 0.2f;
         isDead = true;
         EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
-        Destroy(gameObject, 0.4f);
+        Destroy(gameObject, 2);
     }
 }
