@@ -21,6 +21,6 @@ public class ScoreUI : MonoBehaviour {
     }
 
     public void UpdateCombo(float combo) {
-        comboText.text = "Combo: " + "x" + combo;
+        comboText.text = "x" + combo;
     }
 }
