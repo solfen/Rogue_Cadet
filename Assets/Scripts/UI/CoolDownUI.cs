@@ -13,6 +13,7 @@ public class CoolDownUI : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
         EventDispatcher.AddEventListener(Events.WEAPON_READY, OnWeaponReady);
+        enabled = false;
     }
 
     void OnDestroy () {
@@ -21,6 +22,7 @@ public class CoolDownUI : MonoBehaviour {
 
     private void OnWeaponReady(object weaponObj) {
         weapon = (Weapon)weaponObj;
+        enabled = true;
     }
 
     // Update is called once per frame

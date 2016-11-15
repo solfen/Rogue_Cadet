@@ -9,6 +9,7 @@ public class ShipSelectionUI : MonoBehaviour {
     public GameObject firstUpgradeItem;
     public EventSystem eventSystem;
     public ShopUI shopUI;
+    public GameObject shipUgradeUI;
 
     [SerializeField]
     private Animator transitionAnimator;
@@ -35,6 +36,7 @@ public class ShipSelectionUI : MonoBehaviour {
 
     public void ValidateSelection() {
         shopUI.enabled = true;
+        shipUgradeUI.SetActive(true);
         PlayerPrefs.SetString("selectedShip", selectedShip.typeName);
         transitionAnimator.SetTrigger("Transition");
         if(InputMapUI.instance.isGamepad) {
