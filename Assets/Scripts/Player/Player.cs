@@ -117,11 +117,16 @@ public class Player : MonoBehaviour {
 
     private void Die() {
         anim.SetTrigger("Death");
+        StartCoroutine(DieAnim());
+        isDead = true;
+    }
+
+    IEnumerator DieAnim() {
+        yield return new WaitForSeconds(0.2f);
+        hitShield.SetActive(false);
         spriteRender.color = Color.white;
-        spriteRender.sprite = null;
         _transform.localScale *= 3;
         Time.timeScale = 0.2f;
-        isDead = true;
         EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
         Destroy(gameObject, 2);
     }
