@@ -57,6 +57,7 @@ public class Player : MonoBehaviour {
     }
 
     public void Init(Dungeon dungeonRef) {
+        Debug.Log(dungeonRef);
         dungeon = dungeonRef;
     }
 

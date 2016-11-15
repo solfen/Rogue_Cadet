@@ -20,6 +20,7 @@ public enum ScreenShakeTypes {
 
 public class ScreenShake : MonoBehaviour {
 
+    [SerializeField] private float shakeInterval = 0.1f;
     [SerializeField] private List<ScreenShakeConfig> configsList;
 
     private Dictionary<ScreenShakeTypes, ScreenShakeConfig> configs = new Dictionary<ScreenShakeTypes, ScreenShakeConfig>();
@@ -67,12 +68,19 @@ public class ScreenShake : MonoBehaviour {
 
     IEnumerator Shake(ScreenShakeConfig config, Vector3? dir = null) {
         float timer = 0;
+        float lastTime = Time.unscaledTime;
 
-        while (timer < config.duration) {
+        do {
             Vector3 random = dir != null ? (Vector3)dir : (Vector3)Random.insideUnitCircle;
-            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude;
-            timer += Time.unscaledDeltaTime;
-            yield return null;
-        }
+            Vector3 offset = random * config.curve.Evaluate(timer / config.duration) * config.amplitude;
+            Debug.Log(offset.x);
+            _transform.position += offset;
+
+            yield return new WaitForSecondsRealtime(shakeInterval);
+
+            timer += Time.unscaledTime - lastTime;
+            lastTime = Time.unscaledTime;
+
+        } while (timer < config.duration);
     }
 }
