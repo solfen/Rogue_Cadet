@@ -72,9 +72,7 @@ public class ScreenShake : MonoBehaviour {
 
         do {
             Vector3 random = dir != null ? (Vector3)dir : (Vector3)Random.insideUnitCircle;
-            Vector3 offset = random * config.curve.Evaluate(timer / config.duration) * config.amplitude;
-            Debug.Log(offset.x);
-            _transform.position += offset;
+            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude; ;
 
             yield return new WaitForSecondsRealtime(shakeInterval);
 
