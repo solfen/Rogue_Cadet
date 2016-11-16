@@ -12,7 +12,9 @@ public enum Events {
     BULLET_VOLLEY_FIRED,
     DUNGEON_GRAPH_CREATED,
     GAME_LOADED,
-    WEAPON_READY
+    WEAPON_READY,
+    WEAPON_COOLDOWN_START,
+    WEAPON_COOLDOWN_END
 }
 
 public static class EventDispatcher {
@@ -28,7 +30,9 @@ public static class EventDispatcher {
         { Events.BULLET_VOLLEY_FIRED,  null },
         { Events.DUNGEON_GRAPH_CREATED,  null },
         { Events.GAME_LOADED,  null },
-        { Events.WEAPON_READY,  null }
+        { Events.WEAPON_READY,  null },
+        { Events.WEAPON_COOLDOWN_START,  null },
+        { Events.WEAPON_COOLDOWN_END,  null }
 
     };
 

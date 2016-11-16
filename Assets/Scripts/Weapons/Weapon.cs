@@ -68,7 +68,9 @@ private Transform bulletsParent;
     }
 
     IEnumerator CoolDown() {
+        EventDispatcher.DispatchEvent(Events.WEAPON_COOLDOWN_START, null);
         float timer = coolDownDuration;
+
         while(timer > 0) {
             timer -= Time.deltaTime;
             yield return null;
@@ -76,6 +78,7 @@ private Transform bulletsParent;
 
         isCoolDown = false;
         fireTimer = 0;
+        EventDispatcher.DispatchEvent(Events.WEAPON_COOLDOWN_END, null);
     }
 
 
