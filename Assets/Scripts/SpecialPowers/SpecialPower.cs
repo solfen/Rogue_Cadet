@@ -23,10 +23,20 @@ public class SpecialPower : MonoBehaviour {
         }
         mana = maxMana;
         NotifyUI();
+        enabled = false;
+        EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
     }
 
-	// Update is called once per frame
-	void Update () {
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.GAME_LOADED, OnLoaded);
+    }
+
+    private void OnLoaded(object useless) {
+        enabled = true;
+    }
+
+    // Update is called once per frame
+    void Update () {
         coolDownTimer -= Time.deltaTime;
 
         if(Input.GetButtonDown(button)) {
