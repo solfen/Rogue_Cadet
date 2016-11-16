@@ -29,6 +29,7 @@ public class PowerBerserk : MonoBehaviour, ISpecialPower {
         target.transform.localScale *= 1.5f;
         targetRenderer.color = Color.red;
         targetWeapon.maxFireDuration = 9000;
+        targetWeapon.coolDownTimer = -1;
 
         float timer = duration;
         while (timer > 0) {

@@ -11,9 +11,12 @@ public class Weapon : MonoBehaviour {
     [Header("Fountains")]
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
 
+    [HideInInspector]
+    public float coolDownTimer;
     public bool isFiring { get; private set; }
     public float fireTimer { get; private set; }
     public bool isCoolDown { get; private set; }
+
 
     private Transform bulletsParent;
     private bool newFireState = false;
@@ -69,10 +72,10 @@ public class Weapon : MonoBehaviour {
 
     IEnumerator CoolDown() {
         EventDispatcher.DispatchEvent(Events.WEAPON_COOLDOWN_START, null);
-        float timer = coolDownDuration;
+        coolDownTimer = coolDownDuration;
 
-        while(timer > 0) {
-            timer -= Time.deltaTime;
+        while(coolDownTimer > 0) {
+            coolDownTimer -= Time.deltaTime;
             yield return null;
         }
 
