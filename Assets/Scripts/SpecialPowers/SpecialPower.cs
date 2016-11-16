@@ -16,23 +16,25 @@ public class SpecialPower : MonoBehaviour {
     public float coolDownTimer = 0;
     private ISpecialPower power;
 
-    void Start () {
+    void Start() {
         power = GetComponent<ISpecialPower>();
-        if(!isBomb) {
+        if (!isBomb) {
             maxMana = transform.parent.GetComponent<Player>().maxMana; //tmp
         }
         mana = maxMana;
         NotifyUI();
+
+        EventDispatcher.AddEventListener(Events.GAME_STARTED, OnLoaded);
         enabled = false;
-        EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
     }
 
     void OnDestroy() {
-        EventDispatcher.RemoveEventListener(Events.GAME_LOADED, OnLoaded);
+        EventDispatcher.RemoveEventListener(Events.GAME_STARTED, OnLoaded);
     }
 
     private void OnLoaded(object useless) {
         enabled = true;
+        Debug.Log("ACTIVATE");
     }
 
     // Update is called once per frame

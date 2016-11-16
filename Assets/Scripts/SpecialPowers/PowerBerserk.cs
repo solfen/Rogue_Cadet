@@ -32,7 +32,7 @@ public class PowerBerserk : MonoBehaviour, ISpecialPower {
 
         float timer = duration;
         while (timer > 0) {
-            yield return null;
+            yield return null; 
             timer -= Time.unscaledDeltaTime;
         }
 

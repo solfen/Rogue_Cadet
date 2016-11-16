@@ -36,6 +36,7 @@ public class InputMapUI : MonoBehaviour {
             anim.SetTrigger("Close");
             isLoaded = false;
             Time.timeScale = 1;
+            EventDispatcher.DispatchEvent(Events.GAME_STARTED, null);
         }
 	}
 

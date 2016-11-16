@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ public enum Events {
     GAME_LOADED,
     WEAPON_READY,
     WEAPON_COOLDOWN_START,
-    WEAPON_COOLDOWN_END
+    WEAPON_COOLDOWN_END,
+    GAME_STARTED
 }
 
 public static class EventDispatcher {
@@ -32,9 +34,11 @@ public static class EventDispatcher {
         { Events.GAME_LOADED,  null },
         { Events.WEAPON_READY,  null },
         { Events.WEAPON_COOLDOWN_START,  null },
-        { Events.WEAPON_COOLDOWN_END,  null }
+        { Events.WEAPON_COOLDOWN_END,  null },
+        { Events.GAME_STARTED,  null }
 
     };
+
 
     public static void AddEventListener(Events type, EventHandler method) {
         events[type] += method;

@@ -9,10 +9,6 @@ public class PowerShield : MonoBehaviour, ISpecialPower {
 
     private CircleCollider2D shieldCollider;
 
-    void Start() {
-        shieldCollider = shield.GetComponent<CircleCollider2D>();
-    }
-
     public void Activate() {
         StartCoroutine(ShieldTime());
     }
@@ -27,7 +23,5 @@ public class PowerShield : MonoBehaviour, ISpecialPower {
         }
 
         shield.SetActive(false);
-        shieldCollider.enabled = false;
-
     }
 }
