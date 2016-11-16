@@ -17,7 +17,7 @@ public class ScoreUI : MonoBehaviour {
     }
 
     public void UpdateScore(float score) {
-        scoreText.text = "Money: " + score + "$";
+        scoreText.text = "Money: " + score + " $";
     }
 
     public void UpdateCombo(float combo) {

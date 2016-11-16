@@ -48,7 +48,7 @@ public class ShopUI : MonoBehaviour {
 
     void Start() {
         money = PlayerPrefs.GetFloat("Money", 6000);
-        moneyText.text = "Money: " + money + "$";
+        moneyText.text = "Money: " + Mathf.Floor(money) + " $";
     }
 
     void Update() {
