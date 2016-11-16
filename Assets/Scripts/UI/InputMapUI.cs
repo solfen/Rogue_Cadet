@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class InputMapUI : MonoBehaviour {
     public static InputMapUI instance;
 
-    public Sprite gamepadSprite;
-    public Sprite keyboardSprite;
-    public Image inputImage;
+    public GameObject gamepadControls;
+    public GameObject keyboardControls;
     public Text text;
 
     public bool isGamepad;
@@ -17,10 +16,13 @@ public class InputMapUI : MonoBehaviour {
     private bool isLoaded = false;
 
     void Awake () {
-        isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
-        inputImage.sprite = isGamepad ? gamepadSprite : keyboardSprite;
         anim = GetComponent<Animator>();
         instance = this;
+        isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
+
+        gamepadControls.SetActive(isGamepad);
+        keyboardControls.SetActive(!isGamepad);
+
         EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
     }
 
