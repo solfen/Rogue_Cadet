@@ -107,7 +107,7 @@ public class ShopUI : MonoBehaviour {
             }
 
             PlayerPrefs.SetFloat("Money", money);
-            moneyText.text = "Money: " + money + "$";
+            moneyText.text = "Money: " + Mathf.Floor(money) + "$";
             UpdateItems();
         }
     }
