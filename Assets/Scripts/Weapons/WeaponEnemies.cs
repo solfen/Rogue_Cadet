@@ -21,13 +21,13 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
         }
         player = go.GetComponent<Transform>();
 
-        for (int i = 0; i < bulletsFountains.Count; i++) {
-            bulletsFountains[i].Init(player, bulletsParent);
-        }
-
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
         if (find != null)
             bulletsParent = find.transform;
+
+        for (int i = 0; i < bulletsFountains.Count; i++) {
+            bulletsFountains[i].Init(player, bulletsParent);
+        }
 
         canSwitch = true;
     }
