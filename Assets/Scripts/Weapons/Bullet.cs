@@ -57,7 +57,7 @@ public class Bullet : MonoBehaviour {
     }
 
     void OnBecameInvisible () {
-        if (gameObject.activeSelf && destroyOutScreen) {
+        if (gameObject.activeInHierarchy && destroyOutScreen) {
             StartCoroutine(Die());
         }
     }
