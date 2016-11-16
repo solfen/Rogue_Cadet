@@ -20,7 +20,6 @@ public class PowerShield : MonoBehaviour, ISpecialPower {
     IEnumerator ShieldTime() {
         float timer = duration;
         shield.SetActive(true);
-        shieldCollider.enabled = true; //if not, the collider is not active...
 
         while (timer > 0) {
             yield return null;

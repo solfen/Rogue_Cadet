@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour {
     public float fireTimer { get; private set; }
     public bool isCoolDown { get; private set; }
 
-private Transform bulletsParent;
+    private Transform bulletsParent;
     private bool newFireState = false;
     private float timeMultiplier = -1;
     private bool isInput = false;
