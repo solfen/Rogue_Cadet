@@ -34,7 +34,6 @@ public class SpecialPower : MonoBehaviour {
 
     private void OnLoaded(object useless) {
         enabled = true;
-        Debug.Log("ACTIVATE");
     }
 
     // Update is called once per frame
