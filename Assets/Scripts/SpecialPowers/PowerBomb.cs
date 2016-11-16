@@ -29,14 +29,21 @@ public class PowerBomb : MonoBehaviour, ISpecialPower {
 
     public void Activate() {
         if (destroyBullets && bulletsParent != null) {
+            Transform child = null;
             for (int i = bulletsParent.childCount - 1; i >= 0; i--) {
-                bulletsParent.GetChild(i).GetComponent<Bullet>().BombKill();
+                child = bulletsParent.GetChild(i);
+                if(child.gameObject.activeSelf)
+                    child.GetComponent<Bullet>().BombKill();
             }
         }
 
-        int enemiesCount = currentRoom.enemiesParent.childCount;
+        Transform enemiesParent = currentRoom.enemiesParent.GetChild(0);
+        Enemy enemy = null;
+        int enemiesCount = enemiesParent.childCount;
         for (int i = enemiesCount - 1; i >= 0; i--) {
-            currentRoom.enemiesParent.GetChild(i).GetComponent<Enemy>().Hit(damage);
+            enemy = enemiesParent.GetChild(i).GetComponent<Enemy>();
+            if(enemy != null)
+                enemy.Hit(damage);
         }
 
         explosion.SetTrigger("Explode");
