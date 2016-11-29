@@ -11,36 +11,13 @@ public class ShipSelectionUI : MonoBehaviour {
     public ShopUI shopUI;
     public GameObject shipUgradeUI;
 
-    [SerializeField]
-    private Animator transitionAnimator;
-    [SerializeField]
-    private List<Player> shipTypesList;
-    [SerializeField]
-    private Text statText;
-    //private Text specialText;
+    [SerializeField] private Animator transitionAnimator;
 
-    private Player selectedShip;
-
-    private Dictionary<string, Player> ships = new Dictionary<string, Player>();
-	// Use this for initialization
-	void Start () {
-        for (int i = 0; i < shipTypesList.Count; i++) {
-            ships.Add(shipTypesList[i].typeName, shipTypesList[i]);
-        }
-    }
-	
-    public void SelectShip(string name) {
-        selectedShip = ships[name];
-        statText.text = "Health: " + selectedShip.maxLife + "% | Damage: " + ((int)(selectedShip.damageMultiplier*100)) + "% | Mana: " + selectedShip.maxMana + "%";
-    }
-
-    public void ValidateSelection() {
+    public void ValidateSelection(string selectedShipName) {
         shopUI.enabled = true;
         shipUgradeUI.SetActive(true);
-        PlayerPrefs.SetString("selectedShip", selectedShip.typeName);
+        PlayerPrefs.SetString("selectedShip", selectedShipName);
         transitionAnimator.SetTrigger("Transition");
-        if(InputMapUI.instance.isGamepad) {
-            eventSystem.SetSelectedGameObject(firstUpgradeItem);
-        }
+        eventSystem.SetSelectedGameObject(firstUpgradeItem);
     }
 }
