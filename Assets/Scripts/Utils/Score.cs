@@ -7,9 +7,13 @@ public class Score : MonoBehaviour {
     public float maxCombo;
     public float comboDownInterval = 1;
 
+    [SerializeField] private GameData gameData;
+
     public float score = 0;
+
     private float combo = 1;
     private float comboDownTimer = 0;
+    private float shipGoldPercent;
 
     // Use this for initialization
     void Start () {
@@ -18,6 +22,8 @@ public class Score : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, KilledEnemy);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayerHit);
+
+        shipGoldPercent = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].goldPercent;
     }
 
     void OnDestroy () {
@@ -41,7 +47,7 @@ public class Score : MonoBehaviour {
     public void KilledEnemy(object enemy) {
         float scoreToAdd = ((Enemy)enemy).score;
 
-        score += scoreToAdd * combo;
+        score += scoreToAdd * combo * shipGoldPercent;
         combo = Mathf.Min(maxCombo, combo+1);
         comboDownTimer = comboDownInterval;
 
@@ -59,7 +65,7 @@ public class Score : MonoBehaviour {
     public void CollectibleTaken(object collectible) {
         float value = ((Collectible)collectible).value;
 
-        score += value * combo;
+        score += value * combo * shipGoldPercent;
         ScoreUI.instance.UpdateScore(score);
     }
 
