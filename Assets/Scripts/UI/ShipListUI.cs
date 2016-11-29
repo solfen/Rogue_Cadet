@@ -26,15 +26,15 @@ public class ShipListUI : MonoBehaviour {
 
         UIHalfSize = UISize * 0.5f;
 
-        for (int i = 0; i < gamedata.ships.Count; i++)  {
+        for (int i = 0; i < gamedata.shipsUIItems.Count; i++)  {
             //TODO: if is unlock only
             GameObject obj = Instantiate(shipUIPrefab, _transform) as GameObject;
-            obj.GetComponentInChildren<ShipUI>().Init(gamedata.ships[i], i, UIHalfSize);
+            obj.GetComponentInChildren<ShipUI>().Init(gamedata.shipsUIItems[i], i, UIHalfSize);
         }
 
-        _rectTransform.anchoredPosition = new Vector2(-0.5f * ((gamedata.ships.Count - 3) / 2) * Camera.main.pixelWidth, 0);
+        _rectTransform.anchoredPosition = new Vector2(-0.5f * ((gamedata.shipsUIItems.Count - 3) / 2) * Camera.main.pixelWidth, 0);
 
-        shipSelectedIndex = (gamedata.ships.Count - 1) / 2;
+        shipSelectedIndex = (gamedata.shipsUIItems.Count - 1) / 2;
     }
 	
 	// Update is called once per frame
@@ -55,7 +55,7 @@ public class ShipListUI : MonoBehaviour {
             StartCoroutine(GoDown());
             isDown = true;
         }
-        else if(shipSelectedIndex < gamedata.ships.Count - 1 && Input.GetAxis("MoveX") > 0.5f) {
+        else if(shipSelectedIndex < gamedata.shipsUIItems.Count - 1 && Input.GetAxis("MoveX") > 0.5f) {
             isTransitioning = true;
             StartCoroutine(animator.Animate("listSelectMove", new Vector2(_rectTransform.anchoredPosition.x - 0.5f * Camera.main.pixelWidth, 0)));
             shipSelectedIndex++;

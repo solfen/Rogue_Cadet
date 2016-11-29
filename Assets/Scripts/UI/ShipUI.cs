@@ -7,7 +7,7 @@ public class ShipUI : MonoBehaviour {
     [SerializeField] private Image shipImage;
     [SerializeField] private Text shipName;
 	
-    public void Init (ShipsData data, int elemIndex, Vector2 halfsize) {
+    public void Init (ShipsUIItemData data, int elemIndex, Vector2 halfsize) {
         RectTransform rectTrans = GetComponent<RectTransform>();
         rectTrans.anchorMin = new Vector2(elemIndex * 0.5f - halfsize.x, 0.5f - halfsize.y * Camera.main.aspect);
         rectTrans.anchorMax = new Vector2(elemIndex * 0.5f + halfsize.x, 0.5f + halfsize.y * Camera.main.aspect);

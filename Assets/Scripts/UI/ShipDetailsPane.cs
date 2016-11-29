@@ -41,7 +41,7 @@ public class ShipDetailsPane : MonoBehaviour {
             isOpen = false;
         }
         else if(Input.GetButtonDown("Submit")) {
-            shipSelectionUI.ValidateSelection(gameData.ships[selectedShip].name);
+            shipSelectionUI.ValidateSelection(gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex);
         }
     }
 
@@ -61,12 +61,14 @@ public class ShipDetailsPane : MonoBehaviour {
 
         //TODO: check if isUnlocked and then change the data
 
-        nameText.text = gameData.ships[selectedShip].name;
-        description.text = gameData.ships[selectedShip].types[selectedType].description;
-        life.text = "- Life: " + gameData.ships[selectedShip].types[selectedType].associatedShip.maxLife + "%";
-        dps.text = "- DPS: " + ((int)(gameData.ships[selectedShip].types[selectedType].associatedShip.damageMultiplier * 100)) + "%";
-        life.text = "- Mana: " + gameData.ships[selectedShip].types[selectedType].associatedShip.maxMana + "%";
-        powerName.text = gameData.ships[selectedShip].types[selectedType].powerName;
-        powerName.text = gameData.ships[selectedShip].types[selectedType].powerDescription;
+        nameText.text = gameData.shipsUIItems[selectedShip].name;
+        description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
+        powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
+        powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
+
+        ShipConfig shipConfig = gameData.ships[gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex];
+        life.text = "- Life: " + shipConfig.lifePrecent + "%";
+        dps.text = "- Damage: " +  shipConfig.damagePrecent + "%";
+        life.text = "- Mana: " + shipConfig.manaPrecent + "%";
     }
 }

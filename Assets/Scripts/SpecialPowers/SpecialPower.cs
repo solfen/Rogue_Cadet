@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpecialPower : MonoBehaviour {
 
+    [SerializeField] private GameData gameData;
     public float manaCost;
     public float coolDownDuration;
     public string button;
@@ -19,7 +20,7 @@ public class SpecialPower : MonoBehaviour {
     void Start() {
         power = GetComponent<ISpecialPower>();
         if (!isBomb) {
-            maxMana = transform.parent.GetComponent<Player>().maxMana; //tmp
+            maxMana = gameData.shipBaseStats.maxMana * gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].manaPrecent;
         }
         mana = maxMana;
         NotifyUI();

@@ -5,25 +5,19 @@ public class Player : MonoBehaviour {
 
     public GameData gameData;
     public Transform sprite;
-    public string typeName;
-    public float speed = 5f;
-    public float maxLife = 100f;
-    public float maxMana = 100f;
-    public float damageMultiplier = 1f;
-    public float meleeDamage = 10f;
-    public float invicibiltyDuration = 1f;
-    public float life;
-    public Vector2 hitboxPos;
-    public Vector2 hitboxSize;
+
+    public float currentLife;
 
     public float hitboxUpgradeSizeReduce;
     public float lifeUpgradeRaise;
     public float manaUpgradeRaise;
 
     [SerializeField] private GameObject hitShield;
+    [SerializeField] private Dungeon dungeon;
+
+    private float currentInvicibiltyDuration;
 
     private Transform _transform;
-    private Dungeon dungeon;
     private Animator anim;
     private SpriteRenderer spriteRender;
     private bool isDead = false;
@@ -40,25 +34,23 @@ public class Player : MonoBehaviour {
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
 
-        hitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
-        maxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
-        maxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;
+        ShipConfig config = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)];
+        currentLife = gameData.shipBaseStats.maxLife * config.lifePrecent;
+        currentInvicibiltyDuration = gameData.shipBaseStats.invicibiltyDuration * config.invicibiltyDurationPercent;
+        _collider.size = gameData.shipBaseStats.hitboxSize * config.hitboxSizePercent;
+
+        /*currentHitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
+        baseMaxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
+        baseMaxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;*/
+
         if (PlayerPrefs.HasKey("Equiped_Bomb")) {
             Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], _transform.position, _transform.rotation, _transform);
         }
         Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], _transform.position, _transform.rotation, _transform);
 
         initalColor = spriteRender.color;
-        life = maxLife;
-        _collider.offset = hitboxPos;
-        _collider.size = hitboxSize;
 
         EventDispatcher.DispatchEvent(Events.PLAYER_CREATED, this);
-    }
-
-    public void Init(Dungeon dungeonRef) {
-        Debug.Log(dungeonRef);
-        dungeon = dungeonRef;
     }
 
 	void Update () {
@@ -72,7 +64,7 @@ public class Player : MonoBehaviour {
 
     void FixedUpdate() {
         if(dungeon != null)//tmp
-            SetCurrentRoom();
+            SetCurrentRoom(); //tmp
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -88,10 +80,10 @@ public class Player : MonoBehaviour {
     }
 
     private void Damage(float dmg) {
-        life -= dmg;
+        currentLife -= dmg;
         spriteRender.color = Color.red;
         hitShield.SetActive(true);
-        invincibiltyTimer = invicibiltyDuration;
+        invincibiltyTimer = currentInvicibiltyDuration;
     }
 
     private void SetCurrentRoom() {
@@ -107,7 +99,7 @@ public class Player : MonoBehaviour {
     }
 
     private void LifeUpdate() {
-        if(life <= 0) {
+        if(currentLife <= 0) {
             Die();
             return;
         }

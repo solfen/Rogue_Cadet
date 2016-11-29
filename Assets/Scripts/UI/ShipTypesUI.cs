@@ -31,7 +31,7 @@ public class ShipTypesUI : MonoBehaviour {
 
         for (int i = 0; i < shipTypesUI.Count; i++) {
             // TODO: isUnlock ternary to select sprite
-            shipTypesUI[i].sprite = gameData.ships[selectedShip].types[i].typeSprite;
+            shipTypesUI[i].sprite = gameData.shipsUIItems[selectedShip].types[i].typeSprite;
         }
 
         StartCoroutine("PopDownAnim");

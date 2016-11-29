@@ -8,6 +8,6 @@ public class PowerHeal : MonoBehaviour, ISpecialPower {
     public Player target;
 
     public void Activate() {
-        target.life = Mathf.Min(target.maxLife, target.life + pvAmount);
+        //target.currentLife = Mathf.Min(target.baseMaxLife, target.currentLife + pvAmount);
     }
 }
