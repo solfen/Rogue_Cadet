@@ -26,9 +26,10 @@ public class BulletFountain : MonoBehaviour {
     private Transform playerPos;
     private float volleyTimer;
 
-    public void Init(Transform _playerPos, Transform bulletParent) {
+    public void Init(Transform _playerPos, Transform bulletParent, float damageMultiplier) {
         playerPos = _playerPos;
         bulletStats.parent = bulletParent;
+        bulletStats.damage *= damageMultiplier;
         volleyTimer = pattern.startDelay;
     }
 

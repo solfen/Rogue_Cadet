@@ -26,7 +26,7 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
             bulletsParent = find.transform;
 
         for (int i = 0; i < bulletsFountains.Count; i++) {
-            bulletsFountains[i].Init(player, bulletsParent);
+            bulletsFountains[i].Init(player, bulletsParent, 1);
         }
 
         canSwitch = true;
