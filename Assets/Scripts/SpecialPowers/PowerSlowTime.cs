@@ -7,7 +7,7 @@ public class PowerSlowTime : BaseSpecialPower {
     [SerializeField] private float duration;
     [SerializeField] private float timeFactor;
 
-    public override void Activate() {
+    protected override void Activate() {
         StartCoroutine(SlowTime());
     }
 

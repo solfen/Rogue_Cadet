@@ -18,7 +18,7 @@ public class PowerBerserk : BaseSpecialPower {
         playerWeapon = player.GetComponentInChildren<Weapon>();
 	}
 	
-    public override void Activate() {
+    protected override void Activate() {
         StartCoroutine(BerserkTime());
     }
 

@@ -7,7 +7,7 @@ public class PowerShield : BaseSpecialPower {
     [SerializeField] private float duration;
     [SerializeField] private GameObject shield;
 
-    public override void Activate() {
+    protected override void Activate() {
         StartCoroutine(ShieldTime());
     }
 

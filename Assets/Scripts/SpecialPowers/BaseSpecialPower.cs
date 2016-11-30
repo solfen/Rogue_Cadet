@@ -11,7 +11,7 @@ public abstract class BaseSpecialPower : MonoBehaviour {
     [HideInInspector] public float mana;
     [HideInInspector] public float maxMana;
 
-    public abstract void Activate();
+    protected abstract void Activate();
 
     protected virtual void Start() {
         maxMana = gameData.shipBaseStats.maxMana * gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].manaPrecent;
