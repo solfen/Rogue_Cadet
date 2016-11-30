@@ -17,8 +17,8 @@ public class BombUI : MonoBehaviour {
             gameObject.SetActive(false);
 	}
 
-    public void OnUsePower(SpecialPower bomb) {
+    /*public void OnUsePower(SpecialPower bomb) {
         bombText.text = "Bomb stock: " + bomb.mana + "/" + bomb.maxMana;
-    }
+    }*/
 
 }

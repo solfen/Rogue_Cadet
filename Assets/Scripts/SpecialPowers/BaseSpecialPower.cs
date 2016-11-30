@@ -18,7 +18,6 @@ public abstract class BaseSpecialPower : MonoBehaviour {
         mana = maxMana;
 
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USED, this); //to activate the UI
-        Debug.Log("START");
     }
 
     void Update() {

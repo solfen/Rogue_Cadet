@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerHeal : MonoBehaviour, ISpecialPower {
+public class PowerHeal : BaseSpecialPower {
 
     public float pvAmount;
     public Player target;
 
-    public void Activate() {
+    protected override void Activate() {
         //target.currentLife = Mathf.Min(target.baseMaxLife, target.currentLife + pvAmount);
     }
 }

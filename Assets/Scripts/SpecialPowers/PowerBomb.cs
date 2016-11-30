@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerBomb : MonoBehaviour, ISpecialPower {
+public class PowerBomb {
 
     public static PowerBomb instance;
 
