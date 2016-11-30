@@ -24,10 +24,12 @@ public class BulletFountain : MonoBehaviour {
 
     private IEnumerator routine = null;
     private Transform playerPos;
+    private Player player;
     private float volleyTimer;
 
     public void Init(Transform _playerPos, Transform bulletParent, float damageMultiplier) {
         playerPos = _playerPos;
+        player = playerPos != null ? playerPos.GetComponent<Player>() : null;
         bulletStats.parent = bulletParent;
         bulletStats.damage *= damageMultiplier;
         volleyTimer = pattern.startDelay;
@@ -48,10 +50,9 @@ public class BulletFountain : MonoBehaviour {
 
     IEnumerator FireRoutine() {
         while (true) {
-            if (volleyTimer <= 0) {
+            if (volleyTimer <= 0 && !(pattern.targetPlayer && player.isInvisible)) {
                 float angleOffset = pattern.angleStart;
                 float angleIncrease = pattern.angleBetweenBullets;
-
 
                 EventDispatcher.DispatchEvent(Events.BULLET_VOLLEY_FIRED, this);
                 if(muzzleFlash != null) { //TODO maybe not here

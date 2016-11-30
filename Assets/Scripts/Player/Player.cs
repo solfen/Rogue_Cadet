@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
     public Transform sprite;
 
     public float currentLife;
+    public bool isInvisible;
     private float maxLife;
 
     public float hitboxUpgradeSizeReduce;

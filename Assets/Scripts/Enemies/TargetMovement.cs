@@ -15,7 +15,8 @@ public class TargetMovement : BaseMovement {
     public float eyeAngle = 20;
     public float laserInterval = 0.5f;
 
-    private Transform player;
+    private Transform playerTransform;
+    private Player player;
     private Vector3 currentDir = new Vector3();
     private Quaternion offset;
     private Quaternion leftEyeQuat;
@@ -39,7 +40,8 @@ public class TargetMovement : BaseMovement {
             return;
         }
 
-        player = go.GetComponent<Transform>();
+        playerTransform = go.GetComponent<Transform>();
+        player = go.GetComponent<Player>();
     }
 
     public override void SwitchState(bool state) {
@@ -67,13 +69,18 @@ public class TargetMovement : BaseMovement {
     }
 
 	void FixedUpdate () {
-        _transform.up =  _transform.position - player.position; // "hack" to make it face the player
-        _rigidbody.velocity = currentDir * speed;
+        if(!player.isInvisible) {
+            _transform.up =  _transform.position - playerTransform.position; // "hack" to make it face the player
+            _rigidbody.velocity = currentDir * speed;
+        }
+        else {
+            _rigidbody.velocity = Vector2.zero;
+        }
     }
 
     IEnumerator LaserEyes() {
         while (true) {
-            currentDir = player.position + posOffset - _transform.position;
+            currentDir = playerTransform.position + posOffset - _transform.position;
             currentDir -= currentDir.normalized * distanceOffset;
             currentDir = offset * currentDir;
 
