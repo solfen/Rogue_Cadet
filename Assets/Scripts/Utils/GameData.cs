@@ -8,7 +8,6 @@ public class GameData : ScriptableObject {
     public Vector2 roomBaseSize;
     public List<Zone> zones;
     public List<Weapon> weapons;
-    public List<GameObject> bombs;
     public ShipBaseConfig shipBaseStats;
     public List<ShipConfig> ships;
     public List<ShipsUIItemData> shipsUIItems;

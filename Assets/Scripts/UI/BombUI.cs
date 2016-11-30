@@ -5,20 +5,25 @@ using UnityEngine.UI;
 
 public class BombUI : MonoBehaviour {
 
-    public static BombUI instance;
-
-    [SerializeField]
-    private Text bombText;
+    [SerializeField] private Text bombText;
 
     // Use this for initialization
-    void Awake () {
-        instance = this;
-        if(!PlayerPrefs.HasKey("Equiped_Bomb"))
+    void Start () {
+        if(!PlayerPrefs.HasKey("Equiped_Bomb")) {
             gameObject.SetActive(false);
+            return;
+        }
+
+        EventDispatcher.AddEventListener(Events.BOMB_USED, OnUsePower);
 	}
 
-    /*public void OnUsePower(SpecialPower bomb) {
-        bombText.text = "Bomb stock: " + bomb.mana + "/" + bomb.maxMana;
-    }*/
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.BOMB_USED, OnUsePower);
+    }
+
+    private void OnUsePower(object bombObj) {
+        Bomb bomb = (Bomb)bombObj;
+        bombText.text = "Bomb stock: " + bomb.currentStock + "/" + bomb.maxStock;
+    }
 
 }

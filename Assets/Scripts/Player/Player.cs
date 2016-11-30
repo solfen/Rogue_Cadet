@@ -43,9 +43,6 @@ public class Player : MonoBehaviour {
         baseMaxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
         baseMaxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;*/
 
-        if (PlayerPrefs.HasKey("Equiped_Bomb")) {
-            Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], _transform.position, _transform.rotation, _transform);
-        }
         Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], _transform.position, _transform.rotation, _transform);
         Instantiate(config.power, _transform, false);
 
@@ -91,9 +88,6 @@ public class Player : MonoBehaviour {
         newRoom = dungeon.map[(int)Mathf.Floor(_transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(_transform.position.y / gameData.roomBaseSize.y)].room;
         if (newRoom != currentRoom) {
             MiniMap.instance.OnPlayerEnterRoom(newRoom);
-            if (PowerBomb.instance != null) {
-                PowerBomb.instance.OnPlayerEnterRoom(newRoom);
-            }
             EventDispatcher.DispatchEvent(Events.PLAYER_ENTER_ROOM, newRoom);
         }
         currentRoom = newRoom;
