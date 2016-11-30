@@ -41,6 +41,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
     }
 
     void OnDestroy () {
@@ -50,6 +51,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
     }
 
     private void PlayBulletSound(object fountain) {

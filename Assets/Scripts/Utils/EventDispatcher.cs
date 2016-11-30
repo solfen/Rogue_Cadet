@@ -16,7 +16,9 @@ public enum Events {
     WEAPON_READY,
     WEAPON_COOLDOWN_START,
     WEAPON_COOLDOWN_END,
-    GAME_STARTED
+    GAME_STARTED,
+    SPECIAL_POWER_USED,
+    SPECIAL_POWER_USED_IN_COOLDOWN,
 }
 
 public static class EventDispatcher {
@@ -35,8 +37,9 @@ public static class EventDispatcher {
         { Events.WEAPON_READY,  null },
         { Events.WEAPON_COOLDOWN_START,  null },
         { Events.WEAPON_COOLDOWN_END,  null },
-        { Events.GAME_STARTED,  null }
-
+        { Events.GAME_STARTED,  null },
+        { Events.SPECIAL_POWER_USED,  null },
+        { Events.SPECIAL_POWER_USED_IN_COOLDOWN,  null }
     };
 
 

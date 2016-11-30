@@ -59,7 +59,7 @@ public class SpecialPower : MonoBehaviour {
             BombUI.instance.OnUsePower(this);
         }
         else {
-            PowerUI.instance.OnUsePower(this);
+            //PowerUI.instance.OnUsePower((BaseSpecialPower)this);
         }
     }
 }

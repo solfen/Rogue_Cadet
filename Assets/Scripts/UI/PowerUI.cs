@@ -5,19 +5,19 @@ using UnityEngine.UI;
 
 public class PowerUI : MonoBehaviour {
 
-    public static PowerUI instance;
-
-    [SerializeField]
-    private Text manaText;
-    [SerializeField]
-    private Slider specialLoad;
-
-	// Use this for initialization
-	void Awake () {
-        instance = this;
+    [SerializeField] private Text manaText;
+    [SerializeField] private Slider specialLoad;
+    
+    void Start () {
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
     }
-	
-    public void OnUsePower(SpecialPower power) {
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
+    }
+
+    public void OnUsePower(object powerObj) {
+        BaseSpecialPower power = (BaseSpecialPower)powerObj;
         manaText.text = power.mana + "/" + power.maxMana;
         StartCoroutine(FillLoadBar(power.coolDownTimer));
     }
