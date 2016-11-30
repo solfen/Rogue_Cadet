@@ -4,10 +4,17 @@ using UnityEngine;
 
 public class PowerHeal : BaseSpecialPower {
 
-    public float pvAmount;
-    public Player target;
+    [SerializeField] private float pvAmount;
+    [SerializeField] private ParticleSystem particles;
+    private Player player;
+
+    protected override void Start() {
+        base.Start();
+        player = transform.parent.GetComponent<Player>();
+    }
 
     protected override void Activate() {
-        //target.currentLife = Mathf.Min(target.baseMaxLife, target.currentLife + pvAmount);
+        player.Heal(pvAmount);
+        particles.Play();
     }
 }

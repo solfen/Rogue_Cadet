@@ -7,6 +7,7 @@ public class Player : MonoBehaviour {
     public Transform sprite;
 
     public float currentLife;
+    private float maxLife;
 
     public float hitboxUpgradeSizeReduce;
     public float lifeUpgradeRaise;
@@ -35,7 +36,8 @@ public class Player : MonoBehaviour {
         spriteRender = sprite.GetComponent<SpriteRenderer>();
 
         ShipConfig config = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)];
-        currentLife = gameData.shipBaseStats.maxLife * config.lifePrecent;
+        maxLife = gameData.shipBaseStats.maxLife * config.lifePrecent;
+        currentLife = maxLife;
         currentInvicibiltyDuration = gameData.shipBaseStats.invicibiltyDuration * config.invicibiltyDurationPercent;
         _collider.size = gameData.shipBaseStats.hitboxSize * config.hitboxSizePercent;
 
@@ -82,6 +84,10 @@ public class Player : MonoBehaviour {
         spriteRender.color = Color.red;
         hitShield.SetActive(true);
         invincibiltyTimer = currentInvicibiltyDuration;
+    }
+
+    public void Heal(float amount) {
+        currentLife = Mathf.Min(maxLife, currentLife + amount);
     }
 
     private void SetCurrentRoom() {
