@@ -2,14 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerShield : MonoBehaviour, ISpecialPower {
+public class PowerShield : BaseSpecialPower {
 
-    public float duration;
-    public GameObject shield;
+    [SerializeField] private float duration;
+    [SerializeField] private GameObject shield;
 
-    private CircleCollider2D shieldCollider;
-
-    public void Activate() {
+    public override void Activate() {
         StartCoroutine(ShieldTime());
     }
 

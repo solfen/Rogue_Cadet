@@ -13,11 +13,12 @@ public abstract class BaseSpecialPower : MonoBehaviour {
 
     public abstract void Activate();
 
-    void Start() {
+    protected virtual void Start() {
         maxMana = gameData.shipBaseStats.maxMana * gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].manaPrecent;
         mana = maxMana;
 
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USED, this); //to activate the UI
+        Debug.Log("START");
     }
 
     void Update() {

@@ -1,35 +1,35 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PowerBerserk : MonoBehaviour, ISpecialPower {
+public class PowerBerserk : BaseSpecialPower {
 
-    public Player target;
     public float duration;
 
-    private SpriteRenderer targetRenderer;
-    private Weapon targetWeapon;
+    private Player player;
+    private SpriteRenderer playerRenderer;
+    private Weapon playerWeapon;
 
     // Use this for initialization
-    void Start () {
-        targetRenderer = target.sprite.GetComponent<SpriteRenderer>();
+    protected override void Start () {
+        base.Start();
+
+        player = transform.parent.GetComponent<Player>();
+        playerRenderer = player.sprite.GetComponent<SpriteRenderer>();
+        playerWeapon = player.GetComponentInChildren<Weapon>();
 	}
 	
-    public void Activate() {
+    public override void Activate() {
         StartCoroutine(BerserkTime());
     }
 
     IEnumerator BerserkTime() {
-        if(targetWeapon == null) {
-            targetWeapon = target.GetComponentInChildren<Weapon>();
-        }
+        Color initialColor = playerRenderer.color;
+        float initialFireDuration = playerWeapon.maxFireDuration;
 
-        Color initialColor = targetRenderer.color;
-        float initialFireDuration = targetWeapon.maxFireDuration;
-
-        target.transform.localScale *= 1.5f;
-        targetRenderer.color = Color.red;
-        targetWeapon.maxFireDuration = 9000;
-        targetWeapon.coolDownTimer = -1;
+        player.transform.localScale *= 1.5f;
+        playerRenderer.color = Color.red;
+        playerWeapon.maxFireDuration = 9000;
+        playerWeapon.coolDownTimer = -1;
 
         float timer = duration;
         while (timer > 0) {
@@ -37,8 +37,8 @@ public class PowerBerserk : MonoBehaviour, ISpecialPower {
             timer -= Time.unscaledDeltaTime;
         }
 
-        target.transform.localScale /= 1.5f;
-        targetRenderer.color = initialColor;
-        targetWeapon.maxFireDuration = initialFireDuration;
+        player.transform.localScale /= 1.5f;
+        playerRenderer.color = initialColor;
+        playerWeapon.maxFireDuration = initialFireDuration;
     }
 }

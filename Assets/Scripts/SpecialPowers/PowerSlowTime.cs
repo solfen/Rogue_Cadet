@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PowerSlowTime : MonoBehaviour, ISpecialPower {
+public class PowerSlowTime : BaseSpecialPower {
 
-    public float duration;
-    public float timeFactor;
+    [SerializeField] private float duration;
+    [SerializeField] private float timeFactor;
 
-    public void Activate() {
+    public override void Activate() {
         StartCoroutine(SlowTime());
     }
 
