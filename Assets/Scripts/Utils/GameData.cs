@@ -35,6 +35,7 @@ public class ShipConfig {
     public float speed;
     public float meleeDamagePercent;
     public float invicibiltyDurationPercent = 1f;
+    public BaseSpecialPower power;
 }
 
 [System.Serializable]

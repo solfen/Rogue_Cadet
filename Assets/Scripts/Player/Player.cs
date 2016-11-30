@@ -47,6 +47,7 @@ public class Player : MonoBehaviour {
             Instantiate(gameData.bombs[PlayerPrefs.GetInt("Equiped_Bomb")], _transform.position, _transform.rotation, _transform);
         }
         Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], _transform.position, _transform.rotation, _transform);
+        Instantiate(config.power, _transform, false);
 
         initalColor = spriteRender.color;
 
