@@ -19,7 +19,7 @@ public class LifeBar : MonoBehaviour {
 	void Update () {
         if(player != null) {
             lifeBar.value = player.currentLife / maxLife;
-            text.text = Mathf.Max(player.currentLife, 0) + "/" + maxLife;
+            text.text = Mathf.Max((int)(player.currentLife), 0) + "/" + maxLife;
         }
 	}
 }
