@@ -18,6 +18,7 @@ public class PowerUI : MonoBehaviour {
 
     public void OnUsePower(object powerObj) {
         BaseSpecialPower power = (BaseSpecialPower)powerObj;
+
         manaText.text = power.mana + "/" + power.maxMana;
         StartCoroutine(FillLoadBar(power.coolDownTimer));
     }
