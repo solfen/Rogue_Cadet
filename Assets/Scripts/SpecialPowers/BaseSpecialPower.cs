@@ -20,7 +20,7 @@ public abstract class BaseSpecialPower : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USED, this); //to activate the UI
     }
 
-    void Update() {
+    protected virtual void Update() {
         coolDownTimer -= Time.deltaTime;
 
         if (Input.GetButtonDown("SpecialPower")) {
