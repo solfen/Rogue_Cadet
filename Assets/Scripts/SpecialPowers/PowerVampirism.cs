@@ -28,6 +28,7 @@ public class PowerVampirism : BaseSpecialPower {
     IEnumerator Vampire() {
         float timer = duration;
         particles.Play();
+
         while (timer > 0) {
             int enemiesNb = Physics2D.OverlapCircleNonAlloc(playerTrans.position, distance, enemies, layerMask);
             for(int i = 0; i < enemiesNb; i++) {
