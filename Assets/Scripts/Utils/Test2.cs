@@ -4,9 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Test2 : MonoBehaviour {
-	
-	// Update is called once per frame
-	void Update () {
 
-	}
+    public Test test;
+    private SaveData data;
+
+    void Start() {
+        data = FileSaveLoad.Load();
+        data.hitboxUpgradeNb += 30;
+        FileSaveLoad.Save(data);
+        test.TestStuff();
+    }
 }

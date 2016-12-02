@@ -5,9 +5,8 @@ using System.Collections.Generic;
 public class Test : MonoBehaviour {
 
 
-	// Use this for initialization
-	void Start () {
-
+    public void TestStuff() {
+        Debug.Log(FileSaveLoad.Load().hitboxUpgradeNb);
     }
 	
 
