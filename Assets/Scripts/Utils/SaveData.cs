@@ -13,6 +13,10 @@ public class SaveData {
     public int hitboxUpgradeNb;
     public int lifeUpgradeNb;
     public int manaUpgradeNb;
+    public int damageUpgradeNb;
+    public int goldUpgradeNb;
+    public int bombUpgradeNb;
+    public int bombDamageUpgradeNb;
 }
 
 public static class FileSaveLoad {

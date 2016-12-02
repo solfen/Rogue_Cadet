@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour {
-    [SerializeField] private GameData gameData;
     [Header("Weapon Properties")]
     [SerializeField] private bool autoFire;
     public float maxFireDuration;
@@ -29,9 +28,11 @@ public class Weapon : MonoBehaviour {
         if(find != null)
             bulletsParent = find.transform;
 
-        float damageShipInfluencer = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].damagePrecent;
+        ShipConfig shipConfig = GlobalData.instance.gameData.ships[GlobalData.instance.saveData.selectedShip];
+        float damageInfluencer = shipConfig.damagePrecent + GlobalData.instance.saveData.damageUpgradeNb * shipConfig.damageUpgradeRaise;
+
         for (int i = 0; i < bulletsFountains.Count; i++) {
-            bulletsFountains[i].Init(null, bulletsParent, damageShipInfluencer);
+            bulletsFountains[i].Init(null, bulletsParent, damageInfluencer);
         }
 
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);

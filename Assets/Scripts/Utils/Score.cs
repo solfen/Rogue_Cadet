@@ -7,8 +7,6 @@ public class Score : MonoBehaviour {
     public float maxCombo;
     public float comboDownInterval = 1;
 
-    [SerializeField] private GameData gameData;
-
     public float score = 0;
 
     private float combo = 1;
@@ -23,7 +21,8 @@ public class Score : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayerHit);
 
-        shipGoldPercent = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].goldPercent;
+        ShipConfig shipConfig = GlobalData.instance.gameData.ships[GlobalData.instance.saveData.selectedShip];
+        shipGoldPercent = shipConfig.goldPercent + GlobalData.instance.saveData.goldUpgradeNb * shipConfig.goldUpgradeRaise;
     }
 
     void OnDestroy () {

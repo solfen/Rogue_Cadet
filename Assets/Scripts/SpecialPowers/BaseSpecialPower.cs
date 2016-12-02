@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class BaseSpecialPower : MonoBehaviour {
 
-    [SerializeField] private GameData gameData;
+    [SerializeField] 
     public float manaCost;
     public float coolDownDuration;
 
@@ -14,7 +14,11 @@ public abstract class BaseSpecialPower : MonoBehaviour {
     protected abstract void Activate();
 
     protected virtual void Start() {
-        maxMana = gameData.shipBaseStats.maxMana * gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].manaPrecent;
+        GameData gameData = GlobalData.instance.gameData;
+        SaveData saveData = GlobalData.instance.saveData;
+        ShipConfig shipData = gameData.ships[saveData.selectedShip];
+
+        maxMana = gameData.shipBaseStats.maxMana * (shipData.manaPrecent + saveData.manaUpgradeNb * shipData.manaUpgradeRaise);
         mana = maxMana;
 
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USED, this); //to activate the UI

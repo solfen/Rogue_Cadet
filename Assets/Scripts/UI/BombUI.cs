@@ -8,11 +8,11 @@ public class BombUI : MonoBehaviour {
     [SerializeField] private Text bombText;
 
     // Use this for initialization
-    void Start () {
-        if(!PlayerPrefs.HasKey("Equiped_Bomb")) {
+    void Awake () {
+        /*if(!PlayerPrefs.HasKey("Equiped_Bomb")) {
             gameObject.SetActive(false);
             return;
-        }
+        }*/
 
         EventDispatcher.AddEventListener(Events.BOMB_USED, OnUsePower);
 	}
@@ -23,6 +23,7 @@ public class BombUI : MonoBehaviour {
 
     private void OnUsePower(object bombObj) {
         Bomb bomb = (Bomb)bombObj;
+        Debug.Log("WUT");
         bombText.text = "Bomb stock: " + bomb.currentStock + "/" + bomb.maxStock;
     }
 

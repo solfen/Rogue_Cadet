@@ -8,28 +8,27 @@ public class Bomb : MonoBehaviour {
     public int currentStock;
 
     [SerializeField] private float damage;
-    [SerializeField] private bool destroyBullets = true;
     [SerializeField] private Animator explosion;
 
     private Transform bulletsParent;
     private Room currentRoom;
 
     void Start() {
-        if (!PlayerPrefs.HasKey("Equiped_Bomb")) {
-            gameObject.SetActive(false);
-            //return;
-        }
-
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
         if(find == null) {
             Debug.LogError("No bullet parent! Bomb can't work");
             return;
         }
-
         bulletsParent = find.transform;
+
+        SaveData saveData = GlobalData.instance.saveData;
+        ShipConfig shipconfig = GlobalData.instance.gameData.ships[saveData.selectedShip];
+        maxStock = saveData.bombUpgradeNb * shipconfig.bombStockUpgradeRaise;
         currentStock = maxStock;
+        damage = saveData.bombDamageUpgradeNb * shipconfig.bombDamagePerUpgrade;
 
         EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
+        EventDispatcher.DispatchEvent(Events.BOMB_USED, this); //init UI;
     }
 
     void OnDestroy () {
@@ -37,13 +36,14 @@ public class Bomb : MonoBehaviour {
     }
 
     void Update() {
-        if(Input.GetButtonDown("Bomb")) {
+        if(Input.GetButtonDown("Bomb") && currentStock > 0) {
             Activate();
+            currentStock--;
         }
     }
 
     private void Activate() {
-        if (destroyBullets && bulletsParent != null) {
+        if (bulletsParent != null) {
             Transform child = null;
             for (int i = bulletsParent.childCount - 1; i >= 0; i--) {
                 child = bulletsParent.GetChild(i);

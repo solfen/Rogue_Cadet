@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Player : MonoBehaviour {
 
-    public GameData gameData;
     public Transform sprite;
 
     public float currentLife;
@@ -19,6 +18,7 @@ public class Player : MonoBehaviour {
 
     private float currentInvicibiltyDuration;
 
+    private GameData gameData;
     private Transform _transform;
     private Animator anim;
     private SpriteRenderer spriteRender;
@@ -36,17 +36,17 @@ public class Player : MonoBehaviour {
         anim = sprite.GetComponent<Animator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
 
-        ShipConfig config = gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)];
-        maxLife = gameData.shipBaseStats.maxLife * config.lifePrecent;
-        currentLife = maxLife;
+        gameData = GlobalData.instance.gameData;
+        SaveData saveData = GlobalData.instance.saveData;
+        ShipConfig config = gameData.ships[saveData.selectedShip];
+
+        maxLife = gameData.shipBaseStats.maxLife * (config.lifePrecent + saveData.lifeUpgradeNb * config.lifeUpgradeRaise);
+        _collider.size = gameData.shipBaseStats.hitboxSize * (config.hitboxSizePercent - saveData.hitboxUpgradeNb * config.hitboxUpgradeRaise);
         currentInvicibiltyDuration = gameData.shipBaseStats.invicibiltyDuration * config.invicibiltyDurationPercent;
-        _collider.size = gameData.shipBaseStats.hitboxSize * config.hitboxSizePercent;
 
-        /*currentHitboxSize *= 1 - PlayerPrefs.GetInt("Hitbox_Upgrade", 0) * hitboxUpgradeSizeReduce;
-        baseMaxLife += PlayerPrefs.GetInt("Life_Upgrade", 0) * lifeUpgradeRaise;
-        baseMaxMana += PlayerPrefs.GetInt("Mana_Upgrade", 0) * manaUpgradeRaise;*/
+        currentLife = maxLife;
 
-        Instantiate(gameData.weapons[PlayerPrefs.GetInt("Equiped_Weapon")], _transform.position, _transform.rotation, _transform);
+        Instantiate(gameData.weapons[saveData.selectedWeapon], _transform.position, _transform.rotation, _transform);
         Instantiate(config.power, _transform, false);
 
         initalColor = spriteRender.color;

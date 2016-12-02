@@ -25,6 +25,9 @@ public class ShipBaseConfig {
 [System.Serializable]
 public class ShipConfig {
     public string name;
+    public BaseSpecialPower power;
+
+    [Header("Skills")]
     public float lifePrecent;
     public float fireRatePrecent;
     public float damagePrecent;
@@ -34,7 +37,16 @@ public class ShipConfig {
     public float speed;
     public float meleeDamagePercent;
     public float invicibiltyDurationPercent = 1f;
-    public BaseSpecialPower power;
+
+    [Header("Upgrade Influence")]
+    public float lifeUpgradeRaise;
+    public float hitboxUpgradeRaise;
+    public float manaUpgradeRaise;
+    public float damageUpgradeRaise;
+    public float wheightUpgradeRaise;
+    public float goldUpgradeRaise;
+    public int bombStockUpgradeRaise;
+    public float bombDamagePerUpgrade;
 }
 
 [System.Serializable]

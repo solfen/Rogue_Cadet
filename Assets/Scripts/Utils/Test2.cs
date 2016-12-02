@@ -9,6 +9,7 @@ public class Test2 : MonoBehaviour {
     private SaveData data;
 
     void Start() {
+        FileSaveLoad.Save(new SaveData());
         data = FileSaveLoad.Load();
         data.hitboxUpgradeNb += 30;
         FileSaveLoad.Save(data);
