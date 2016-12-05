@@ -64,7 +64,7 @@ public class ShipDetailsPane : MonoBehaviour {
         nameText.text = gameData.shipsUIItems[selectedShip].name;
         description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
         powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
-        powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
+        powerDescription.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
 
         ShipConfig shipConfig = gameData.ships[gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex];
         life.text = "- Life: " + shipConfig.lifePrecent + "%";
