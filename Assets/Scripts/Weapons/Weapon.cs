@@ -23,6 +23,10 @@ public class Weapon : MonoBehaviour {
     private bool newFireState = false;
     private bool isInput = false;
 
+    void Awake() {
+        enabled = false;
+    }
+
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
 
@@ -41,13 +45,13 @@ public class Weapon : MonoBehaviour {
     }
 
     public void Activate() {
-        gameObject.SetActive(true);
+        enabled = true;
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
     }
 
     public void Disable() {
         SetFiring(false);
-        gameObject.SetActive(false);
+        enabled = false;
     }
 
     private void OnPlayerDeath(object useless) {
