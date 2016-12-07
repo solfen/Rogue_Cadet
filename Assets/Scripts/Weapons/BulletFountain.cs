@@ -17,6 +17,9 @@ public class BulletFountain : MonoBehaviour {
 
     public GenericSoundsEnum volleySound;
     public ScreenShakeTypes screenShakeType = ScreenShakeTypes.NONE;
+    public delegate void FireAction();
+    public event FireAction OnFire;
+
     [SerializeField] private BulletPattern pattern;
     [SerializeField] private Transform origin;
     [SerializeField] private BulletStats bulletStats;
@@ -55,6 +58,9 @@ public class BulletFountain : MonoBehaviour {
                 float angleIncrease = pattern.angleBetweenBullets;
 
                 EventDispatcher.DispatchEvent(Events.BULLET_VOLLEY_FIRED, this);
+                if (OnFire != null)
+                    OnFire();
+
                 if(muzzleFlash != null) { //TODO maybe not here
                     StartCoroutine(MuzzleFlash());
                 }

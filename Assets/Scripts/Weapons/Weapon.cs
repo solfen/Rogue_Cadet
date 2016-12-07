@@ -5,13 +5,14 @@ using System.Collections.Generic;
 public class Weapon : MonoBehaviour {
     [Header("Weapon Properties")]
     [SerializeField] private bool autoFire;
-    public float maxFireDuration;
     [SerializeField] private float coolDownDuration;
+    [SerializeField] private float timePerShot;
+    public float maxFireDuration;
+
     [Header("Fountains")]
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
 
-    [HideInInspector]
-    public float coolDownTimer;
+    [HideInInspector] public float coolDownTimer;
     public bool isFiring { get; private set; }
     public float fireTimer { get; private set; }
     public bool isCoolDown { get; private set; }
@@ -19,7 +20,6 @@ public class Weapon : MonoBehaviour {
 
     private Transform bulletsParent;
     private bool newFireState = false;
-    private float timeMultiplier = -1;
     private bool isInput = false;
 
     void Start() {
@@ -35,6 +35,8 @@ public class Weapon : MonoBehaviour {
             bulletsFountains[i].Init(null, bulletsParent, damageInfluencer);
         }
 
+        bulletsFountains[0].OnFire += Test;
+
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
     }
 
@@ -48,7 +50,7 @@ public class Weapon : MonoBehaviour {
     }
 
     void Update () {
-        fireTimer += Time.deltaTime * timeMultiplier;
+        fireTimer -= Time.deltaTime;
         if(!isCoolDown && fireTimer >= maxFireDuration) {
             isCoolDown = true;
             StartCoroutine(CoolDown());
@@ -59,8 +61,6 @@ public class Weapon : MonoBehaviour {
 
         if(isFiring != newFireState) {
             fireTimer = Mathf.Max(0, fireTimer);
-            timeMultiplier *= -1;
-
             isFiring = newFireState;
             SetFiring(isFiring);
         }
@@ -84,6 +84,10 @@ public class Weapon : MonoBehaviour {
         isCoolDown = false;
         fireTimer = 0;
         EventDispatcher.DispatchEvent(Events.WEAPON_COOLDOWN_END, null);
+    }
+
+    private void Test() {
+        fireTimer += timePerShot;
     }
 
 
