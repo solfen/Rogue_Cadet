@@ -7,7 +7,7 @@ public class PowerBerserk : BaseSpecialPower {
 
     private Player player;
     private SpriteRenderer playerRenderer;
-    private Weapon playerWeapon;
+    private WeaponSwitcher playerWeaponSwitcher;
 
     // Use this for initialization
     protected override void Start () {
@@ -15,7 +15,7 @@ public class PowerBerserk : BaseSpecialPower {
 
         player = transform.parent.GetComponent<Player>();
         playerRenderer = player.sprite.GetComponent<SpriteRenderer>();
-        playerWeapon = player.GetComponentInChildren<Weapon>();
+        playerWeaponSwitcher = player.GetComponentInChildren<WeaponSwitcher>();
 	}
 	
     protected override void Activate() {
@@ -24,12 +24,12 @@ public class PowerBerserk : BaseSpecialPower {
 
     IEnumerator BerserkTime() {
         Color initialColor = playerRenderer.color;
-        float initialFireDuration = playerWeapon.maxFireDuration;
+        Weapon playerWeapon = playerWeaponSwitcher.currentWeapon;
 
         player.transform.localScale *= 1.5f;
         playerRenderer.color = Color.red;
-        playerWeapon.maxFireDuration = 9000;
-        playerWeapon.coolDownTimer = -1;
+        playerWeapon.maxFireDuration *= 9000; // 9000 is just my "infinity" value. 'cause you know over nine thousand.
+        playerWeapon.coolDownTimer = -1; // reset cooldown if ther's any
 
         float timer = duration;
         while (timer > 0) {
@@ -39,6 +39,6 @@ public class PowerBerserk : BaseSpecialPower {
 
         player.transform.localScale /= 1.5f;
         playerRenderer.color = initialColor;
-        playerWeapon.maxFireDuration = initialFireDuration;
+        playerWeapon.maxFireDuration /= 9000;
     }
 }

@@ -23,7 +23,6 @@ public class BombUI : MonoBehaviour {
 
     private void OnUsePower(object bombObj) {
         Bomb bomb = (Bomb)bombObj;
-        Debug.Log("WUT");
         bombText.text = "Bomb stock: " + bomb.currentStock + "/" + bomb.maxStock;
     }
 

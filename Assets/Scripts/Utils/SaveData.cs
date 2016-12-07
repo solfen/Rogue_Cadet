@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
@@ -8,7 +9,7 @@ public class SaveData {
 
     //TODO: Use enum
     public int selectedShip;
-    public int selectedWeapon;
+    public List<int> selectedWeapons;
 
     public int hitboxUpgradeNb;
     public int lifeUpgradeNb;

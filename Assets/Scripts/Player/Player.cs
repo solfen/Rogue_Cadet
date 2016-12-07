@@ -46,7 +46,6 @@ public class Player : MonoBehaviour {
 
         currentLife = maxLife;
 
-        Instantiate(gameData.weapons[saveData.selectedWeapon], _transform.position, _transform.rotation, _transform);
         Instantiate(config.power, _transform, false);
 
         initalColor = spriteRender.color;

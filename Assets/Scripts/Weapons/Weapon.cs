@@ -4,10 +4,11 @@ using System.Collections.Generic;
 
 public class Weapon : MonoBehaviour {
     [Header("Weapon Properties")]
-    [SerializeField] private bool autoFire;
+    public string displayName;
+    public float maxFireDuration;
     [SerializeField] private float coolDownDuration;
     [SerializeField] private float timePerShot;
-    public float maxFireDuration;
+    [SerializeField] private bool autoFire;
 
     [Header("Fountains")]
     [SerializeField] private List<BulletFountain> bulletsFountains = new List<BulletFountain>();
@@ -24,6 +25,7 @@ public class Weapon : MonoBehaviour {
 
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
         if(find != null)
             bulletsParent = find.transform;
@@ -35,18 +37,21 @@ public class Weapon : MonoBehaviour {
             bulletsFountains[i].Init(null, bulletsParent, damageInfluencer);
         }
 
-        bulletsFountains[0].OnFire += Test;
+        bulletsFountains[0].OnFire += OnFountainFire;
+    }
 
+    public void Activate() {
+        gameObject.SetActive(true);
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
     }
 
-    void OnDestroy() {
-        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+    public void Disable() {
+        SetFiring(false);
+        gameObject.SetActive(false);
     }
 
     private void OnPlayerDeath(object useless) {
-        enabled = false;
-        SetFiring(false);
+        Disable();
     }
 
     void Update () {
@@ -86,7 +91,7 @@ public class Weapon : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.WEAPON_COOLDOWN_END, null);
     }
 
-    private void Test() {
+    private void OnFountainFire() {
         fireTimer += timePerShot;
     }
 

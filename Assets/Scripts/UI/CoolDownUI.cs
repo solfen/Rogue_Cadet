@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class CoolDownUI : MonoBehaviour {
 
+    [SerializeField] private Text header;
     [SerializeField] private Slider UISlider;
     [SerializeField] private Slider cooldownBar;
     [SerializeField] private float cooldownBarBlinkInterval;
@@ -22,6 +23,8 @@ public class CoolDownUI : MonoBehaviour {
 
     private void OnWeaponReady(object weaponObj) {
         weapon = (Weapon)weaponObj;
+        header.text = weapon.displayName + " cooldown:";
+
         enabled = true;
     }
 
