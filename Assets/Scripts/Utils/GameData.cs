@@ -47,6 +47,10 @@ public class ShipConfig {
     public float goldUpgradeRaise;
     public int bombStockUpgradeRaise;
     public float bombDamagePerUpgrade;
+
+    [Header("Stock")]
+    public int maxStock = 5;
+    public float stockGainByRun = 0.5f;
 }
 
 [System.Serializable]

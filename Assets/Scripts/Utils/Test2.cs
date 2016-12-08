@@ -9,12 +9,7 @@ public class Test2 : MonoBehaviour {
     private SaveData data;
 
     void Start() {
-        FileSaveLoad.Save(new SaveData());
         data = FileSaveLoad.Load();
-        List<int> selected = new List<int>();
-        selected.Add(0); selected.Add(1);
-        data.selectedWeapons = selected;
-        FileSaveLoad.Save(data);
-       // test.TestStuff();
+        Debug.Log(data.shipsStock[0]);
     }
 }

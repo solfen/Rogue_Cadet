@@ -6,13 +6,13 @@ using System.Collections.Generic;
 
 public class ShipTypesUI : MonoBehaviour {
 
-    [SerializeField] private GameData gameData;
     [SerializeField] private ShipListUI shipList;
     [SerializeField] private ShipDetailsPane detailsPane;
     [SerializeField] private GameObject firstSlectedObject;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private List<Image> shipTypesUI;
 
+    private GameData gameData;
     private RectTransform _rectTransform;
     private UIPosAnimator animator;
     private RectTransform detailsTrans;
@@ -24,6 +24,7 @@ public class ShipTypesUI : MonoBehaviour {
         _rectTransform = GetComponent<RectTransform>();
         animator = GetComponent<UIPosAnimator>();
         detailsTrans = detailsPane.GetComponent<RectTransform>();
+        gameData = GlobalData.instance.gameData;
     }
 
     public void PopDown(int _selectedShip) {

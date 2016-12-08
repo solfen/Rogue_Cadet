@@ -8,16 +8,16 @@ public class ShipSelectionUI : MonoBehaviour {
 
     public GameObject firstUpgradeItem;
     public EventSystem eventSystem;
-    public ShopUI shopUI;
     public GameObject shipUgradeUI;
 
     [SerializeField] private Animator transitionAnimator;
+    [SerializeField] private ShipSelector shipSelector;
 
     public void ValidateSelection(int selectedShip) {
-        shopUI.enabled = true;
         shipUgradeUI.SetActive(true);
-        PlayerPrefs.SetInt("SelectedShip", selectedShip);
         transitionAnimator.SetTrigger("Transition");
         eventSystem.SetSelectedGameObject(firstUpgradeItem);
+
+        shipSelector.SelectShip(selectedShip);
     }
 }
