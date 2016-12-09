@@ -9,10 +9,6 @@ public class Player : MonoBehaviour {
     public bool isInvisible;
     private float maxLife;
 
-    public float hitboxUpgradeSizeReduce;
-    public float lifeUpgradeRaise;
-    public float manaUpgradeRaise;
-
     [SerializeField] private GameObject hitShield;
     [SerializeField] private Dungeon dungeon;
 
@@ -46,11 +42,13 @@ public class Player : MonoBehaviour {
 
         currentLife = maxLife;
 
-        Instantiate(config.power, _transform, false);
-
         initalColor = spriteRender.color;
 
         EventDispatcher.DispatchEvent(Events.PLAYER_CREATED, this);
+    }
+
+    public void Init(Dungeon _dungeon) {
+        dungeon = _dungeon;
     }
 
 	void Update () {
