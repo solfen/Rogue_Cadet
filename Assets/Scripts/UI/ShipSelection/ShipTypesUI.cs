@@ -4,13 +4,19 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class ShipTypeItem {
+    public Image image;
+    public Text stock;
+}
+
 public class ShipTypesUI : MonoBehaviour {
 
     [SerializeField] private ShipListUI shipList;
     [SerializeField] private ShipDetailsPane detailsPane;
     [SerializeField] private GameObject firstSlectedObject;
     [SerializeField] private EventSystem eventSystem;
-    [SerializeField] private List<Image> shipTypesUI;
+    [SerializeField] private List<ShipTypeItem> shipTypesUI;
 
     private GameData gameData;
     private RectTransform _rectTransform;
@@ -32,7 +38,11 @@ public class ShipTypesUI : MonoBehaviour {
 
         for (int i = 0; i < shipTypesUI.Count; i++) {
             // TODO: isUnlock ternary to select sprite
-            shipTypesUI[i].sprite = gameData.shipsUIItems[selectedShip].types[i].typeSprite;
+            ShipTypeUIItem data = gameData.shipsUIItems[selectedShip].types[i];
+            int currentStock = (int)(FileSaveLoad.Load().shipsStock[data.associatedShipIndex]);
+            shipTypesUI[i].image.sprite = data.typeSprite;
+            shipTypesUI[i].image.color = currentStock >= 1 ? Color.white : Color.grey;
+            shipTypesUI[i].stock.text = "Stock: " + currentStock + "/" + gameData.ships[data.associatedShipIndex].maxStock;
         }
 
         StartCoroutine("PopDownAnim");

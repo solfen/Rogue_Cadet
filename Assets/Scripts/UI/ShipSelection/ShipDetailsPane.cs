@@ -8,7 +8,7 @@ public class ShipDetailsPane : MonoBehaviour {
     //UI elements refs
     [SerializeField] private GameData gameData;
     [SerializeField] private ShipTypesUI shipTypes;
-    [SerializeField] private ShipSelectionUI shipSelectionUI;
+    [SerializeField] private ShipSelector shipSelector;
 
     [Header("UI child elems")]
     [SerializeField] private Text nameText;
@@ -41,7 +41,7 @@ public class ShipDetailsPane : MonoBehaviour {
             isOpen = false;
         }
         else if(Input.GetButtonDown("Submit")) {
-            shipSelectionUI.ValidateSelection(gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex);
+            shipSelector.SelectShip(gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex);
         }
     }
 

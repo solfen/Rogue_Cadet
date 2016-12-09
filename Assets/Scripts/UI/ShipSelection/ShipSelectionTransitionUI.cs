@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ShipSelectionUI : MonoBehaviour {
+public class ShipSelectionTransitionUI : MonoBehaviour {
 
     public GameObject firstUpgradeItem;
     public EventSystem eventSystem;
@@ -13,11 +13,9 @@ public class ShipSelectionUI : MonoBehaviour {
     [SerializeField] private Animator transitionAnimator;
     [SerializeField] private ShipSelector shipSelector;
 
-    public void ValidateSelection(int selectedShip) {
+    public void Transition() {
         shipUgradeUI.SetActive(true);
         transitionAnimator.SetTrigger("Transition");
         eventSystem.SetSelectedGameObject(firstUpgradeItem);
-
-        shipSelector.SelectShip(selectedShip);
     }
 }

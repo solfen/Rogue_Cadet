@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class ShipSelector : MonoBehaviour {
 
+    [SerializeField] private ShipSelectionTransitionUI transistor;
+
     void Start () {
         SaveData data = FileSaveLoad.Load();
         List<ShipConfig> ships = GlobalData.instance.gameData.ships;
@@ -15,6 +17,7 @@ public class ShipSelector : MonoBehaviour {
         FileSaveLoad.Save(data);
     }
 
+    //called from shipDetails pane (weird, I know)
     public void SelectShip(int shipIndex) {
         SaveData data = FileSaveLoad.Load();
 
@@ -22,6 +25,9 @@ public class ShipSelector : MonoBehaviour {
             data.selectedShip = shipIndex;
             data.shipsStock[shipIndex] -= 1;
             FileSaveLoad.Save(data);
-        } 
+
+            transistor.Transition();
+        }
+        // TODO: Else sound of error 
     }
 }
