@@ -16,7 +16,7 @@ public class Player : MonoBehaviour {
 
     private GameData gameData;
     private Transform _transform;
-    private Animator anim;
+    private PlayerCustomAnimator anim;
     private SpriteRenderer spriteRender;
     private bool isDead = false;
     private GraphRoom currentRoom;
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour {
     void Start() {
         _transform = GetComponent<Transform>();
         _collider = GetComponent<BoxCollider2D>();
-        anim = sprite.GetComponent<Animator>();
+        anim = sprite.GetComponent<PlayerCustomAnimator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
 
         gameData = GlobalData.instance.gameData;
@@ -111,18 +111,19 @@ public class Player : MonoBehaviour {
     }
 
     private void Die() {
-        anim.SetTrigger("Death");
-        StartCoroutine(DieAnim());
+        anim.PlayExplosion();
         isDead = true;
-    }
 
-    IEnumerator DieAnim() {
-        yield return new WaitForSeconds(0.2f);
         hitShield.SetActive(false);
         spriteRender.color = Color.white;
         _transform.localScale *= 3;
         Time.timeScale = 0.2f;
         EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
         Destroy(gameObject, 2);
+    }
+
+    IEnumerator DieAnim() {
+        yield return new WaitForSeconds(0.2f);
+
     }
 }

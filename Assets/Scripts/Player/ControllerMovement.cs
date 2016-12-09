@@ -5,7 +5,7 @@ public class ControllerMovement : BaseMovement {
 
     public float rotationDeadZone = 0.5f;
 
-    [SerializeField] private Animator anim;
+    [SerializeField] private PlayerCustomAnimator anim;
 
     private Vector3 direction = Vector3.zero;
     private Vector3 rotation = Vector3.zero;
@@ -14,7 +14,7 @@ public class ControllerMovement : BaseMovement {
         Move();
         Turn();
 
-        anim.SetFloat("Speed", (rotation + direction).magnitude);
+        anim.playerSpeed = (rotation + direction).magnitude;
     }
 
     private void Move() {
