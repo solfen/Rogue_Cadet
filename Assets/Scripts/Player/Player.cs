@@ -7,7 +7,7 @@ public class Player : MonoBehaviour {
 
     public float currentLife;
     public bool isInvisible;
-    private float maxLife;
+    public float maxLife;
 
     [SerializeField] private GameObject hitShield;
     [SerializeField] private Dungeon dungeon;

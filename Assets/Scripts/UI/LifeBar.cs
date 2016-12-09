@@ -12,11 +12,22 @@ public class LifeBar : MonoBehaviour {
     private float maxLife;
 
     void Start() {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
-        maxLife = gameData.shipBaseStats.maxLife * gameData.ships[PlayerPrefs.GetInt("SelectedShip", 0)].lifePrecent;
+        EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
+        enabled = false;
     }
 
-	void Update () {
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
+    }
+
+    private void OnPlayerCreation(object playerObj) {
+        player = (Player)playerObj;
+        maxLife = player.maxLife;
+        enabled = true;
+    }
+
+
+    void Update () {
         if(player != null) {
             lifeBar.value = player.currentLife / maxLife;
             text.text = Mathf.Max((int)(player.currentLife), 0) + "/" + maxLife;
