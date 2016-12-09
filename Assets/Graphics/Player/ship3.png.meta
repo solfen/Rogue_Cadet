@@ -1,14 +1,14 @@
 fileFormatVersion: 2
 guid: 9beb6b77009619f418972cb1eb988ae4
-timeCreated: 1481212944
+timeCreated: 1481298076
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: ship3_0
-    21300002: ship3_1
-    21300004: ship3_2
-    21300006: ship3_3
-    21300008: ship3_4
+    21300002: ship3_2
+    21300004: ship3_4
+    21300006: ship3_1
+    21300008: ship3_3
     21300010: ship3_5
   serializedVersion: 2
   mipmaps:
@@ -67,20 +67,7 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship3_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 24
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -88,25 +75,12 @@ TextureImporter:
       name: ship3_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 16
         y: 24
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: 0
-    - serializedVersion: 2
-      name: ship3_3
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -114,12 +88,38 @@ TextureImporter:
       name: ship3_4
       rect:
         serializedVersion: 2
+        x: 32
+        y: 24
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ship3_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 24
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: ship3_3
+      rect:
+        serializedVersion: 2
         x: 16
         y: 0
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -132,7 +132,7 @@ TextureImporter:
         width: 16
         height: 24
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
