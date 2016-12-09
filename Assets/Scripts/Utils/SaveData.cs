@@ -20,6 +20,9 @@ public class SaveData {
     public int bombDamageUpgradeNb;
 
     public List<float> shipsStock;
+
+    public float shipWeight;
+    public float money;
 }
 
 public static class FileSaveLoad {

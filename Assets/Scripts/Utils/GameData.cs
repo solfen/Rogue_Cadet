@@ -20,14 +20,15 @@ public class ShipBaseConfig {
     public float meleeDamage = 10f;
     public float invicibiltyDuration = 1f;
     public Vector2 hitboxSize;
+    public float maxWeight = 100;
 }
 
 [System.Serializable]
 public class ShipConfig {
     public string name;
-    public BaseSpecialPower power;
+    public Player playerPrefab;
 
-    [Header("Skills")]
+    [Header("Stats")]
     public float lifePrecent;
     public float fireRatePrecent;
     public float damagePrecent;
@@ -36,6 +37,7 @@ public class ShipConfig {
     public float hitboxSizePercent;
     public float speed;
     public float meleeDamagePercent;
+    public float maxWheightPercent;
     public float invicibiltyDurationPercent = 1f;
 
     [Header("Upgrade Influence")]
@@ -47,6 +49,7 @@ public class ShipConfig {
     public float goldUpgradeRaise;
     public int bombStockUpgradeRaise;
     public float bombDamagePerUpgrade;
+    public float maxWheightUpgradeRaise;
 
     [Header("Stock")]
     public int maxStock = 5;
