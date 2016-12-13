@@ -12,6 +12,8 @@ public class CreateNewSave : MonoBehaviour {
         SaveData data = FileSaveLoad.Load();
         List<ShipConfig> ships = GlobalData.instance.gameData.ships;
 
+        //TODO upgrades init
+
         data.selectedWeapons = new List<int>();
         data.selectedWeapons.Add(0);
 
