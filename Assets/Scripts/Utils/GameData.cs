@@ -11,6 +11,7 @@ public class GameData : ScriptableObject {
     public ShipBaseConfig shipBaseStats;
     public List<ShipConfig> ships;
     public List<ShipsUIItemData> shipsUIItems;
+    public List<UpgradeCategory> upgradesCategories;
 }
 
 [System.Serializable]
@@ -70,4 +71,9 @@ public class ShipTypeUIItem {
     public string powerDescription;
     public Sprite typeSprite;
     public int associatedShipIndex;
+}
+
+[System.Serializable]
+public class UpgradeCategory {
+    public List<BaseUpgrade> upgrades;
 }

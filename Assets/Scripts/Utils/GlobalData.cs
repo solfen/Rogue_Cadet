@@ -14,5 +14,15 @@ public class GlobalData : MonoBehaviour {
         instance = this;
         gameData = _gameData;
         saveData = FileSaveLoad.Load();
+
+        EventDispatcher.AddEventListener(Events.FILE_SAVED, OnFileSaved);
+    }
+
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.FILE_SAVED, OnFileSaved);
+    }
+
+    private void OnFileSaved(object useless) {
+        saveData = FileSaveLoad.Load();
     }
 }

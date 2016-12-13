@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class ShopUI : MonoBehaviour {
 
     [SerializeField] private ShopDetailsUI shopDetailPane;
+    [SerializeField] private UpgradesShop upgradeShop;
     [SerializeField] private GameObject categroryContainerPrefab;
     [SerializeField] private GameObject shopItemPrefab;
     [SerializeField] private Animator anim;
@@ -21,45 +22,40 @@ public class ShopUI : MonoBehaviour {
     private bool isOpen;
     private GameObject lastCategorySelected;
     private GameObject activeCategoryContainer = null;
-    private Dictionary<ShopCategory, GameObject> categoriesContainers = new Dictionary<ShopCategory, GameObject>();
+    private Dictionary<UpgradeCategory, GameObject> categoriesContainers = new Dictionary<UpgradeCategory, GameObject>();
 
     void Awake() {
         _transform = GetComponent<Transform>();
         gridLayout = GetComponent<ResponsiveGridLayout>();
     }
 
-    void Update () {
-        if (isOpen && Input.GetButtonDown("Cancel")) {
-            CloseShop();
-        }
-    }
+    public void InitItems(List<UpgradeCategory> upgradesCategories) {
 
-    public void InitItems(List<ShopCategory> itemsCategories) {
-        Debug.Log(itemsCategories.Count);
-        for (int i = 0; i < itemsCategories.Count; i++) {
+        for (int i = 0; i < upgradesCategories.Count; i++) {
             GameObject container = Instantiate(categroryContainerPrefab, _transform, false) as GameObject;
             Transform containerTransform = container.GetComponent<Transform>();
             RectTransform containerRectTrans = container.GetComponent<RectTransform>();
             containerRectTrans.anchorMin = Vector2.zero;
             containerRectTrans.anchorMax = new Vector2(1, 1);
 
-            for (int j = 0; j < itemsCategories[i].items.Count; j++) {
+            for (int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
                 GameObject item = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
-                item.GetComponent<ShopItemUI>().UpdateItem(itemsCategories[i].items[j], j, shopDetailPane);
+                Instantiate(upgradesCategories[i].upgrades[j], item.transform, false);
+                item.GetComponent<ShopItemUI>().UpdateItem(upgradesCategories[i].upgrades[j], shopDetailPane, upgradeShop);
             }
 
             container.SetActive(false);
-            categoriesContainers.Add(itemsCategories[i], container);
+            categoriesContainers.Add(upgradesCategories[i], container);
         }
     }
 
-    public void OpenShop(ShopCategory category) {
+    public void OpenShop(UpgradeCategory category) {
         lastCategorySelected = eventSystem.currentSelectedGameObject;
 
-        shopDetailPane.Open(category); //needs to be before ActivateCategory because selecting the first object calls an update on the details (berk)
         anim.SetTrigger("OpenShop");
 
         ActivateCategory(category);
+        shopDetailPane.Open(); //needs to be before ActivateCategory because selecting the first object calls an update on the details (berk)
 
         isOpen = true;
     }
@@ -71,7 +67,7 @@ public class ShopUI : MonoBehaviour {
         isOpen = false;
     }
 
-    private void ActivateCategory(ShopCategory category) {
+    private void ActivateCategory(UpgradeCategory category) {
         if(activeCategoryContainer != null) {
             activeCategoryContainer.SetActive(false);
         }

@@ -12,12 +12,7 @@ public class ShopDetailsUI : MonoBehaviour {
     [SerializeField] private Text wheight;
     [SerializeField] private Text totalWeight;
 
-    private ShopCategory currentCategory;
-
-    public void Open(ShopCategory category) {
-        currentCategory = category;
-        UpdateDetails(0);
-
+    public void Open() {
         anim.SetTrigger("Open");
     }
 
@@ -25,12 +20,12 @@ public class ShopDetailsUI : MonoBehaviour {
         anim.SetTrigger("Close");
     }
 
-    public void UpdateDetails(int selectedItem) {
-        ShopItem data = currentCategory.items[selectedItem];
-        header.text = data.title;
-        description.text = data.description;
-        activeNb.text = "Active: 0/" + data.numberOfUpgrade;
-        price.text = "Price: " + data.price;
-        wheight.text = "Wheight: " + data.wheight; 
+    public void UpdateDetails(BaseUpgrade upgrade) {
+        header.text = upgrade.title;
+        description.text = upgrade.description;
+        activeNb.text = "Active: " + upgrade.currentEquipedNb + "/" + upgrade.numberOfUpgrade;
+        price.text = "Price: " + (int)upgrade.currentPrice;
+        wheight.text = "Wheight: " + upgrade.wheight;
+        totalWeight.text = "Tot Wheight: " + (int)(upgrade.wheight * upgrade.currentEquipedNb);
     }
 }

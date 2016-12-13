@@ -6,20 +6,30 @@ using UnityEngine.EventSystems;
 public class ShopItemUI : MonoBehaviour, ISelectHandler {
 
     [SerializeField] private Image image;
-    [SerializeField] private Text name;
+    [SerializeField] private Text nameText;
 
-    private int numberIncategory;
     private ShopDetailsUI shopDetailsPane;
+    private UpgradesShop shop;
+    private BaseUpgrade associatedUpgrade;
 
-    public void UpdateItem(ShopItem data, int _numberIncategory, ShopDetailsUI _shopDetailsPane) {
+    public void UpdateItem(BaseUpgrade data, ShopDetailsUI _shopDetailsPane, UpgradesShop upgradeShop) {
         image.sprite = data.sprite;
-        name.text = data.title;
+        nameText.text = data.title;
 
-        numberIncategory = _numberIncategory;
         shopDetailsPane = _shopDetailsPane;
+        shop = upgradeShop;
+
+        GetComponent<Button>().onClick.AddListener(OnClicked);
+        associatedUpgrade = GetComponentInChildren<BaseUpgrade>();
     }
 
     public void OnSelect (BaseEventData data) {
-        shopDetailsPane.UpdateDetails(numberIncategory);
+        associatedUpgrade.UpdateDynamicDetails();
+        shopDetailsPane.UpdateDetails(associatedUpgrade);
+    }
+
+    public void OnClicked() {
+        shop.BuyItem(associatedUpgrade);
+        OnSelect(null);
     }
 }
