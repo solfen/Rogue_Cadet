@@ -24,7 +24,7 @@ public class ShopDetailsUI : MonoBehaviour {
         header.text = upgrade.title;
         description.text = upgrade.description;
         activeNb.text = "Active: " + upgrade.currentEquipedNb + "/" + upgrade.numberOfUpgrade;
-        price.text = "Price: " + (int)upgrade.currentPrice;
+        price.text = "Price: " + (int)upgrade.currentPrice + "$";
         wheight.text = "Wheight: " + upgrade.wheight;
         totalWeight.text = "Tot Wheight: " + (int)(upgrade.wheight * upgrade.currentEquipedNb);
     }
