@@ -13,7 +13,7 @@ public class UpgradesShop : MonoBehaviour {
     private List<UpgradeCategory> upgradesCategories;
     private bool isShopOpen = false;
     private GameData gameData;
-    private ShopItemUI selectedShopItem;
+    private BaseUpgrade selectedUpgrade;
 
     // Use this for initialization
     void Start () {
@@ -33,7 +33,7 @@ public class UpgradesShop : MonoBehaviour {
                 isShopOpen = false;
             }
             else if(Input.GetButtonDown("UnEquip")) {
-                UnEquip(selectedShopItem);
+                UnEquip(selectedUpgrade);
             }
         }
     }
@@ -46,20 +46,19 @@ public class UpgradesShop : MonoBehaviour {
     }
 
     //called from ShopItemUI.OnSelected event
-    public void OnUpgradeSelected(ShopItemUI item) {
-        selectedShopItem = item;
-        shopDetailsPane.UpdateDetails(item.associatedUpgrade);
+    public void OnUpgradeSelected(BaseUpgrade associatedUpgrade) {
+        selectedUpgrade = associatedUpgrade;
+        shopDetailsPane.UpdateDetails(associatedUpgrade);
     }
 
-    public void BuyItem(ShopItemUI item) {
-        BaseUpgrade upgrade = item.associatedUpgrade;
-        SaveData data = FileSaveLoad.Load();
-        UpgradeInfo upgradeInfo = data.upgradesInfo[upgrade.saveDataIndex];
-
+    public void BuyItem(BaseUpgrade upgrade) {
         if (!upgrade.canBuy) {
             return;
             //TODO: Error feedback
         }
+
+        SaveData data = FileSaveLoad.Load();
+        UpgradeInfo upgradeInfo = data.upgradesInfo[upgrade.saveDataIndex];
 
         data.money -= upgrade.currentPrice;
         data.shipWeight += upgrade.wheight;
@@ -72,12 +71,11 @@ public class UpgradesShop : MonoBehaviour {
 
         wheightUI.UpdateWheight();
         moneyUI.UpdateMoney();
-        item.UpdateItem();
+        shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
     }
 
-    public void UnEquip(ShopItemUI item) {
-        BaseUpgrade upgrade = item.associatedUpgrade;
+    public void UnEquip(BaseUpgrade upgrade) {
         SaveData data = FileSaveLoad.Load();
         UpgradeInfo upgradeInfo = data.upgradesInfo[upgrade.saveDataIndex];
 
@@ -93,7 +91,7 @@ public class UpgradesShop : MonoBehaviour {
         FileSaveLoad.Save(data);
 
         wheightUI.UpdateWheight();
-        item.UpdateItem();
+        shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
     }
 }

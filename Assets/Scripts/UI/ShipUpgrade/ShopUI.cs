@@ -22,6 +22,7 @@ public class ShopUI : MonoBehaviour {
     private GameObject lastCategorySelected;
     private GameObject activeCategoryContainer = null;
     private Dictionary<UpgradeCategory, GameObject> categoriesContainers = new Dictionary<UpgradeCategory, GameObject>();
+    private List<ShopItemUI> items = new List<ShopItemUI>();
 
     void Awake() {
         _transform = GetComponent<Transform>();
@@ -37,21 +38,24 @@ public class ShopUI : MonoBehaviour {
             containerRectTrans.anchorMin = Vector2.zero;
             containerRectTrans.anchorMax = new Vector2(1, 1);
 
-            SaveData saveData = GlobalData.instance.saveData;
-
             for (int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
                 BaseUpgrade upgradePrefab = upgradesCategories[i].upgrades[j];
+                GameObject itemGO = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
+                ShopItemUI item = itemGO.GetComponent<ShopItemUI>();
+                Instantiate(upgradePrefab, itemGO.transform, false);
+                item.Init(upgradePrefab, upgradeShop);
 
-                if(saveData.upgradesInfo[upgradePrefab.saveDataIndex].isUnlocked) {
-                    GameObject item = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
-
-                    Instantiate(upgradePrefab, item.transform, false);
-                    item.GetComponent<ShopItemUI>().Init(upgradePrefab, upgradeShop);
-                }
+                items.Add(item);
             }
 
             container.SetActive(false);
             categoriesContainers.Add(upgradesCategories[i], container);
+        }
+    }
+
+    public void UpdateAllItems() {
+        for(int i = 0; i < items.Count; i++) {
+            items[i].UpdateItem();
         }
     }
 
