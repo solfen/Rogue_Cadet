@@ -11,6 +11,6 @@ public class MoneyUI : MonoBehaviour {
     }
 
 	public void UpdateMoney () {
-        moneyText.text = "Money: " + GlobalData.instance.saveData.money + " $";
+        moneyText.text = "Money: " + (int)GlobalData.instance.saveData.money + " $";
     }
 }
