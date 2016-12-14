@@ -15,16 +15,21 @@ public abstract class BaseUpgrade : MonoBehaviour {
     public float wheight;
     public bool canUnEquip = true;
 
+    public bool canBuy { get; private set; }
+
     [HideInInspector] public float currentPrice;
     [HideInInspector] public int currentEquipedNb;
 
     public void UpdateDynamicDetails() {
-        SaveData data = FileSaveLoad.Load();
+        SaveData data = GlobalData.instance.saveData;
         UpgradeInfo upgradeInfo = data.upgradesInfo[saveDataIndex];
+        float maxWheight = GlobalData.instance.gameData.ships[data.selectedShip].maxWheightPercent * GlobalData.instance.gameData.shipBaseStats.maxWeight;
 
         float priceMultiplier = upgradeInfo.currentUpgradeNb < upgradeInfo.boughtUpgradeNb ? rebuyMultiplier : 1;
         currentPrice = basePrice * Mathf.Pow(priceMultiplierPerUpgrade, upgradeInfo.currentUpgradeNb) * priceMultiplier;
         currentEquipedNb = upgradeInfo.currentUpgradeNb;
+
+        canBuy = currentPrice <= data.money && upgradeInfo.isUnlocked && upgradeInfo.currentUpgradeNb < numberOfUpgrade && data.shipWeight + wheight <= maxWheight;
     }
 
     public abstract void Equip(SaveData dataToModify);

@@ -37,10 +37,17 @@ public class ShopUI : MonoBehaviour {
             containerRectTrans.anchorMin = Vector2.zero;
             containerRectTrans.anchorMax = new Vector2(1, 1);
 
+            SaveData saveData = GlobalData.instance.saveData;
+
             for (int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
-                GameObject item = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
-                Instantiate(upgradesCategories[i].upgrades[j], item.transform, false);
-                item.GetComponent<ShopItemUI>().UpdateItem(upgradesCategories[i].upgrades[j], upgradeShop);
+                BaseUpgrade upgradePrefab = upgradesCategories[i].upgrades[j];
+
+                if(saveData.upgradesInfo[upgradePrefab.saveDataIndex].isUnlocked) {
+                    GameObject item = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
+
+                    Instantiate(upgradePrefab, item.transform, false);
+                    item.GetComponent<ShopItemUI>().Init(upgradePrefab, upgradeShop);
+                }
             }
 
             container.SetActive(false);

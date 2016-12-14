@@ -7,25 +7,34 @@ public class ShopItemUI : MonoBehaviour, ISelectHandler {
 
     [SerializeField] private Image image;
     [SerializeField] private Text nameText;
+    [SerializeField] private GameObject UnavailableImage;
 
     private UpgradesShop shop;
-    private BaseUpgrade associatedUpgrade;
+    private Button button;
+    public BaseUpgrade associatedUpgrade { get; private set; }
 
-    public void UpdateItem(BaseUpgrade data, UpgradesShop upgradeShop) {
+    public void Init(BaseUpgrade data, UpgradesShop upgradeShop) {
         image.sprite = data.sprite;
         nameText.text = data.title;
         shop = upgradeShop;
 
-        GetComponent<Button>().onClick.AddListener(OnClicked);
+        button = GetComponent<Button>();
+        button.onClick.AddListener(OnClicked);
         associatedUpgrade = GetComponentInChildren<BaseUpgrade>();
+
+        UpdateItem();
+    }
+
+    public void UpdateItem() {
         associatedUpgrade.UpdateDynamicDetails();
+        UnavailableImage.SetActive(!associatedUpgrade.canBuy);
     }
 
     public void OnSelect (BaseEventData data) {
-        shop.OnUpgradeSelected(associatedUpgrade);
+        shop.OnUpgradeSelected(this);
     }
 
     public void OnClicked() {
-        shop.BuyItem(associatedUpgrade);
+        shop.BuyItem(this);
     }
 }
