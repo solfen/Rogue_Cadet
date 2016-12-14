@@ -17,9 +17,12 @@ public class CreateNewSave : MonoBehaviour {
         data.selectedWeapons = new List<int>();
         data.selectedWeapons.Add(0);
 
-        data.shipsStock = new List<float>();
+        data.shipsInfo = new List<ShipInfo>();
         for(int i = 0; i < ships.Count; i++) {
-            data.shipsStock.Add(ships[i].maxStock);
+            ShipInfo info = new ShipInfo();
+            info.isUnlocked = i < 3;
+            info.stock = ships[i].maxStock;
+            data.shipsInfo.Add(info);
         }
 
         FileSaveLoad.Save(data);

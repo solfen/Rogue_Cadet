@@ -10,6 +10,5 @@ public class Test2 : MonoBehaviour {
 
     void Start() {
         data = FileSaveLoad.Load();
-        Debug.Log(data.shipsStock[0]);
     }
 }

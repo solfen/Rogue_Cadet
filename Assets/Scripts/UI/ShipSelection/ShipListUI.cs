@@ -5,11 +5,11 @@ using System.Collections.Generic;
 
 public class ShipListUI : MonoBehaviour {
 
-    [SerializeField] private GameData gamedata;
     [SerializeField] private GameObject shipUIPrefab;
     [SerializeField] private Vector2 UISize;
     [SerializeField] private ShipTypesUI shipTypes;
 
+    private GameData gamedata;
     private Transform _transform;
     private RectTransform _rectTransform;
     private UIPosAnimator animator;
@@ -17,6 +17,7 @@ public class ShipListUI : MonoBehaviour {
     private bool isTransitioning = false;
     private bool isDown = false;
     private int shipSelectedIndex;
+    private int shipNb = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -24,12 +25,17 @@ public class ShipListUI : MonoBehaviour {
         _rectTransform = GetComponent<RectTransform>();
         animator = GetComponent<UIPosAnimator>();
 
+        gamedata = GlobalData.instance.gameData;
+        SaveData saveData = GlobalData.instance.saveData;
+
         UIHalfSize = UISize * 0.5f;
 
         for (int i = 0; i < gamedata.shipsUIItems.Count; i++)  {
-            //TODO: if is unlock only
-            GameObject obj = Instantiate(shipUIPrefab, _transform) as GameObject;
-            obj.GetComponentInChildren<ShipUI>().Init(gamedata.shipsUIItems[i], i, UIHalfSize);
+            if(saveData.shipsInfo[gamedata.shipsUIItems[i].associatedShipIndex].isUnlocked) {
+                GameObject obj = Instantiate(shipUIPrefab, _transform) as GameObject;
+                obj.GetComponentInChildren<ShipUI>().Init(gamedata.shipsUIItems[i], i, UIHalfSize);
+                shipNb++;
+            }
         }
 
         _rectTransform.anchoredPosition = new Vector2(-0.5f * ((gamedata.shipsUIItems.Count - 3) / 2) * Camera.main.pixelWidth, 0);
@@ -55,7 +61,7 @@ public class ShipListUI : MonoBehaviour {
             StartCoroutine(GoDown());
             isDown = true;
         }
-        else if(shipSelectedIndex < gamedata.shipsUIItems.Count - 1 && Input.GetAxis("MoveX") > 0.5f) {
+        else if(shipSelectedIndex < shipNb - 1 && Input.GetAxis("MoveX") > 0.5f) {
             isTransitioning = true;
             StartCoroutine(animator.Animate("listSelectMove", new Vector2(_rectTransform.anchoredPosition.x - 0.5f * Camera.main.pixelWidth, 0)));
             shipSelectedIndex++;

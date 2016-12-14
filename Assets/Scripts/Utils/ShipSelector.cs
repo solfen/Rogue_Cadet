@@ -11,7 +11,7 @@ public class ShipSelector : MonoBehaviour {
         List<ShipConfig> ships = GlobalData.instance.gameData.ships;
 
         for (int i = 0; i < ships.Count; i++) {
-            data.shipsStock[i] = Mathf.Min(ships[i].maxStock, data.shipsStock[i] + ships[i].stockGainByRun);
+            data.shipsInfo[i].stock = Mathf.Min(ships[i].maxStock, data.shipsInfo[i].stock + ships[i].stockGainByRun);
         }
 
         FileSaveLoad.Save(data);
@@ -21,9 +21,9 @@ public class ShipSelector : MonoBehaviour {
     public void SelectShip(int shipIndex) {
         SaveData data = FileSaveLoad.Load();
 
-        if(data.shipsStock[shipIndex] >= 1) {
+        if(data.shipsInfo[shipIndex].stock >= 1) {
             data.selectedShip = shipIndex;
-            data.shipsStock[shipIndex] -= 1;
+            data.shipsInfo[shipIndex].stock -= 1;
             FileSaveLoad.Save(data);
 
             transistor.Transition();

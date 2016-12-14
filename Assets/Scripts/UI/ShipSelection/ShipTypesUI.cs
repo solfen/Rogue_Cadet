@@ -17,6 +17,7 @@ public class ShipTypesUI : MonoBehaviour {
     [SerializeField] private GameObject firstSlectedObject;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private List<ShipTypeItem> shipTypesUI;
+    [SerializeField] private Sprite lockedSprite;
 
     private GameData gameData;
     private RectTransform _rectTransform;
@@ -37,12 +38,19 @@ public class ShipTypesUI : MonoBehaviour {
         selectedShip = _selectedShip;
 
         for (int i = 0; i < shipTypesUI.Count; i++) {
-            // TODO: isUnlock ternary to select sprite
             ShipTypeUIItem data = gameData.shipsUIItems[selectedShip].types[i];
-            int currentStock = (int)(FileSaveLoad.Load().shipsStock[data.associatedShipIndex]);
-            shipTypesUI[i].image.sprite = data.typeSprite;
-            shipTypesUI[i].image.color = currentStock >= 1 ? Color.white : Color.grey;
-            shipTypesUI[i].stock.text = "Stock: " + currentStock + "/" + gameData.ships[data.associatedShipIndex].maxStock;
+            ShipInfo savedData = GlobalData.instance.saveData.shipsInfo[data.associatedShipIndex];
+            int currentStock = (int)(savedData.stock);
+
+            if(savedData.isUnlocked) {
+                shipTypesUI[i].image.sprite = data.typeSprite;
+                shipTypesUI[i].image.color = currentStock >= 1 ? Color.white : Color.grey;
+                shipTypesUI[i].stock.text = "Stock: " + currentStock + "/" + gameData.ships[data.associatedShipIndex].maxStock;
+            }
+            else {
+                shipTypesUI[i].image.sprite = lockedSprite;
+                shipTypesUI[i].stock.text = "Stock: ?";
+            }
         }
 
         StartCoroutine("PopDownAnim");

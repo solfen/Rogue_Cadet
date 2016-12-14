@@ -12,6 +12,12 @@ public class UpgradeInfo {
 }
 
 [System.Serializable]
+public class ShipInfo {
+    public float stock;
+    public bool isUnlocked = false;
+}
+
+[System.Serializable]
 public class SaveData {
 
     //TODO: Use enum
@@ -28,7 +34,7 @@ public class SaveData {
     public int bombUpgradeNb;
     public int bombDamageUpgradeNb;
 
-    public List<float> shipsStock;
+    public List<ShipInfo> shipsInfo;
     public List<UpgradeInfo> upgradesInfo;
 
 }

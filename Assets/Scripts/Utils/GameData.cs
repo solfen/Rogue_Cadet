@@ -61,6 +61,7 @@ public class ShipConfig {
 public class ShipsUIItemData {
     public string name;
     public Sprite spriteUI;
+    public int associatedShipIndex;
     public List<ShipTypeUIItem> types;
 }
 
