@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class ShopUI : MonoBehaviour {
 
-    [SerializeField] private ShopDetailsUI shopDetailPane;
     [SerializeField] private UpgradesShop upgradeShop;
     [SerializeField] private GameObject categroryContainerPrefab;
     [SerializeField] private GameObject shopItemPrefab;
@@ -41,7 +40,7 @@ public class ShopUI : MonoBehaviour {
             for (int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
                 GameObject item = Instantiate(shopItemPrefab, containerTransform, false) as GameObject;
                 Instantiate(upgradesCategories[i].upgrades[j], item.transform, false);
-                item.GetComponent<ShopItemUI>().UpdateItem(upgradesCategories[i].upgrades[j], shopDetailPane, upgradeShop);
+                item.GetComponent<ShopItemUI>().UpdateItem(upgradesCategories[i].upgrades[j], upgradeShop);
             }
 
             container.SetActive(false);
@@ -51,19 +50,14 @@ public class ShopUI : MonoBehaviour {
 
     public void OpenShop(UpgradeCategory category) {
         lastCategorySelected = eventSystem.currentSelectedGameObject;
-
         anim.SetTrigger("OpenShop");
-
         ActivateCategory(category);
-        shopDetailPane.Open(); //needs to be before ActivateCategory because selecting the first object calls an update on the details (berk)
-
         isOpen = true;
     }
 
     public void CloseShop() {
         eventSystem.SetSelectedGameObject(lastCategorySelected);
         anim.SetTrigger("CloseShop");
-        shopDetailPane.Close();
         isOpen = false;
     }
 

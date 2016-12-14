@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class UpgradesShop : MonoBehaviour {
 
     [SerializeField] private ShopUI shopUI;
+    [SerializeField] private ShopDetailsUI shopDetailsPane;
     [SerializeField] private WheightUI wheightUI;
     [SerializeField] private MoneyUI moneyUI;
 
@@ -12,6 +13,7 @@ public class UpgradesShop : MonoBehaviour {
     private List<UpgradeCategory> upgradesCategories;
     private bool isShopOpen = false;
     private GameData gameData;
+    private BaseUpgrade selectedUpgrade;
 
     // Use this for initialization
     void Start () {
@@ -24,16 +26,29 @@ public class UpgradesShop : MonoBehaviour {
         if (Input.GetButtonDown("Start")) {
             InputMapUI.instance.Open();
         }
-        else if (isShopOpen && Input.GetButtonDown("Cancel")) {
-            shopUI.CloseShop();
-            isShopOpen = false;
+        else if (isShopOpen) {
+            if(Input.GetButtonDown("Cancel")) {
+                shopUI.CloseShop();
+                shopDetailsPane.Close();
+                isShopOpen = false;
+            }
+            else if(Input.GetButtonDown("UnEquip")) {
+                UnEquip(selectedUpgrade);
+            }
         }
     }
 
     //called from UI
     public void OnCategorySelected(int index) {
         shopUI.OpenShop(upgradesCategories[index]);
+        shopDetailsPane.Open();
         isShopOpen = true;
+    }
+
+    //called from ShopItemUI.OnSelected event
+    public void OnUpgradeSelected(BaseUpgrade associatedUpgrade) {
+        selectedUpgrade = associatedUpgrade;
+        shopDetailsPane.UpdateDetails(associatedUpgrade);
     }
 
     public void BuyItem(BaseUpgrade upgrade) {
@@ -44,6 +59,7 @@ public class UpgradesShop : MonoBehaviour {
 
         if (upgrade.currentPrice > data.money || !upgradeInfo.isUnlocked || upgradeInfo.currentUpgradeNb >= upgrade.numberOfUpgrade || data.shipWeight + upgrade.wheight > maxWheight) {
             return;
+            //TODO: Error feedback
         }
 
         data.money -= upgrade.currentPrice;
@@ -57,5 +73,28 @@ public class UpgradesShop : MonoBehaviour {
 
         wheightUI.UpdateWheight();
         moneyUI.UpdateMoney();
+        upgrade.UpdateDynamicDetails();
+        shopDetailsPane.UpdateDetails(upgrade);
+
+    }
+
+    public void UnEquip(BaseUpgrade upgrade) {
+        SaveData data = FileSaveLoad.Load();
+        UpgradeInfo upgradeInfo = data.upgradesInfo[upgrade.saveDataIndex];
+
+        if(!upgrade.canUnEquip || upgradeInfo.currentUpgradeNb <= 0) {
+            return;
+            //TODO: Error feedback
+        }
+
+        data.shipWeight -= upgrade.wheight;
+        upgradeInfo.currentUpgradeNb--;
+        upgrade.UnEquip(data);
+
+        FileSaveLoad.Save(data);
+
+        wheightUI.UpdateWheight();
+        upgrade.UpdateDynamicDetails();
+        shopDetailsPane.UpdateDetails(upgrade);
     }
 }

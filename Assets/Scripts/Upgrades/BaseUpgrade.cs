@@ -23,7 +23,7 @@ public abstract class BaseUpgrade : MonoBehaviour {
         UpgradeInfo upgradeInfo = data.upgradesInfo[saveDataIndex];
 
         float priceMultiplier = upgradeInfo.currentUpgradeNb < upgradeInfo.boughtUpgradeNb ? rebuyMultiplier : 1;
-        currentPrice = basePrice * Mathf.Pow(upgradeInfo.currentUpgradeNb + 1, priceMultiplierPerUpgrade) * priceMultiplier;
+        currentPrice = basePrice * Mathf.Pow(priceMultiplierPerUpgrade, upgradeInfo.currentUpgradeNb) * priceMultiplier;
         currentEquipedNb = upgradeInfo.currentUpgradeNb;
     }
 
