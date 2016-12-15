@@ -4,8 +4,6 @@ using System.Collections;
 
 public class ShipDetailsPane : MonoBehaviour {
 
-    //GameData ref
-    //UI elements refs
     [SerializeField] private GameData gameData;
     [SerializeField] private ShipTypesUI shipTypes;
     [SerializeField] private ShipSelector shipSelector;
@@ -58,17 +56,28 @@ public class ShipDetailsPane : MonoBehaviour {
     public void UpdateDetails(int _selectedShip, int _selectedType) {
         selectedShip = _selectedShip;
         selectedType = _selectedType;
-
+        int shipIndex = gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex;
         //TODO: check if isUnlocked and then change the data
+        if (GlobalData.instance.saveData.shipsInfo[shipIndex].isUnlocked) {
+            nameText.text = gameData.shipsUIItems[selectedShip].name;
+            description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
+            powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
+            powerDescription.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
 
-        nameText.text = gameData.shipsUIItems[selectedShip].name;
-        description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
-        powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
-        powerDescription.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
+            ShipConfig shipConfig = gameData.ships[shipIndex];
+            life.text = "- Life: " + (int)(shipConfig.lifePrecent*100) + "%";
+            dps.text = "- Damage: " + (int)(shipConfig.damagePrecent * 100) + "%";
+            mana.text = "- Mana: " + (int)(shipConfig.manaPrecent * 100) + "%";
+        }
+        else {
+            nameText.text = "???";
+            description.text = "Unlock this layout through achivements";
+            powerName.text = "???";
+            powerDescription.text = "????";
 
-        ShipConfig shipConfig = gameData.ships[gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex];
-        life.text = "- Life: " + shipConfig.lifePrecent + "%";
-        dps.text = "- Damage: " +  shipConfig.damagePrecent + "%";
-        life.text = "- Mana: " + shipConfig.manaPrecent + "%";
+            life.text = "- Life: ???%";
+            dps.text = "- Damage: ???%";
+            mana.text = "- Mana: ???%";
+        }
     }
 }
