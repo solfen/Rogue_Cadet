@@ -25,6 +25,7 @@ public class SaveData {
     public float shipWeight;
     public float money;
     public List<int> selectedWeapons;
+    public int maxWeaponNb;
 
     public int hitboxUpgradeNb;
     public int lifeUpgradeNb;
