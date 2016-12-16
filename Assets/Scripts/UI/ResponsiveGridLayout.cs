@@ -22,14 +22,14 @@ public class ResponsiveGridLayout : MonoBehaviour {
         float colNb = Mathf.Ceil(rectTransform.rect.width / maxItemSize);
         float rowNb = Mathf.Ceil(rectTransform.rect.height / maxItemSize);
 
-        float containerRatio = (rectTransform.anchorMax.x - rectTransform.anchorMin.x) / (rectTransform.anchorMax.y - rectTransform.anchorMin.y);
+        float containerRatio = rectTransform.rect.width / rectTransform.rect.height;
         float sizeScaleRatio = (maxItemSize / rectTransform.rect.width - minSize) / (maxSize - minSize); // where we are on the item size scale
         Vector2 spacing = Vector2.Lerp(minSpacing, maxSpacing, sizeScaleRatio);
         Vector2 padding = Vector2.Lerp(minPadding, maxPadding, sizeScaleRatio);
 
         Vector2 totalSpacingSize = new Vector2((colNb - 1) * spacing.x, (rowNb - 1) * spacing.y);
         Vector2 itemSize = new Vector2((1 - padding.x * 2 - totalSpacingSize.x) / colNb, 0);
-        itemSize.y = itemSize.x * Camera.main.aspect * containerRatio;
+        itemSize.y = itemSize.x * containerRatio;
 
         for (int i = 0; i < target.childCount; i++) {
             Transform child = target.GetChild(i);
