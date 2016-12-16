@@ -17,8 +17,6 @@ public class ShopUI : MonoBehaviour {
     private ResponsiveGridLayout gridLayout;
     private int currentCategory;
     private int currentItem;
-    private float money;
-    private bool isOpen;
     private GameObject lastCategorySelected;
     private GameObject activeCategoryContainer = null;
     private Dictionary<UpgradeCategory, GameObject> categoriesContainers = new Dictionary<UpgradeCategory, GameObject>();
@@ -63,13 +61,11 @@ public class ShopUI : MonoBehaviour {
         lastCategorySelected = eventSystem.currentSelectedGameObject;
         anim.SetTrigger("OpenShop");
         ActivateCategory(category);
-        isOpen = true;
     }
 
     public void CloseShop() {
         eventSystem.SetSelectedGameObject(lastCategorySelected);
         anim.SetTrigger("CloseShop");
-        isOpen = false;
     }
 
     private void ActivateCategory(UpgradeCategory category) {
