@@ -17,7 +17,6 @@ public class WeaponSelectionUpgrade : BaseUpgrade {
 
     public override void UnEquip(SaveData dataToModify) {
         dataToModify.selectedWeapons.Remove(weaponIndex);
-        
     }
 
     private void DeactiveWeaponUpgrade(SaveData data) {
