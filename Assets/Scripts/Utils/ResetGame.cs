@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class ResetGame : MonoBehaviour {
@@ -15,7 +16,7 @@ public class ResetGame : MonoBehaviour {
             PlayerPrefs.SetString("selectedShip", "Knight");
             PlayerPrefs.SetFloat("Money", 0);
 
-            Application.LoadLevel(0);
+            SceneManager.LoadScene(0);
         }
 	}
 }

@@ -2,55 +2,45 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class InputMapUI : MonoBehaviour {
-    public static InputMapUI instance;
-
-    public GameObject gamepadControls;
-    public GameObject keyboardControls;
-    public Text text;
-
-    public bool isGamepad;
+    [SerializeField] private GameObject gamepadControls;
+    [SerializeField] private GameObject keyboardControls;
+    [SerializeField] private Text text;
 
     private Animator anim;
-    private bool isLoaded = false;
 
     void Awake () {
         anim = GetComponent<Animator>();
-        instance = this;
-        isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
+        bool isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
 
         gamepadControls.SetActive(isGamepad);
         keyboardControls.SetActive(!isGamepad);
 
         EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
+        EventDispatcher.AddEventListener(Events.GAME_STARTED, OnGameStart);
     }
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.GAME_LOADED, OnLoaded);
+        EventDispatcher.RemoveEventListener(Events.GAME_STARTED, OnGameStart);
     }
 
-    // Update is called once per frame
-    void Update () {
-		if(Input.GetButtonDown("Start") && isLoaded) {
-            anim.SetTrigger("Close");
-            isLoaded = false;
-            Time.timeScale = 1;
-            EventDispatcher.DispatchEvent(Events.GAME_STARTED, null);
-        }
-	}
-
+    //called from UpgradeShop
     public void Open() {
         anim.SetTrigger("Open");
-        Time.timeScale = 0;
     }
 
-    public void OnLoaded(object useless) {
+    private void OnLoaded(object useless) {
         text.text = "Press start or space";
-        isLoaded = true;
     }
 
-    public void OnOpen() {
-        Application.LoadLevel(0);
+    private void OnGameStart(object useless) {
+        anim.SetTrigger("Close");
+    }
+
+    public void OnOpenAnimFinished() {
+        SceneManager.LoadScene(0);
     }
 }

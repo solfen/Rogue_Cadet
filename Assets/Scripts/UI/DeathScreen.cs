@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class DeathScreen : MonoBehaviour {
 
@@ -23,8 +24,8 @@ public class DeathScreen : MonoBehaviour {
 
     void Update () {
         if(Input.GetButtonDown("Start")) {
-            InputMapUI.instance.gameObject.SetActive(false); //BAD! JUST SPENT 30MIN TRYING TO FIND THAT
-            Application.LoadLevel(levelToLoad);
+            Time.timeScale = 1;
+            SceneManager.LoadScene(levelToLoad);
         }
     }
 

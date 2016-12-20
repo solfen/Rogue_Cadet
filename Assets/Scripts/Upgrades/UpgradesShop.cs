@@ -8,6 +8,7 @@ public class UpgradesShop : MonoBehaviour {
     [SerializeField] private ShopDetailsUI shopDetailsPane;
     [SerializeField] private WheightUI wheightUI;
     [SerializeField] private MoneyUI moneyUI;
+    [SerializeField] private InputMapUI inputMap;
 
     private int currentCategory;
     private List<UpgradeCategory> upgradesCategories;
@@ -24,7 +25,7 @@ public class UpgradesShop : MonoBehaviour {
 
     void Update() {
         if (Input.GetButtonDown("Start")) {
-            InputMapUI.instance.Open();
+            inputMap.Open();
         }
         else if (isShopOpen) {
             if(Input.GetButtonDown("Cancel")) {
