@@ -44,6 +44,10 @@ public class Weapon : MonoBehaviour {
         bulletsFountains[0].OnFire += OnFountainFire;
     }
 
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+    }
+
     public void Activate() {
         enabled = true;
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
