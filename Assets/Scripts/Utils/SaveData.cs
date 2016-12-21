@@ -18,6 +18,7 @@ public class ShipInfo {
 public class SaveData {
 
     //TODO: Use enum
+    public int currentScene = 1; // 1 is for introduction
     public int selectedShip;
     public float shipWeight;
     public float money;
