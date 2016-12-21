@@ -14,6 +14,7 @@ public abstract class BaseUpgrade : MonoBehaviour {
     public int numberOfUpgrade;
     public float wheight;
     public bool canUnEquip = true;
+    public bool unlockedAtStart = false;
 
     public bool canBuy { get; private set; }
     public bool isUnlocked { get; private set; }

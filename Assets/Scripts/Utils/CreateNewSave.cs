@@ -5,26 +5,35 @@ using System.Collections.Generic;
 public class CreateNewSave : MonoBehaviour {
 
     void Start() {
-        Create(); //tmp for debug
-    }
+        Debug.Log(Application.persistentDataPath);
+        if(!FileSaveLoad.DoesSaveExists()) {
+            SaveData data = FileSaveLoad.Load();
+            List<ShipConfig> ships = GlobalData.instance.gameData.ships;
+            List<UpgradeCategory> upgradesCategories = GlobalData.instance.gameData.upgradesCategories;
 
-    public void Create() {
-        SaveData data = FileSaveLoad.Load();
-        List<ShipConfig> ships = GlobalData.instance.gameData.ships;
+            //TODO upgrades init
 
-        //TODO upgrades init
+            data.selectedWeapons = new List<int>();
+            data.selectedWeapons.Add(0);
 
-        data.selectedWeapons = new List<int>();
-        data.selectedWeapons.Add(0);
+            data.shipsInfo = new List<ShipInfo>();
+            for (int i = 0; i < ships.Count; i++) {
+                ShipInfo info = new ShipInfo();
+                info.isUnlocked = i < 3;
+                info.stock = ships[i].maxStock;
+                data.shipsInfo.Add(info);
+            }
 
-        data.shipsInfo = new List<ShipInfo>();
-        for(int i = 0; i < ships.Count; i++) {
-            ShipInfo info = new ShipInfo();
-            info.isUnlocked = i < 3;
-            info.stock = ships[i].maxStock;
-            data.shipsInfo.Add(info);
+            data.upgradesInfo = new List<UpgradeInfo>();
+            for(int i = 0; i < upgradesCategories.Count; i++) {
+                for(int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
+                    UpgradeInfo info = new UpgradeInfo();
+                    info.isUnlocked = upgradesCategories[i].upgrades[j].unlockedAtStart;
+                    data.upgradesInfo.Add(info);
+                }
+            }
+
+            FileSaveLoad.Save(data);
         }
-
-        FileSaveLoad.Save(data);
     }
 }
