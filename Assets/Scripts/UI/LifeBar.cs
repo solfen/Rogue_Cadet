@@ -11,7 +11,7 @@ public class LifeBar : MonoBehaviour {
     private Player player;
     private float maxLife;
 
-    void Start() {
+    void Awake() {
         EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
         enabled = false;
     }
