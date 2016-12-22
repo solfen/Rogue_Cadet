@@ -41,6 +41,6 @@ public class InputMapUI : MonoBehaviour {
     }
 
     public void OnOpenAnimFinished() {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(4);
     }
 }
