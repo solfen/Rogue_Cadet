@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class Test2 : MonoBehaviour {
 
     public Test test;
-    private SaveData data;
+
 
     void Start() {
-        data = FileSaveLoad.Load();
+
     }
 }
