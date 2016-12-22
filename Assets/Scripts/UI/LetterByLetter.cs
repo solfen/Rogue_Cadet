@@ -27,7 +27,5 @@ public class LetterByLetter : MonoBehaviour {
                 yield return null;
             }
         }
-
-        Debug.Log(Time.time);
     }
 }
