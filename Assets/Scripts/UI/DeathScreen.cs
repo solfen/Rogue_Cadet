@@ -5,21 +5,24 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class DeathScreen : MonoBehaviour {
+    [SerializeField] private Score score;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text highScore;
+    [SerializeField] private int levelToLoad = 1;
 
-    public static DeathScreen instance;
-    public Text scoreText;
-    public Text highScore;
-
-    [SerializeField]
-    private int levelToLoad = 1;
     private Animator anim;
     private AudioSource sound;
 
     void Awake() {
-        instance = this;
         sound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         anim.enabled = false;
+
+        EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+    }
+
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
     }
 
     void Update () {
@@ -29,12 +32,18 @@ public class DeathScreen : MonoBehaviour {
         }
     }
 
-    public void OnPlayerDeath(float score, float highscore) {
+    private void OnPlayerDeath(object useless) {
         anim.enabled = true;
         enabled = true;
 
-        scoreText.text = "Run money: " + score + "$";
-        highScore.text = "High score: " + highscore + "$";
+        if(score != null) {
+            scoreText.text = "Run money: " + score.score + "$";
+            highScore.text = "High score: " + Mathf.Max(score.score, GlobalData.instance.saveData.highScore) + "$";
+        }
+        else {
+            scoreText.text = "";
+            highScore.text = "";
+        }
 
         sound.Play();
     }

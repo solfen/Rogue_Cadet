@@ -69,14 +69,9 @@ public class Score : MonoBehaviour {
     }
 
     public void OnPlayerDeath(object useless) {
-        float highscore = Mathf.Max(PlayerPrefs.GetFloat("HighScore", 0), score);
-
-        PlayerPrefs.SetFloat("HighScore", highscore);
-
         SaveData data = FileSaveLoad.Load();
         data.money += score;
+        data.highScore = Mathf.Max(data.highScore, score);
         FileSaveLoad.Save(data);
-
-        DeathScreen.instance.OnPlayerDeath(score, highscore);
     }
 }
