@@ -5,19 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class InputMapUI : MonoBehaviour {
-    [SerializeField] private GameObject gamepadControls;
-    [SerializeField] private GameObject keyboardControls;
     [SerializeField] private Text text;
 
     private Animator anim;
 
     void Awake () {
         anim = GetComponent<Animator>();
-        bool isGamepad = Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "";
-
-        gamepadControls.SetActive(isGamepad);
-        keyboardControls.SetActive(!isGamepad);
-
         EventDispatcher.AddEventListener(Events.GAME_LOADED, OnLoaded);
         EventDispatcher.AddEventListener(Events.GAME_STARTED, OnGameStart);
     }
