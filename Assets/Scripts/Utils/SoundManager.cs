@@ -42,6 +42,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
+        EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
     }
 
     void OnDestroy () {
@@ -52,6 +53,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
+        EventDispatcher.RemoveEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
     }
 
     private void PlayBulletSound(object fountain) {
@@ -80,6 +82,12 @@ public class SoundManager : MonoBehaviour {
 
     private void PlayActivateSound(object useless) {
         PlaySound(GenericSoundsEnum.ACTIVATE);
+    }
+
+    private void PlayCollectibleSound(object collectibleObj) {
+        GenericSoundsEnum sound = ((Collectible)collectibleObj).sound;
+        if (sound != GenericSoundsEnum.NONE)
+            PlaySound(sound);
     }
 
     public void PlaySound(GenericSoundsEnum sound) {

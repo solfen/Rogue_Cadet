@@ -20,7 +20,6 @@ public class Collectible : MonoBehaviour {
 
     void OnTriggerEnter2D() {
         EventDispatcher.DispatchEvent(Events.COLLECTIBLE_TAKEN, this);
-        SoundManager.instance.PlaySound(sound);
         Destroy(gameObject);
     }
 }
