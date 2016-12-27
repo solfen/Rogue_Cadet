@@ -5,7 +5,6 @@ using System.Collections.Generic;
 public class CreateNewSave : MonoBehaviour {
 
     void Start() {
-        Debug.Log(Application.persistentDataPath);
         if(!FileSaveLoad.DoesSaveExists()) {
             SaveData data = FileSaveLoad.Load();
             List<ShipConfig> ships = GlobalData.instance.gameData.ships;
