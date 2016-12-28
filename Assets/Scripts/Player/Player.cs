@@ -68,8 +68,13 @@ public class Player : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D other) {
         DamageDealer damager = other.GetComponent<DamageDealer>();
         if (invincibiltyTimer <= 0 && damager != null) {
-            Damage(damager.damage);
-            EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
+            if(damager.damage >= 0) {
+                Damage(damager.damage);
+                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
+            }
+            else {
+                Heal(-damager.damage);
+            }
         }
     }
 
@@ -124,6 +129,5 @@ public class Player : MonoBehaviour {
 
     IEnumerator DieAnim() {
         yield return new WaitForSeconds(0.2f);
-
     }
 }

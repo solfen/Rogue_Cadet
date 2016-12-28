@@ -40,4 +40,8 @@ public abstract class BaseSpecialPower : MonoBehaviour {
             }
         }
     }
+
+    public virtual void Regenerate(float amount) {
+        mana = Mathf.Min(maxMana, mana + amount);
+    }
 }
