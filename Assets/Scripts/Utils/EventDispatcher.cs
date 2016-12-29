@@ -20,7 +20,8 @@ public enum Events {
     SPECIAL_POWER_USED,
     SPECIAL_POWER_USED_IN_COOLDOWN,
     BOMB_USED,
-    FILE_SAVED
+    FILE_SAVED,
+    REVEAL_TREASURE_MAP,
 }
 
 public static class EventDispatcher {
@@ -44,6 +45,7 @@ public static class EventDispatcher {
         { Events.SPECIAL_POWER_USED_IN_COOLDOWN,  null },
         { Events.BOMB_USED,  null },
         { Events.FILE_SAVED,  null },
+        { Events.REVEAL_TREASURE_MAP,  null },
     };
 
 

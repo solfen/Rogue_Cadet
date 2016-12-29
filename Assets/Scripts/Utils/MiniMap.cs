@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class MiniMap : MonoBehaviour {
-    public static MiniMap instance;
 
     public GameData gameData;
     public Dungeon dungeon;
@@ -30,12 +29,15 @@ public class MiniMap : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        instance = this;
         EventDispatcher.AddEventListener(Events.DUNGEON_GRAPH_CREATED, OnGraphCreated);
+        EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
+        EventDispatcher.AddEventListener(Events.REVEAL_TREASURE_MAP, OnRevealTreasure);
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.DUNGEON_GRAPH_CREATED, OnGraphCreated);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
+        EventDispatcher.RemoveEventListener(Events.REVEAL_TREASURE_MAP, OnRevealTreasure);
     }
 
     void Start() {
@@ -98,7 +100,16 @@ public class MiniMap : MonoBehaviour {
         }
     }
 
-    public void OnPlayerEnterRoom(GraphRoom room) {
+    private void OnPlayerEnterRoom(object roomObj) {
+        GraphRoom room = (GraphRoom)roomObj;
         rooms[room].SetActive(true);
+    }
+
+    private void OnRevealTreasure(object useless) {
+        foreach (KeyValuePair<GraphRoom, GameObject> entry in rooms) {
+            if(entry.Key.roomPrefab.type == RoomType.TREASURE) {
+                entry.Value.SetActive(true);
+            }
+        }
     }
 }

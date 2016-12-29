@@ -96,7 +96,6 @@ public class Player : MonoBehaviour {
     private void SetCurrentRoom() {
         newRoom = dungeon.map[(int)Mathf.Floor(_transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(_transform.position.y / gameData.roomBaseSize.y)].room;
         if (newRoom != currentRoom) {
-            MiniMap.instance.OnPlayerEnterRoom(newRoom);
             EventDispatcher.DispatchEvent(Events.PLAYER_ENTER_ROOM, newRoom);
         }
         currentRoom = newRoom;
