@@ -62,7 +62,12 @@ public class Dungeon : MonoBehaviour {
     public List<ZoneRooms> zoneRooms = new List<ZoneRooms>(); 
     [Tooltip("Rooms that have only one exit")]
     public List<ZoneRooms> deadEndRooms = new List<ZoneRooms>();
+    [Tooltip("Rooms that teleports to the bossses")]
     public List<BossRoom> bossRooms;
+    [Tooltip("Rooms that contain treasure")]
+    public List<ZoneRooms> treasureRooms = new List<ZoneRooms>();
+    [Tooltip("Rooms that contain special events")]
+    public List<ZoneRooms> specialRooms = new List<ZoneRooms>();
 
     [Header("Misc")]
     [Tooltip("To avoid having too small dungeon. Dead end are not possible before this number of rooms")]
@@ -87,6 +92,8 @@ public class Dungeon : MonoBehaviour {
     void Start() {
 
         float time = Time.realtimeSinceStartup;
+        zoneRooms.AddRange(treasureRooms); // for now it's useless to separate the rooms types. But later it can be used to tweak the probability and stuff like that
+        zoneRooms.AddRange(specialRooms);
         CreateRoomGraph();
         Debug.Log((Time.realtimeSinceStartup - time)*1000);
 

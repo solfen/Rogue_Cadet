@@ -14,12 +14,21 @@ public class EnemyPack {
     public GameObject container;
 }
 
+[System.Serializable]
+public enum RoomType {
+    NORMAL,
+    BOSS,
+    TREASURE,
+    SPECIAL
+}
+
 public class Room : MonoBehaviour {
 
     public bool debug = true;
     public Transform enemiesParent;
     [Header("Dungeon data")]
     public int zoneIndex;
+    public RoomType type = RoomType.NORMAL;
     public Vector2 size;
     public List<Exit> exits = new List<Exit>();
     [Header("Enemies configuration")]

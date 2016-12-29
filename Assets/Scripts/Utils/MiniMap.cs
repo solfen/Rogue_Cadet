@@ -8,6 +8,7 @@ public class MiniMap : MonoBehaviour {
     public GameData gameData;
     public Dungeon dungeon;
     public RectTransform roomPrefab;
+    public RectTransform treasurePrefab;
     public RectTransform exitPrefab;
     public Transform roomsParent;
     public float scale;
@@ -70,6 +71,10 @@ public class MiniMap : MonoBehaviour {
             currentSize.Set(roomBaseSize.x * graph[i].roomPrefab.size.x, roomBaseSize.y * graph[i].roomPrefab.size.y);
 
             currentRoom = Instantiate(roomPrefab, roomsParent) as RectTransform;
+            if(graph[i].roomPrefab.type == RoomType.TREASURE) {
+                Instantiate(treasurePrefab, currentRoom.transform, false);
+            }
+
             currentRoom.localPosition = currentPos;
             currentRoom.sizeDelta = currentSize;
 
