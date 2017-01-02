@@ -22,6 +22,7 @@ public enum Events {
     BOMB_USED,
     FILE_SAVED,
     REVEAL_TREASURE_MAP,
+    PLAYER_TELEPORTED,
 }
 
 public static class EventDispatcher {
@@ -46,6 +47,7 @@ public static class EventDispatcher {
         { Events.BOMB_USED,  null },
         { Events.FILE_SAVED,  null },
         { Events.REVEAL_TREASURE_MAP,  null },
+        { Events.PLAYER_TELEPORTED,  null },
     };
 
 
