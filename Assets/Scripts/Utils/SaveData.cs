@@ -25,6 +25,7 @@ public class SaveData {
     public float highScore;
     public List<int> selectedWeapons;
     public int maxWeaponNb = 1;
+    public List<int> bossesBeaten = new List<int>();
 
     public int hitboxUpgradeNb;
     public int lifeUpgradeNb;

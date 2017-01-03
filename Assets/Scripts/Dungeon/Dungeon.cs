@@ -31,7 +31,7 @@ public class ZoneRooms {
 }
 
 [System.Serializable]
-public class BossRoom {
+public class BossRoomConfig {
     public List<Room> roomsBasePrefab;
     public List<Room> roomsBoss;
     [HideInInspector]
@@ -63,7 +63,7 @@ public class Dungeon : MonoBehaviour {
     [Tooltip("Rooms that have only one exit")]
     public List<ZoneRooms> deadEndRooms = new List<ZoneRooms>();
     [Tooltip("Rooms that teleports to the bossses")]
-    public List<BossRoom> bossRooms;
+    public List<BossRoomConfig> bossRooms;
     [Tooltip("Rooms that contain treasure")]
     public List<ZoneRooms> treasureRooms = new List<ZoneRooms>();
     [Tooltip("Rooms that contain special events")]
@@ -133,10 +133,6 @@ public class Dungeon : MonoBehaviour {
     private void CreateRoomGraph() {
         InitMap();
 
-        for (int i = 0; i < bossRooms.Count; i++) {
-            bossRooms[i].canPop = PlayerPrefs.GetInt("Defeated_Boss" + i) == 0;
-        }
-
         graph = new List<GraphRoom>((int)(gameData.worldSize.x * gameData.worldSize.y));
         firstDepthGrag = new List<GraphRoom>((int)(gameData.worldSize.x * gameData.worldSize.y));
         currentZoneIndex = 0;
@@ -149,7 +145,7 @@ public class Dungeon : MonoBehaviour {
         GenerateGraph();
 
        if(graph.Count < gameData.worldSize.x * gameData.worldSize.y * 0.4 || !TryAddBosses()) {
-            CreateRoomGraph();
+            CreateRoomGraph(); //bad roll lets start again
        }
     }
 
@@ -232,24 +228,19 @@ public class Dungeon : MonoBehaviour {
 
     private bool TryAddBosses() {
         for (int i = bossRooms.Count-1; i >= 0; i--) {
-            if (bossRooms[i].canPop) {
-                if(TrySetBossRoom(i)) {
-                    bossRooms[i].canPop = false;
-                }
-                else {
-                    return false;
-                }
+            if(!OverrideRoomWithBoss(i)) {
+                return false;
             }
         }
 
         return true;
     }
 
-    private bool TrySetBossRoom(int i) {
-        for(int k = 0; k < bossRooms[i].roomsBasePrefab.Count; k++) {
-            for (int j = graph.Count-1; j >= 0 ; j--) {
-                if (graph[j].roomPrefab == bossRooms[i].roomsBasePrefab[k]) {
-                    graph[j].roomPrefab = bossRooms[i].roomsBoss[k];
+    private bool OverrideRoomWithBoss(int i) {
+        for(int j = 0; j < bossRooms[i].roomsBasePrefab.Count; j++) {
+            for (int k = graph.Count-1; k >= 0 ; k--) {
+                if (graph[k].roomPrefab == bossRooms[i].roomsBasePrefab[j]) {
+                    graph[k].roomPrefab = bossRooms[i].roomsBoss[j];
                     return true;
                 }
             }

@@ -12,7 +12,6 @@ public class Teleporter : MonoBehaviour {
 
     private Transform playerTransform;
 
-	// Use this for initialization
 	void Awake () {
         EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
 
@@ -53,13 +52,16 @@ public class Teleporter : MonoBehaviour {
 	}
 
     IEnumerator Teleport() {
+        Vector3 playerPos = playerTransform.position;
+
         particles.Play();
         yield return new WaitForSeconds(animDuration);
         screenTransitorAnim.SetTrigger("Transition");
         yield return new WaitForSeconds(0.2f);
 
-        EventDispatcher.DispatchEvent(Events.PLAYER_TELEPORTED, playerTransform.position);
         playerTransform.position = teleportPos;
-        Destroy(gameObject);
+        EventDispatcher.DispatchEvent(Events.PLAYER_TELEPORTED, playerPos); // needs to be after to avoid teleport back autoInfluence
+
+        Destroy(gameObject, 1);
     }
 }
