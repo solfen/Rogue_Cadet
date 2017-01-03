@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Teleporter : MonoBehaviour {
+public class Teleporter : MonoBehaviour, IInteractable {
 
     [SerializeField] private bool isTeleportBack;
     [SerializeField] private float animDuration = 1;
     [SerializeField] private Vector3 teleportPos;
-    [SerializeField] private GameObject hintBtn;
+
     [SerializeField] private ParticleSystem particles;
     [SerializeField] private Animator screenTransitorAnim;
 
@@ -33,23 +33,9 @@ public class Teleporter : MonoBehaviour {
         teleportPos = (Vector3)playerLastPos;
     }
 
-    void OnTriggerEnter2D () {
-        StartCoroutine("WaitForInput");
-        hintBtn.SetActive(true);
+    public void Activate() {
+        StartCoroutine("Teleport");
     }
-
-    void OnTriggerExit2D() {
-        StopCoroutine("WaitForInput");
-        hintBtn.SetActive(false);
-    }
-
-    IEnumerator WaitForInput () {
-	    while(!Input.GetButtonDown("Submit")) {
-            yield return null;
-        }
-
-        StartCoroutine(Teleport());
-	}
 
     IEnumerator Teleport() {
         Vector3 playerPos = playerTransform.position;
