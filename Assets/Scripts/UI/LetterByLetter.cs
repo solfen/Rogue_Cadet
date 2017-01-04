@@ -23,7 +23,7 @@ public class LetterByLetter : MonoBehaviour {
         for(int i = 0;  i < orignialText.Length; i++) {
             textUI.text += orignialText[i];
             
-            for(float t = 0; t < letterInterval; t += Time.deltaTime) {
+            for(float t = 0; t < letterInterval; t += Time.unscaledDeltaTime) {
                 yield return null;
             }
         }

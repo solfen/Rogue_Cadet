@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
 public class Test : MonoBehaviour {
 
+    public Text realText;
 
-    public void TestStuff() {
-        Debug.Log(FileSaveLoad.Load().hitboxUpgradeNb);
+    void Start () {
+        //Debug.Log();
     }
 	
 
