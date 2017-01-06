@@ -11,9 +11,12 @@ public class ShipDetailsPane : MonoBehaviour {
     [Header("UI child elems")]
     [SerializeField] private Text nameText;
     [SerializeField] private Text description;
+    [SerializeField] private GameObject statsParent;
     [SerializeField] private Text life;
     [SerializeField] private Text dps;
     [SerializeField] private Text mana;
+    [SerializeField] private GameObject achievementParent;
+    [SerializeField] private Image achivementImage;
     [SerializeField] private Text powerName;
     [SerializeField] private Text powerDescription;
 
@@ -57,8 +60,10 @@ public class ShipDetailsPane : MonoBehaviour {
         selectedShip = _selectedShip;
         selectedType = _selectedType;
         int shipIndex = gameData.shipsUIItems[selectedShip].types[selectedType].associatedShipIndex;
-        //TODO: check if isUnlocked and then change the data
+
         if (GlobalData.instance.saveData.shipsInfo[shipIndex].isUnlocked) {
+            achievementParent.SetActive(false);
+            statsParent.SetActive(true);
             nameText.text = gameData.shipsUIItems[selectedShip].name;
             description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
             powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
@@ -70,14 +75,14 @@ public class ShipDetailsPane : MonoBehaviour {
             mana.text = "- Mana: " + (int)(shipConfig.manaPrecent * 100) + "%";
         }
         else {
-            nameText.text = "???";
-            description.text = "Unlock this layout through achivements";
-            powerName.text = "???";
-            powerDescription.text = "????";
-
-            life.text = "- Life: ???%";
-            dps.text = "- Damage: ???%";
-            mana.text = "- Mana: ???%";
+            AchievementUI achiev = gameData.achievementsUI[gameData.shipsUIItems[selectedShip].types[selectedType].associatedAchievementIndex];
+            achievementParent.SetActive(true);
+            statsParent.SetActive(false);
+            nameText.text = "Locked";
+            description.text = "Achievement required";
+            achivementImage.sprite = achiev.icon;
+            powerName.text = achiev.name;
+            powerDescription.text = achiev.description;
         }
     }
 }
