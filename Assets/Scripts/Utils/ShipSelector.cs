@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class ShipSelector : MonoBehaviour {
 
-    [SerializeField] private ShipSelectionTransitionUI transistor;
+    [SerializeField] private ShipSelectionTransitionUI transitor;
 
     void Start () {
         SaveData data = FileSaveLoad.Load();
@@ -21,12 +21,12 @@ public class ShipSelector : MonoBehaviour {
     public void SelectShip(int shipIndex) {
         SaveData data = FileSaveLoad.Load();
 
-        if(data.shipsInfo[shipIndex].stock >= 1) {
+        if(data.shipsInfo[shipIndex].stock >= 1 && data.shipsInfo[shipIndex].isUnlocked) {
             data.selectedShip = shipIndex;
             data.shipsInfo[shipIndex].stock -= 1;
             FileSaveLoad.Save(data);
 
-            transistor.Transition();
+            transitor.Transition();
         }
         // TODO: Else sound of error 
     }
