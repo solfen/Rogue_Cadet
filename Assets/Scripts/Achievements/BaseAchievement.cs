@@ -8,6 +8,8 @@ public abstract class BaseAchievement : MonoBehaviour {
 
 	// Use this for initialization
 	protected virtual void Start () {
+        EventDispatcher.DispatchEvent(Events.ACHIEVMENT_CREATED, achievementIndex);
+
 	    if(GlobalData.instance.saveData.achievementsUnlocked.Contains(achievementIndex)) {
             Destroy(this);
             return;
@@ -22,7 +24,7 @@ public abstract class BaseAchievement : MonoBehaviour {
 
         FileSaveLoad.Save(data);
 
-        Debug.Log("Achievement: " + achievementIndex + " unlcoked");
+        Debug.Log("Achievement: " + achievementIndex + " unlocked");
         //UI Event
 
         Destroy(this);
