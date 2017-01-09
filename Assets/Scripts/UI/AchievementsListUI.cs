@@ -10,7 +10,7 @@ public class AchievementsListUI : MonoBehaviour {
 	}
 
     void OnDestroy() {
-        EventDispatcher.AddEventListener(Events.ACHIEVMENT_CREATED, OnAchievementCreated);
+        EventDispatcher.RemoveEventListener(Events.ACHIEVMENT_CREATED, OnAchievementCreated);
     }
 
     private void OnAchievementCreated(object achievementIndex) {

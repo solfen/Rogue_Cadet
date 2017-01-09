@@ -25,6 +25,7 @@ public enum Events {
     PLAYER_TELEPORTED,
     SHIELD_ABSORB_BULLET,
     ACHIEVMENT_CREATED,
+    ACHIEVMENT_UNLOCKED,
 }
 
 public static class EventDispatcher {
@@ -52,6 +53,7 @@ public static class EventDispatcher {
         { Events.PLAYER_TELEPORTED,  null },
         { Events.SHIELD_ABSORB_BULLET,  null },
         { Events.ACHIEVMENT_CREATED,  null },
+        { Events.ACHIEVMENT_UNLOCKED,  null },
     };
 
 

@@ -24,8 +24,7 @@ public abstract class BaseAchievement : MonoBehaviour {
 
         FileSaveLoad.Save(data);
 
-        Debug.Log("Achievement: " + achievementIndex + " unlocked");
-        //UI Event
+        EventDispatcher.DispatchEvent(Events.ACHIEVMENT_UNLOCKED, achievementIndex);
 
         Destroy(this);
     }
