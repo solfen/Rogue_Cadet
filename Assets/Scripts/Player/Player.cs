@@ -94,11 +94,15 @@ public class Player : MonoBehaviour {
     }
 
     private void SetCurrentRoom() {
-        newRoom = dungeon.map[(int)Mathf.Floor(_transform.position.x / gameData.roomBaseSize.x), (int)Mathf.Floor(_transform.position.y / gameData.roomBaseSize.y)].room;
-        if (newRoom != currentRoom) {
-            EventDispatcher.DispatchEvent(Events.PLAYER_ENTER_ROOM, newRoom);
+        int x = (int)Mathf.Floor(_transform.position.x / gameData.roomBaseSize.x);
+        int y = (int)Mathf.Floor(_transform.position.y / gameData.roomBaseSize.y);
+        if(x >= 0 && x < gameData.worldSize.x && y >= 0 && y < gameData.worldSize.y) {
+            newRoom = dungeon.map[x, y].room;
+            if (newRoom != currentRoom) {
+                EventDispatcher.DispatchEvent(Events.PLAYER_ENTER_ROOM, newRoom);
+            }
+            currentRoom = newRoom;
         }
-        currentRoom = newRoom;
     }
 
     private void LifeUpdate() {
