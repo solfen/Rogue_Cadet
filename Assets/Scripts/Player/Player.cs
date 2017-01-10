@@ -24,7 +24,7 @@ public class Player : MonoBehaviour {
     private BoxCollider2D _collider;
     private Color initalColor;
 
-    private float invincibiltyTimer;
+    public float invincibiltyTimer;
 
     void Start() {
         _transform = GetComponent<Transform>();

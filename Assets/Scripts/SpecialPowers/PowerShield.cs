@@ -6,6 +6,12 @@ public class PowerShield : BaseSpecialPower {
 
     [SerializeField] private float duration;
     [SerializeField] private GameObject shield;
+    private Player player;
+
+    protected override void Start() {
+        base.Start();
+        player = transform.parent.GetComponent<Player>();
+    }
 
     protected override void Activate() {
         StartCoroutine(ShieldTime());
@@ -14,6 +20,7 @@ public class PowerShield : BaseSpecialPower {
     IEnumerator ShieldTime() {
         float timer = duration;
         shield.SetActive(true);
+        player.invincibiltyTimer = duration;
 
         while (timer > 0) {
             yield return null;
