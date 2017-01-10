@@ -27,16 +27,11 @@ public class PlayerCustomAnimator : MonoBehaviour {
         currentAnim = playerSpeed > 1.2 ? "ThrustMax" : playerSpeed < 0.5 ? "ThrustLow" : "Idle";
 
         if (previousAnim != currentAnim) {
+            if(previousAnim != null)
+                animations[previousAnim].Stop();
+
+            animations[currentAnim].Play();
             previousAnim = currentAnim;
-            
-            for(int i = 0; i < animationsList.Count; i++) {
-                if(animationsList[i].name == currentAnim) {
-                    animationsList[i].anim.Play();
-                }
-                else {
-                    animationsList[i].anim.Stop();
-                }
-            }
         }
     }
 
@@ -45,9 +40,8 @@ public class PlayerCustomAnimator : MonoBehaviour {
             animationsList[i].anim.Stop();
         }
 
+        enabled = false;
+
         animations["Explosion"].Play();
     }
-
-
-    
 }

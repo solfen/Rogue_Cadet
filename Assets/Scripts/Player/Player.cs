@@ -129,8 +129,4 @@ public class Player : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
         Destroy(gameObject, 2);
     }
-
-    IEnumerator DieAnim() {
-        yield return new WaitForSeconds(0.2f);
-    }
 }
