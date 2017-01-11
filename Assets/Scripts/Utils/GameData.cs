@@ -9,6 +9,7 @@ public class GameData : ScriptableObject {
     public List<Zone> zones;
     public List<Weapon> weapons;
     public ShipBaseConfig shipBaseStats;
+    public List<int> shipsUnlockedAtStart;
     public List<ShipConfig> ships;
     public List<ShipsUIItemData> shipsUIItems;
     public List<UpgradeCategory> upgradesCategories;
@@ -68,6 +69,7 @@ public class ShipsUIItemData {
 
 [System.Serializable]
 public class ShipTypeUIItem {
+    public string name;
     public string description;
     public string powerName;
     public string powerDescription;

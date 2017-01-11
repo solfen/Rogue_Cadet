@@ -19,7 +19,7 @@ public class SaveData {
 
     //TODO: Use enum
     public int currentScene = 1; // 1 is for introduction
-    public int selectedShip = 15;
+    public int selectedShip = 0;
     public float shipWeight;
     public float money;
     public float highScore;

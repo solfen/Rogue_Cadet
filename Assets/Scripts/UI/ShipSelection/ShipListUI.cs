@@ -38,9 +38,9 @@ public class ShipListUI : MonoBehaviour {
             }
         }
 
-        _rectTransform.anchoredPosition = new Vector2(-0.5f * ((gamedata.shipsUIItems.Count - 3) / 2) * Camera.main.pixelWidth, 0);
+        _rectTransform.anchoredPosition = new Vector2(0.5f * Camera.main.pixelWidth, 0);
 
-        shipSelectedIndex = (gamedata.shipsUIItems.Count - 1) / 2;
+        shipSelectedIndex = 0;
     }
 	
 	// Update is called once per frame

@@ -18,9 +18,12 @@ public class CreateNewSave : MonoBehaviour {
             data.shipsInfo = new List<ShipInfo>();
             for (int i = 0; i < ships.Count; i++) {
                 ShipInfo info = new ShipInfo();
-                info.isUnlocked = i < 3;
                 info.stock = ships[i].maxStock;
                 data.shipsInfo.Add(info);
+            }
+
+            for(int i = 0; i < GlobalData.instance.gameData.shipsUnlockedAtStart.Count; i++) {
+                data.shipsInfo[GlobalData.instance.gameData.shipsUnlockedAtStart[i]].isUnlocked = true;
             }
 
             data.upgradesInfo = new List<UpgradeInfo>();

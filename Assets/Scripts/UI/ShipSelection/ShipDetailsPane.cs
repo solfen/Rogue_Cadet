@@ -64,7 +64,7 @@ public class ShipDetailsPane : MonoBehaviour {
         if (GlobalData.instance.saveData.shipsInfo[shipIndex].isUnlocked) {
             achievementParent.SetActive(false);
             statsParent.SetActive(true);
-            nameText.text = gameData.shipsUIItems[selectedShip].name;
+            nameText.text = gameData.shipsUIItems[selectedShip].types[selectedType].name;
             description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
             powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
             powerDescription.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
