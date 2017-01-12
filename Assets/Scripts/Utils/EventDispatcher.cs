@@ -26,6 +26,10 @@ public enum Events {
     SHIELD_ABSORB_BULLET,
     ACHIEVMENT_CREATED,
     ACHIEVMENT_UNLOCKED,
+    SPECIAL_POWER_USE_END,
+    SPECIAL_POWER_CREATED,
+    SCORE_CHANGED,
+    COMBO_CHANGED,
 }
 
 public static class EventDispatcher {
@@ -54,6 +58,10 @@ public static class EventDispatcher {
         { Events.SHIELD_ABSORB_BULLET,  null },
         { Events.ACHIEVMENT_CREATED,  null },
         { Events.ACHIEVMENT_UNLOCKED,  null },
+        { Events.SPECIAL_POWER_USE_END,  null },
+        { Events.SPECIAL_POWER_CREATED,  null },
+        { Events.SCORE_CHANGED,  null },
+        { Events.COMBO_CHANGED,  null },
     };
 
 

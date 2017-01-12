@@ -39,7 +39,7 @@ public class Score : MonoBehaviour {
             combo = Mathf.Max(1, combo - 1);
             comboDownTimer = comboDownInterval;
 
-            ScoreUI.instance.UpdateCombo(combo);
+            EventDispatcher.DispatchEvent(Events.COMBO_CHANGED, combo);
         }
     }
 
@@ -50,22 +50,22 @@ public class Score : MonoBehaviour {
         combo = Mathf.Min(maxCombo, combo+1);
         comboDownTimer = comboDownInterval;
 
-        ScoreUI.instance.UpdateScore(score);
-        ScoreUI.instance.UpdateCombo(combo);
+        EventDispatcher.DispatchEvent(Events.SCORE_CHANGED, score);
+        EventDispatcher.DispatchEvent(Events.COMBO_CHANGED, combo);
     }
 
     public void PlayerHit(object useless) {
         combo = Mathf.Max(1, combo - 1);
 
         comboDownTimer = comboDownInterval;
-        ScoreUI.instance.UpdateCombo(combo);
+        EventDispatcher.DispatchEvent(Events.COMBO_CHANGED, combo);
     }
 
     public void CollectibleTaken(object collectible) {
         float value = ((Collectible)collectible).value;
 
         score += value * combo * shipGoldPercent;
-        ScoreUI.instance.UpdateScore(score);
+        EventDispatcher.DispatchEvent(Events.SCORE_CHANGED, score);
     }
 
     public void OnPlayerDeath(object useless) {

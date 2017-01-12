@@ -5,22 +5,24 @@ using UnityEngine.UI;
 
 public class ScoreUI : MonoBehaviour {
 
-    public static ScoreUI instance;
-
-    [SerializeField]
-    private Text scoreText;
-    [SerializeField]
-    private Text comboText;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text comboText;
 
     void Awake () {
-        instance = this;
+        EventDispatcher.AddEventListener(Events.SCORE_CHANGED, UpdateScore);
+        EventDispatcher.AddEventListener(Events.COMBO_CHANGED, UpdateCombo);
     }
 
-    public void UpdateScore(float score) {
-        scoreText.text = "Money: " + score + " $";
+    void OnDestroy () {
+        EventDispatcher.RemoveEventListener(Events.SCORE_CHANGED, UpdateScore);
+        EventDispatcher.RemoveEventListener(Events.COMBO_CHANGED, UpdateCombo);
     }
 
-    public void UpdateCombo(float combo) {
-        comboText.text = "x" + combo;
+    public void UpdateScore(object score) {
+        scoreText.text = "Money: " + ((float)score) + " $";
+    }
+
+    public void UpdateCombo(object combo) {
+        comboText.text = "x" + ((float)combo);
     }
 }

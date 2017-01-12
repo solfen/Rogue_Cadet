@@ -10,10 +10,12 @@ public class PowerUI : MonoBehaviour {
     
     void Start () {
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_CREATED, OnUsePower);
     }
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_CREATED, OnUsePower);
     }
 
     public void OnUsePower(object powerObj) {
