@@ -26,7 +26,7 @@ public class AchievementShieldFromBullets : BaseAchievement {
     void OnShieldAbsorb(object useless) {
         bulletAbsorbed++;
         if(bulletAbsorbed == bulletsToAbsorb) {
-            base.Unlock();
+            Unlock();
         }
     }
 }
