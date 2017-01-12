@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
         if (invincibiltyTimer <= 0 && damager != null) {
             if(damager.damage >= 0) {
                 Damage(damager.damage);
-                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, null);
+                EventDispatcher.DispatchEvent(Events.PLAYER_HIT, this);
             }
             else {
                 Heal(-damager.damage);
