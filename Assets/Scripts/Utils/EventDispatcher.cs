@@ -30,6 +30,7 @@ public enum Events {
     SPECIAL_POWER_CREATED,
     SCORE_CHANGED,
     COMBO_CHANGED,
+    CHEST_LOOTED,
 }
 
 public static class EventDispatcher {
@@ -62,6 +63,7 @@ public static class EventDispatcher {
         { Events.SPECIAL_POWER_CREATED,  null },
         { Events.SCORE_CHANGED,  null },
         { Events.COMBO_CHANGED,  null },
+        { Events.CHEST_LOOTED,  null },
     };
 
 

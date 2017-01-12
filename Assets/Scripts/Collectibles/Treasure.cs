@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class TreasureChest : MonoBehaviour {
+public class Treasure : MonoBehaviour {
 
     [SerializeField] private List<GameObject> treassures = new List<GameObject>();
     private Animator anim;
