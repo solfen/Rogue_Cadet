@@ -7,6 +7,7 @@ public class AchievementUsePowerXTimes : BaseAchievement {
     private int currentUseNb = 0;
 
 	protected override void Start () {
+        base.Start();
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, OnPowerUsed);
 	}
 
