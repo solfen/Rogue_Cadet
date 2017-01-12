@@ -40,5 +40,7 @@ public class PowerBerserk : BaseSpecialPower {
         player.transform.localScale /= 1.5f;
         playerRenderer.color = initialColor;
         playerWeapon.maxFireDuration /= 9000;
+
+        EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USE_END, null);
     }
 }

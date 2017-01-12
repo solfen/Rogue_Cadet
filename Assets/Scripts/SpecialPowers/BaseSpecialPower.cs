@@ -21,7 +21,7 @@ public abstract class BaseSpecialPower : MonoBehaviour {
         maxMana = gameData.shipBaseStats.maxMana * (shipData.manaPrecent + saveData.manaUpgradeNb * shipData.manaUpgradeRaise);
         mana = maxMana;
 
-        EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USED, this); //to activate the UI
+        EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_CREATED, this); //to activate the UI
     }
 
     protected virtual void Update() {

@@ -70,7 +70,7 @@ public class Enemy : MonoBehaviour {
 
         anim.SetTrigger("Death");
         spriteRender.color = Color.white;
-        GetComponent<Rigidbody2D>().simulated = false; //remove from 
+        GetComponent<Rigidbody2D>().simulated = false; //remove from physics
         if (drop != null) {
             drop.Pop();
         }
