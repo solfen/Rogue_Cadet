@@ -31,6 +31,10 @@ public class Enemy : MonoBehaviour {
         }
     }
 
+    void OnTriggerStay2D(Collider2D other) {
+        OnTriggerEnter2D(other);
+    }
+
     public void Hit(float damage) {
         life -= damage;
         if (life <= 0) {

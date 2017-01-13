@@ -24,7 +24,7 @@ public class PowerBerserk : BaseSpecialPower {
 
     IEnumerator BerserkTime() {
         Color initialColor = playerRenderer.color;
-        Weapon playerWeapon = playerWeaponSwitcher.currentWeapon;
+        BaseWeapon playerWeapon = playerWeaponSwitcher.currentWeapon;
 
         player.transform.localScale *= 1.5f;
         playerRenderer.color = Color.red;

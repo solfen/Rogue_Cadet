@@ -35,6 +35,7 @@ public class Bullet : MonoBehaviour {
         direction = dir; 
 
         gameObject.SetActive(true);
+        _rigidbody.simulated = true;
         _rigidbody.velocity = direction * speed;
 
         if(stats.lifeTime > 0) {
@@ -43,7 +44,7 @@ public class Bullet : MonoBehaviour {
     }
 
     IEnumerator Die() {
-        _rigidbody.velocity *= 0;
+        _rigidbody.simulated = false;
 
         if (impactSprite != null) {
             Sprite normalSprite = _renderer.sprite;

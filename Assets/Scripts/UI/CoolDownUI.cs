@@ -9,51 +9,48 @@ public class CoolDownUI : MonoBehaviour {
     [SerializeField] private Slider cooldownBar;
     [SerializeField] private float cooldownBarBlinkInterval;
 
-    private Weapon weapon;
+    private BaseWeapon weapon;
 
-	// Use this for initialization
 	void Awake () {
         EventDispatcher.AddEventListener(Events.WEAPON_READY, OnWeaponReady);
+        EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_START, OnWeaponCoolDownStart);
+        EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, OnWeaponCoolDownEnd);
         enabled = false;
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.WEAPON_READY, OnWeaponReady);
+        EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_START, OnWeaponCoolDownStart);
+        EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, OnWeaponCoolDownEnd);
     }
 
     private void OnWeaponReady(object weaponObj) {
-        weapon = (Weapon)weaponObj;
+        weapon = (BaseWeapon)weaponObj;
         header.text = weapon.displayName + " cooldown:";
 
         enabled = true;
     }
 
-    // Update is called once per frame
     void Update () {
-        if(weapon.isCoolDown) {
-            StartCoroutine(CoolDown());
-            enabled = false;
-            return;
-        }
-        
         UISlider.value = Mathf.Max(0, 1 - weapon.fireTimer / weapon.maxFireDuration);
 	}
 
-    IEnumerator CoolDown() {
-        float timer = 0;
+    private void OnWeaponCoolDownStart(object useless) {
+        enabled = false;
         cooldownBar.gameObject.SetActive(true);
+        StartCoroutine("BlinkCooldownBar");
+    }
 
-        while (weapon.isCoolDown) {
-            if(timer < 0) {
-                cooldownBar.value = cooldownBar.value == 1 ? 0 : 1;
-                timer = cooldownBarBlinkInterval;
-            }
-
-            timer -= Time.deltaTime;
-            yield return null;
-        }
-
-        cooldownBar.gameObject.SetActive(false);
+    private void OnWeaponCoolDownEnd(object useless) {
         enabled = true;
+        cooldownBar.gameObject.SetActive(false);
+        StopCoroutine("BlinkCooldownBar");
+    }
+
+    IEnumerator BlinkCooldownBar() {
+        while (true) {
+            yield return new WaitForSeconds(cooldownBarBlinkInterval);
+            cooldownBar.value = cooldownBar.value == 1 ? 0 : 1;
+        }
     }
 }

@@ -7,7 +7,7 @@ public class GameData : ScriptableObject {
     public Vector2 worldSize;
     public Vector2 roomBaseSize;
     public List<Zone> zones;
-    public List<Weapon> weapons;
+    public List<BaseWeapon> weapons;
     public ShipBaseConfig shipBaseStats;
     public List<int> shipsUnlockedAtStart;
     public List<ShipConfig> ships;

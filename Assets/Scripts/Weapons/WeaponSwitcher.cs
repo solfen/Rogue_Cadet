@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class WeaponSwitcher : MonoBehaviour {
 
-    public Weapon currentWeapon { get; private set; }
+    public BaseWeapon currentWeapon { get; private set; }
 
     private Transform _transform;
-    private List<Weapon> weapons = new List<Weapon>();
+    private List<BaseWeapon> weapons = new List<BaseWeapon>();
     private int currentWeaponIndex = 0;
 
 	// Use this for initialization
@@ -17,7 +17,7 @@ public class WeaponSwitcher : MonoBehaviour {
         SaveData saveData = GlobalData.instance.saveData;
 
         for(int i = saveData.selectedWeapons.Count-1; i >= 0; i--) {
-            weapons.Add(Instantiate(gameData.weapons[saveData.selectedWeapons[i]], _transform, false) as Weapon);
+            weapons.Add(Instantiate(gameData.weapons[saveData.selectedWeapons[i]], _transform, false) as BaseWeapon);
         }
 
         weapons[currentWeaponIndex].Activate();

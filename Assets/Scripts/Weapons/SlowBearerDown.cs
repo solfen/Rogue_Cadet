@@ -3,10 +3,10 @@ using System.Collections;
 
 public class SlowBearerDown : MonoBehaviour {
 
-    public float firingSpeedMultiplier;
+    public float speedMultiplier;
 
     [SerializeField]
-    private Weapon weapon;
+    private BaseWeapon weapon;
     [SerializeField]
     private BaseMovement bearer;
 
@@ -14,17 +14,17 @@ public class SlowBearerDown : MonoBehaviour {
 	
     void Start() {
         if(bearer == null) {
-            bearer = transform.parent.GetComponent<BaseMovement>();
+            bearer = transform.parent.parent.GetComponent<BaseMovement>();
         }
     }
 	// Update is called once per frame
 	void Update () {
 	    if(weapon.isFiring && !isSlow) {
-            bearer.speed *= firingSpeedMultiplier;
+            bearer.speed *= speedMultiplier;
             isSlow = true;
         }
         else if(!weapon.isFiring && isSlow) {
-            bearer.speed /= firingSpeedMultiplier;
+            bearer.speed /= speedMultiplier;
             isSlow = false;
         }
 	}
