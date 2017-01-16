@@ -35,6 +35,7 @@ public class SaveData {
     public int goldUpgradeNb;
     public int bombUpgradeNb;
     public int bombDamageUpgradeNb;
+    public int wheightUpgradeNb;
 
     public List<ShipInfo> shipsInfo;
     public List<UpgradeInfo> upgradesInfo;

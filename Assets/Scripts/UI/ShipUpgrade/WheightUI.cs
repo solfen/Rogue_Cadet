@@ -15,7 +15,7 @@ public class WheightUI : MonoBehaviour {
         GameData gameData = GlobalData.instance.gameData;
         SaveData saveData = GlobalData.instance.saveData;
 
-        float maxWheight = gameData.ships[saveData.selectedShip].maxWheightPercent * gameData.shipBaseStats.maxWeight;
+        float maxWheight = gameData.shipBaseStats.maxWeight * (gameData.ships[saveData.selectedShip].maxWheightPercent + saveData.wheightUpgradeNb * gameData.ships[saveData.selectedShip].wheightUpgradeRaise);
         wheightText.text = ((int)saveData.shipWeight) + " / " + ((int)maxWheight);
         slider.value = saveData.shipWeight / maxWheight;
     }

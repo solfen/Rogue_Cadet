@@ -24,8 +24,9 @@ public abstract class BaseUpgrade : MonoBehaviour {
 
     public void UpdateDynamicDetails() {
         SaveData data = GlobalData.instance.saveData;
+        GameData gameData = GlobalData.instance.gameData;
         UpgradeInfo upgradeInfo = data.upgradesInfo[saveDataIndex];
-        float maxWheight = GlobalData.instance.gameData.ships[data.selectedShip].maxWheightPercent * GlobalData.instance.gameData.shipBaseStats.maxWeight;
+        float maxWheight = gameData.shipBaseStats.maxWeight * (gameData.ships[data.selectedShip].maxWheightPercent + data.wheightUpgradeNb * gameData.ships[data.selectedShip].wheightUpgradeRaise);
 
         float priceMultiplier = upgradeInfo.currentUpgradeNb < upgradeInfo.boughtUpgradeNb ? rebuyMultiplier : 1;
         currentPrice = basePrice * Mathf.Pow(priceMultiplierPerUpgrade, upgradeInfo.currentUpgradeNb) * priceMultiplier;
