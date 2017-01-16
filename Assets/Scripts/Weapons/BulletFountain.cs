@@ -35,12 +35,12 @@ public class BulletFountain : MonoBehaviour {
         player = playerPos != null ? playerPos.GetComponent<Player>() : null;
         bulletStats.parent = bulletParent;
         bulletStats.damage *= damageMultiplier;
-        volleyTimer = pattern.startDelay;
     }
 
     public void SetFiring(bool fire) {
         if(fire) {
             if(routine == null) {
+                volleyTimer = Mathf.Max(volleyTimer, pattern.startDelay);
                 routine = FireRoutine();
                 StartCoroutine(routine);
             }
