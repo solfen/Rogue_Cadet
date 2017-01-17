@@ -31,6 +31,7 @@ public enum Events {
     SCORE_CHANGED,
     COMBO_CHANGED,
     CHEST_LOOTED,
+    TELEPORTER_CREATED
 }
 
 public static class EventDispatcher {
@@ -64,6 +65,7 @@ public static class EventDispatcher {
         { Events.SCORE_CHANGED,  null },
         { Events.COMBO_CHANGED,  null },
         { Events.CHEST_LOOTED,  null },
+        { Events.TELEPORTER_CREATED,  null },
     };
 
 

@@ -27,6 +27,8 @@ public class Teleporter : MonoBehaviour, IInteractable {
 
     private void OnPlayerCreation(object _player) {
         playerTransform = ((Player)_player).GetComponent<Transform>();
+        if(!isTeleportBack)
+            EventDispatcher.DispatchEvent(Events.TELEPORTER_CREATED, transform.position);
     }
 
     private void OnPlayerTP (object playerLastPos) {
@@ -35,6 +37,11 @@ public class Teleporter : MonoBehaviour, IInteractable {
 
     public void Activate() {
         StartCoroutine("Teleport");
+    }
+    
+    //for custom teleport behaviours
+    public void SetTeleportPos(Vector3 pos) {
+        teleportPos = pos;
     }
 
     IEnumerator Teleport() {
