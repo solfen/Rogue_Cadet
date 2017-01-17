@@ -48,21 +48,12 @@ public class SaveRoomToDungeonTool {
 
         Undo.RecordObject(dungeon, "Add room to dungeon");
 
-        List<ZoneRooms> zone;
-
-        if (newRoom.type == RoomType.SPECIAL)
-            zone = dungeon.specialRooms;
-        else if (newRoom.type == RoomType.TREASURE)
-            zone = dungeon.treasureRooms;
-        else
-            zone = newRoom.exits.Count > 1 ? dungeon.zoneRooms : dungeon.deadEndRooms;
-
-        while (zone.Count <= newRoom.zoneIndex) {
-            zone.Add(new ZoneRooms());
-            zone[zone.Count - 1].zoneIndex = zone.Count - 1;
+        while (dungeon.zoneRooms.Count <= newRoom.zoneIndex) {
+            dungeon.zoneRooms.Add(new ZoneRooms());
+            dungeon.zoneRooms[dungeon.zoneRooms.Count - 1].zoneIndex = dungeon.zoneRooms.Count - 1;
         }
 
-        List<RoomList> roomConfigs = zone[newRoom.zoneIndex].roomConfigs;
+        List<RoomList> roomConfigs = dungeon.zoneRooms[newRoom.zoneIndex].roomConfigs;
         for (int i = 0; i < roomConfigs.Count; i++) {
             if (roomConfigs[i].rooms.Contains(newRoom)) {
                 Debug.LogWarning("Room NOT added. Zone: " + newRoom.zoneIndex + " Room config: " + i);

@@ -60,14 +60,8 @@ public class Dungeon : MonoBehaviour {
     public List<Transform> roomsParent;
     [Tooltip("Rooms are ordered by zone, then by exits")]
     public List<ZoneRooms> zoneRooms = new List<ZoneRooms>(); 
-    [Tooltip("Rooms that have only one exit")]
-    public List<ZoneRooms> deadEndRooms = new List<ZoneRooms>();
     [Tooltip("Rooms that teleports to the bossses")]
     public List<BossRoomConfig> bossRooms;
-    [Tooltip("Rooms that contain treasure")]
-    public List<ZoneRooms> treasureRooms = new List<ZoneRooms>();
-    [Tooltip("Rooms that contain special events")]
-    public List<ZoneRooms> specialRooms = new List<ZoneRooms>();
 
     [Header("Misc")]
     [Tooltip("To avoid having too small dungeon. Dead end are not possible before this number of rooms")]
@@ -81,10 +75,8 @@ public class Dungeon : MonoBehaviour {
     private List<GraphRoom> graph;
     private List<GraphRoom> firstDepthGrag;
     private int currentZoneIndex;
-    private int currentRoomsNb;
     private Vector2 nextRoomPos = Vector3.zero;
     private Vector3 roomWorldPos = new Vector3();
-    private bool deadEndAdded;
     private List<RoomList> roomList;
     private IEnumerable<int> roomListIndexes;
     private List<GameObject> activeRooms = new List<GameObject>();
@@ -92,10 +84,8 @@ public class Dungeon : MonoBehaviour {
     void Start() {
 
         float time = Time.realtimeSinceStartup;
-        zoneRooms.AddRange(treasureRooms); // for now it's useless to separate the rooms types. But later it can be used to tweak the probability and stuff like that
-        zoneRooms.AddRange(specialRooms);
         CreateRoomGraph();
-        Debug.Log((Time.realtimeSinceStartup - time)*1000);
+        Debug.Log("Graph Generation Duration: " + (Time.realtimeSinceStartup - time)*1000);
 
         EventDispatcher.DispatchEvent(Events.DUNGEON_GRAPH_CREATED, graph);
 
@@ -136,8 +126,6 @@ public class Dungeon : MonoBehaviour {
         graph = new List<GraphRoom>((int)(gameData.worldSize.x * gameData.worldSize.y));
         firstDepthGrag = new List<GraphRoom>((int)(gameData.worldSize.x * gameData.worldSize.y));
         currentZoneIndex = 0;
-        currentRoomsNb = 0;
-        deadEndAdded = false;
 
         CreateRoom(startingPos, startingRoom);
         currentExit = currentRoom.roomPrefab.exits[0]; //assumes that the starting room only has one exit
@@ -151,11 +139,6 @@ public class Dungeon : MonoBehaviour {
 
     private void GenerateGraph() {
         do {
-           if(!deadEndAdded && currentRoomsNb >= minRoomsBeforeDeadEnd) {
-                deadEndAdded = true;
-                zoneRooms.AddRange(deadEndRooms);
-            }
-
             GetNextZone((int)(currentRoom.pos.x + currentExit.pos.x), (int)(currentRoom.pos.y + currentExit.pos.y));
             GenerateRoom();
 
@@ -223,7 +206,7 @@ public class Dungeon : MonoBehaviour {
         graph.Add(currentRoom);
         firstDepthGrag.Add(currentRoom);
         MarkMapWithRoom(pos, roomPrefab.size);
-        currentRoomsNb++;
+        Debug.Log(roomPrefab.type);
     }
 
     private bool TryAddBosses() {
