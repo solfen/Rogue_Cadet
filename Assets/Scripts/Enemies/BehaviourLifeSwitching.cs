@@ -6,23 +6,32 @@ using System.Collections.Generic;
 public class BehaviourLifeSwitch {
     public Behaviour script;
     [Tooltip("inclusive")] [Range(0,1)] public float minLifePercent;
-    [Tooltip("exclusive")] [Range(0,1)] public float maxLifePercent;
+    [Tooltip("exclusive")] [Range(0,1.1f)] public float maxLifePercent;
     [HideInInspector] public float minLife;
     [HideInInspector] public float maxLife;
 }
 
 [RequireComponent(typeof(Enemy))]
-public class BehaviourLifeSwitching : MonoBehaviour {
+public class BehaviourLifeSwitching : MonoBehaviour, ISwitchable {
 
     public List<BehaviourLifeSwitch> behavioursToSwitch;
     private Enemy bearer;
 	// Use this for initialization
+    void Awake() {
+
+        enabled = false;
+    }
+
 	void Start () {
         bearer = GetComponent<Enemy>();
         for (int i = 0; i < behavioursToSwitch.Count; i++) {
             behavioursToSwitch[i].minLife = bearer.life * behavioursToSwitch[i].minLifePercent;
             behavioursToSwitch[i].maxLife = bearer.life * behavioursToSwitch[i].maxLifePercent;
         }
+    }
+
+    public void SwitchState(bool state) {
+        enabled = state;
     }
 
     // Update is called once per frame
