@@ -12,13 +12,13 @@ public class RandomTeleport : MonoBehaviour, IInteractable {
 	// Use this for initialization
 	void Awake () {
         EventDispatcher.AddEventListener(Events.TELEPORTER_CREATED, OnTeleporterCreated);
-        EventDispatcher.AddEventListener(Events.GAME_LOADED, OnGameLoaded);
+        EventDispatcher.AddEventListener(Events.GAME_STARTED, OnGameLoaded);
         _transform = GetComponent<Transform>();
     }
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.TELEPORTER_CREATED, OnTeleporterCreated);
-        EventDispatcher.RemoveEventListener(Events.GAME_LOADED, OnGameLoaded);
+        EventDispatcher.RemoveEventListener(Events.GAME_STARTED, OnGameLoaded);
     }
 
     private void OnTeleporterCreated(object TeleporterPos) {
@@ -34,11 +34,10 @@ public class RandomTeleport : MonoBehaviour, IInteractable {
             Destroy(gameObject);
             return;
         }
-
-        associatedTeleporter.SetTeleportPos(availablePositions[Random.Range(0, availablePositions.Count)]);
     }
 
     public void Activate() {
+        associatedTeleporter.SetTeleportPos(availablePositions[Random.Range(0, availablePositions.Count)]);
         associatedTeleporter.Activate();
     }
 }

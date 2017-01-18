@@ -8,8 +8,11 @@ public class Test : MonoBehaviour {
     public Text realText;
 
     void Start () {
-        //Debug.Log();
+        StartCoroutine("Teste");
     }
 	
-
+    IEnumerator Teste() {
+        yield return new WaitForSeconds(1);
+        EventDispatcher.DispatchEvent(Events.GAME_STARTED, null);
+    }
 }

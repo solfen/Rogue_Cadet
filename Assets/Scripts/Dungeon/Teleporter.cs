@@ -4,11 +4,12 @@ using System.Collections;
 public class Teleporter : MonoBehaviour, IInteractable {
 
     [SerializeField] private bool isTeleportBack;
+    [SerializeField] private bool autoDestroy = true;
     [SerializeField] private float animDuration = 1;
     [SerializeField] private Vector3 teleportPos;
 
     [SerializeField] private ParticleSystem particles;
-    [SerializeField] private Animator screenTransitorAnim;
+    private Animator screenTransitorAnim;
 
     private Transform playerTransform;
 
@@ -20,6 +21,17 @@ public class Teleporter : MonoBehaviour, IInteractable {
         }
     }
 
+    void Start() {
+        GameObject transitor = GameObject.FindGameObjectWithTag("ScreenTransition");
+        if(transitor == null) {
+            Debug.LogError("No screen transition, TP can't work");
+            Destroy(gameObject);
+            return;
+        }
+
+        screenTransitorAnim = transitor.GetComponent<Animator>();
+    }
+
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
         EventDispatcher.RemoveEventListener(Events.PLAYER_TELEPORTED, OnPlayerTP);
@@ -27,8 +39,9 @@ public class Teleporter : MonoBehaviour, IInteractable {
 
     private void OnPlayerCreation(object _player) {
         playerTransform = ((Player)_player).GetComponent<Transform>();
-        if(!isTeleportBack)
+        if(!isTeleportBack) {
             EventDispatcher.DispatchEvent(Events.TELEPORTER_CREATED, transform.position);
+        }
     }
 
     private void OnPlayerTP (object playerLastPos) {
@@ -55,6 +68,7 @@ public class Teleporter : MonoBehaviour, IInteractable {
         playerTransform.position = teleportPos;
         EventDispatcher.DispatchEvent(Events.PLAYER_TELEPORTED, playerPos); // needs to be after to avoid teleport back autoInfluence
 
-        Destroy(gameObject, 1);
+        if(autoDestroy)
+            Destroy(gameObject, 1);
     }
 }
