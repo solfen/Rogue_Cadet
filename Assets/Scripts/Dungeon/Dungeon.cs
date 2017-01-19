@@ -206,7 +206,7 @@ public class Dungeon : MonoBehaviour {
         graph.Add(currentRoom);
         firstDepthGrag.Add(currentRoom);
         MarkMapWithRoom(pos, roomPrefab.size);
-        Debug.Log(roomPrefab.type);
+        //Debug.Log(roomPrefab.type);
     }
 
     private bool TryAddBosses() {

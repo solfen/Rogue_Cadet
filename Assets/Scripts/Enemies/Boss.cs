@@ -6,6 +6,8 @@ public class Boss : MonoBehaviour {
     [SerializeField] private int bossIndex;
     [SerializeField] private Enemy enemyScriptRef;
     [SerializeField] private GameObject bossBeatenObjects;
+
+    private bool isDead = false;
 	
     void Start () {
         bossBeatenObjects.SetActive(false);
@@ -13,8 +15,10 @@ public class Boss : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-	    if(enemyScriptRef.life <= 0) {
+	    if(!isDead && enemyScriptRef.life <= 0) {
             BossDied();
+            isDead = true;
+            enabled = false;
         }
 	}
 
