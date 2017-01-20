@@ -7,11 +7,16 @@ public class Bomb : MonoBehaviour {
     public int maxStock;
     public int currentStock;
 
-    [SerializeField] private float damage;
     [SerializeField] private Animator explosion;
+    [SerializeField] private float baseDamage = 50; // tmp needs to be in global config and specific to each ship. But I'm too close to the deadline to balance it.
 
     private Transform bulletsParent;
     private Room currentRoom;
+    private float damage;
+
+    void Awake() {
+        EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
+    }
 
     void Start() {
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
@@ -25,9 +30,8 @@ public class Bomb : MonoBehaviour {
         ShipConfig shipconfig = GlobalData.instance.gameData.ships[saveData.selectedShip];
         maxStock = saveData.bombUpgradeNb * shipconfig.bombStockUpgradeRaise;
         currentStock = maxStock;
-        damage = saveData.bombDamageUpgradeNb * shipconfig.bombDamagePerUpgrade;
+        damage = baseDamage * (1 + saveData.bombDamageUpgradeNb * shipconfig.bombDamagePerUpgrade);
 
-        EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
         EventDispatcher.DispatchEvent(Events.BOMB_USED, this); //init UI;
     }
 
@@ -38,7 +42,6 @@ public class Bomb : MonoBehaviour {
     void Update() {
         if(Input.GetButtonDown("Bomb") && currentStock > 0) {
             Activate();
-            currentStock--;
         }
     }
 
@@ -52,7 +55,7 @@ public class Bomb : MonoBehaviour {
             }
         }
 
-        if(currentRoom.enemiesParent.childCount > 0) {
+        if(currentRoom.enemiesParent != null && currentRoom.enemiesParent.childCount > 0) {
             Transform enemiesParent = currentRoom.enemiesParent.GetChild(0);
             Enemy enemy = null;
             int enemiesCount = enemiesParent.childCount;
@@ -63,6 +66,7 @@ public class Bomb : MonoBehaviour {
             }
 
             explosion.SetTrigger("Explode");
+            currentStock--;
             EventDispatcher.DispatchEvent(Events.BOMB_USED, this);
         }
     }

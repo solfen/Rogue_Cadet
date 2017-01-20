@@ -9,13 +9,14 @@ public class BombUI : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        /*if(!PlayerPrefs.HasKey("Equiped_Bomb")) {
-            gameObject.SetActive(false);
-            return;
-        }*/
-
         EventDispatcher.AddEventListener(Events.BOMB_USED, OnUsePower);
 	}
+
+    void Start() {
+        if (GlobalData.instance.saveData.bombUpgradeNb == 0) {
+            Destroy(gameObject);
+        }
+    }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.BOMB_USED, OnUsePower);
