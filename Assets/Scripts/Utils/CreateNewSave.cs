@@ -4,16 +4,13 @@ using System.Collections.Generic;
 
 public class CreateNewSave : MonoBehaviour {
 
+    [SerializeField] private WeaponSelectionUpgrade firstWeapon;
+
     void Start() {
         if(!FileSaveLoad.DoesSaveExists()) {
             SaveData data = FileSaveLoad.Load();
             List<ShipConfig> ships = GlobalData.instance.gameData.ships;
             List<UpgradeCategory> upgradesCategories = GlobalData.instance.gameData.upgradesCategories;
-
-            //TODO upgrades init
-
-            data.selectedWeapons = new List<int>();
-            data.selectedWeapons.Add(0);
 
             data.shipsInfo = new List<ShipInfo>();
             for (int i = 0; i < ships.Count; i++) {
@@ -34,6 +31,12 @@ public class CreateNewSave : MonoBehaviour {
                     data.upgradesInfo.Add(info);
                 }
             }
+
+            data.selectedWeapons = new List<int>();
+            data.selectedWeapons.Add(firstWeapon.weaponIndex);
+            data.shipWeight += firstWeapon.wheight;
+            data.upgradesInfo[firstWeapon.saveDataIndex].boughtUpgradeNb = 1;
+            data.upgradesInfo[firstWeapon.saveDataIndex].currentUpgradeNb = 1;
 
             FileSaveLoad.Save(data);
         }

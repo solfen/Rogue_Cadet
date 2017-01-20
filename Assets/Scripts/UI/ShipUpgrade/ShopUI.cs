@@ -81,5 +81,4 @@ public class ShopUI : MonoBehaviour {
 
         eventSystem.SetSelectedGameObject(activeCategoryContainer.transform.GetChild(0).gameObject);
     }
-
 }
