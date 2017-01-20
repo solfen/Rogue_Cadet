@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour {
 
@@ -28,5 +29,9 @@ public class Boss : MonoBehaviour {
         SaveData data = FileSaveLoad.Load();
         data.bossesBeaten.Add(bossIndex);
         FileSaveLoad.Save(data);
+
+        if(data.bossesBeaten.Count >= 4) {
+            SceneManager.LoadScene(5);
+        }
     }
 }
