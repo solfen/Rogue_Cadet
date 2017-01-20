@@ -19,7 +19,7 @@ public class ScoreUI : MonoBehaviour {
     }
 
     public void UpdateScore(object score) {
-        scoreText.text = "Money: " + ((float)score) + " $";
+        scoreText.text = "Money: " + ((int)(float)score) + " $";
     }
 
     public void UpdateCombo(object combo) {
