@@ -48,6 +48,7 @@ public class PauseMenuUI : MonoBehaviour {
     }
 
     private void Open() {
+        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         previousSelected = eventSystem.currentSelectedGameObject;
         previousTimeScale = Time.timeScale;
 
@@ -58,6 +59,7 @@ public class PauseMenuUI : MonoBehaviour {
     }
 
     public void Close() {
+        EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         anim.SetTrigger("Close");
         eventSystem.SetSelectedGameObject(previousSelected);
         Time.timeScale = previousTimeScale;

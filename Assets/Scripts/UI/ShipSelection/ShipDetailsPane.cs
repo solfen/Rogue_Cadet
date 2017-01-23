@@ -52,6 +52,7 @@ public class ShipDetailsPane : MonoBehaviour {
     }
 
     IEnumerator Close() {
+        EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         yield return StartCoroutine(animator.Animate("toggleVisibility", new Vector2((_rectTransform.anchorMax.x - _rectTransform.anchorMin.x) * 2 * Camera.main.pixelWidth, _rectTransform.anchoredPosition.y)));
         shipTypes.Close();
     }

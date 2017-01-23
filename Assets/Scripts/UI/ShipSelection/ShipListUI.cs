@@ -65,11 +65,13 @@ public class ShipListUI : MonoBehaviour {
             isTransitioning = true;
             StartCoroutine(animator.Animate("listSelectMove", new Vector2(_rectTransform.anchoredPosition.x - 0.5f * Camera.main.pixelWidth, 0)));
             shipSelectedIndex++;
+            EventDispatcher.DispatchEvent(Events.SELECT_UI, null);
         }
         else if (shipSelectedIndex > 0 && Input.GetAxis("MoveX") < -0.5f) {
             isTransitioning = true;
             StartCoroutine(animator.Animate("listSelectMove", new Vector2(_rectTransform.anchoredPosition.x + 0.5f * Camera.main.pixelWidth, 0)));
             shipSelectedIndex--;
+            EventDispatcher.DispatchEvent(Events.SELECT_UI, null);
         }
     }
 
@@ -79,6 +81,7 @@ public class ShipListUI : MonoBehaviour {
     }
 
     IEnumerator GoDown() {
+        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         isTransitioning = true;
         yield return StartCoroutine(animator.Animate("listToggleVisibility", new Vector2(_rectTransform.anchoredPosition.x, -Camera.main.pixelHeight)));
         shipTypes.PopDown(shipSelectedIndex);

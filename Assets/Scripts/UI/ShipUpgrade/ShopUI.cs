@@ -58,12 +58,14 @@ public class ShopUI : MonoBehaviour {
     }
 
     public void OpenShop(UpgradeCategory category) {
+        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         lastCategorySelected = eventSystem.currentSelectedGameObject;
         anim.SetTrigger("OpenShop");
         ActivateCategory(category);
     }
 
     public void CloseShop() {
+        EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         eventSystem.SetSelectedGameObject(lastCategorySelected);
         anim.SetTrigger("CloseShop");
     }

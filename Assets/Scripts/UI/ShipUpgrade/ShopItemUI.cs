@@ -32,6 +32,7 @@ public class ShopItemUI : MonoBehaviour, ISelectHandler {
 
     public void OnSelect (BaseEventData data) {
         shop.OnUpgradeSelected(associatedUpgrade);
+        EventDispatcher.DispatchEvent(Events.SELECT_UI, null);
     }
 
     public void OnClicked() {

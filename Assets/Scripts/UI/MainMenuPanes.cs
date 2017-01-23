@@ -18,11 +18,13 @@ public class MainMenuPanes : MonoBehaviour {
 	}
 
     public void Open() {
+        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         anim.SetTrigger("Open");
         isOpen = true;
     }
 
     private void Close() {
+        EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         anim.SetTrigger("Close");
         isOpen = false;
     }

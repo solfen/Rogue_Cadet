@@ -54,6 +54,7 @@ public class UpgradesShop : MonoBehaviour {
 
     public void BuyItem(BaseUpgrade upgrade) {
         if (!upgrade.canBuy) {
+            EventDispatcher.DispatchEvent(Events.UI_ERROR, null);
             return;
             //TODO: Error feedback
         }
@@ -74,6 +75,7 @@ public class UpgradesShop : MonoBehaviour {
         moneyUI.UpdateMoney();
         shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
+        EventDispatcher.DispatchEvent(Events.UI_SUCCESS, null);
     }
 
     public void UnEquip(BaseUpgrade upgrade) {
@@ -81,6 +83,7 @@ public class UpgradesShop : MonoBehaviour {
         UpgradeInfo upgradeInfo = data.upgradesInfo[upgrade.saveDataIndex];
 
         if(!upgrade.canUnEquip || upgradeInfo.currentUpgradeNb <= 0) {
+            EventDispatcher.DispatchEvent(Events.UI_ERROR, null);
             return;
             //TODO: Error feedback
         }
@@ -94,5 +97,6 @@ public class UpgradesShop : MonoBehaviour {
         wheightUI.UpdateWheight();
         shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
+        EventDispatcher.DispatchEvent(Events.UI_SUCCESS, null);
     }
 }

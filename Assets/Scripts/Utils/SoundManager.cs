@@ -13,7 +13,12 @@ public enum GenericSoundsEnum {
     WEAPON_SHOT_1,
     PLAYER_EXPLOSION,
     PLAYER_HIT,
-    CANT_DO
+    CANT_DO,
+    POP_IN,
+    POP_OUT,
+    SELECT_UI,
+    UI_ERROR,
+    UI_SUCCESS
 }
 
 [System.Serializable]
@@ -43,6 +48,11 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
         EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
+        EventDispatcher.AddEventListener(Events.OPEN_UI_PANE, PlayOpenPaneSound);
+        EventDispatcher.AddEventListener(Events.CLOSE_UI_PANE, PlayClosePaneSound);
+        EventDispatcher.AddEventListener(Events.SELECT_UI, PlaySelectUISound);
+        EventDispatcher.AddEventListener(Events.UI_ERROR, PlayUIErrorSound);
+        EventDispatcher.AddEventListener(Events.UI_SUCCESS, PlayUISuccessSound);
     }
 
     void OnDestroy () {
@@ -54,6 +64,11 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
         EventDispatcher.RemoveEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
+        EventDispatcher.RemoveEventListener(Events.OPEN_UI_PANE, PlayOpenPaneSound);
+        EventDispatcher.RemoveEventListener(Events.CLOSE_UI_PANE, PlayClosePaneSound);
+        EventDispatcher.RemoveEventListener(Events.SELECT_UI, PlaySelectUISound);
+        EventDispatcher.RemoveEventListener(Events.UI_ERROR, PlayUIErrorSound);
+        EventDispatcher.RemoveEventListener(Events.UI_SUCCESS, PlayUISuccessSound);
     }
 
     private void PlayBulletSound(object fountain) {
@@ -84,6 +99,26 @@ public class SoundManager : MonoBehaviour {
         PlaySound(GenericSoundsEnum.ACTIVATE);
     }
 
+    private void PlayOpenPaneSound(object useless) {
+        PlaySound(GenericSoundsEnum.POP_IN);
+    }
+
+    private void PlayClosePaneSound(object useless) {
+        PlaySound(GenericSoundsEnum.POP_OUT);
+    }
+
+    private void PlaySelectUISound(object useless) {
+        PlaySound(GenericSoundsEnum.SELECT_UI);
+    }
+
+    private void PlayUIErrorSound(object useless) {
+        PlaySound(GenericSoundsEnum.UI_ERROR);
+    }
+
+    private void PlayUISuccessSound(object useless) {
+        PlaySound(GenericSoundsEnum.UI_SUCCESS);
+    }
+
     private void PlayCollectibleSound(object collectibleObj) {
         GenericSoundsEnum sound = ((Collectible)collectibleObj).sound;
         if (sound != GenericSoundsEnum.NONE)
@@ -97,5 +132,14 @@ public class SoundManager : MonoBehaviour {
         }
 
         sounds[sound].Play();
+    }
+
+    public void PlaySound(int soundIndex) {
+        if (soundIndex < 0 && soundIndex >= soundsList.Count) {
+            Debug.LogError("Sound index:" + soundIndex + " doesn't exist");
+            return;
+        }
+
+        soundsList[soundIndex].value.Play();
     }
 }

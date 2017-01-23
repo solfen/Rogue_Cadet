@@ -77,5 +77,6 @@ public class ShipTypesUI : MonoBehaviour {
         yield return StartCoroutine(animator.Animate("shifting", Vector2.zero));
         yield return StartCoroutine(animator.Animate("toggleVisibility", new Vector2(0, Camera.main.pixelHeight)));
         shipList.Open();
+        eventSystem.SetSelectedGameObject(null);
     }
 }

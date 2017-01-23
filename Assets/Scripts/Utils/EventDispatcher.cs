@@ -31,7 +31,12 @@ public enum Events {
     SCORE_CHANGED,
     COMBO_CHANGED,
     CHEST_LOOTED,
-    TELEPORTER_CREATED
+    TELEPORTER_CREATED,
+    OPEN_UI_PANE,
+    CLOSE_UI_PANE,
+    SELECT_UI,
+    UI_ERROR,
+    UI_SUCCESS
 }
 
 public static class EventDispatcher {
@@ -66,6 +71,11 @@ public static class EventDispatcher {
         { Events.COMBO_CHANGED,  null },
         { Events.CHEST_LOOTED,  null },
         { Events.TELEPORTER_CREATED,  null },
+        { Events.OPEN_UI_PANE,  null },
+        { Events.CLOSE_UI_PANE,  null },
+        { Events.SELECT_UI,  null },
+        { Events.UI_ERROR,  null },
+        { Events.UI_SUCCESS,  null },
     };
 
 
