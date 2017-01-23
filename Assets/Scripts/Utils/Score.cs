@@ -55,7 +55,7 @@ public class Score : MonoBehaviour {
     }
 
     public void PlayerHit(object useless) {
-        combo = Mathf.Max(1, combo - 1);
+        combo = 1;
 
         comboDownTimer = comboDownInterval;
         EventDispatcher.DispatchEvent(Events.COMBO_CHANGED, combo);
