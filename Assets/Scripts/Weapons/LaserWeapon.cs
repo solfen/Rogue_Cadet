@@ -11,6 +11,7 @@ public class LaserWeapon : BaseWeapon {
     [SerializeField] private GameObject laserSpriteStart;
     [SerializeField] private GameObject laserSpriteMiddle;
     [SerializeField] private GameObject laserSpriteEnd;
+    [SerializeField] private AudioSource laserSound;
 
     private Transform _transform;
     private Transform laserStart;
@@ -59,9 +60,11 @@ public class LaserWeapon : BaseWeapon {
     protected override void SetFiring(bool fireState) {
         if(fireState) {
             SetLaserActive(true);
+            laserSound.Play();
             StartCoroutine("LaserLength");
         }
         else {
+            laserSound.Pause();
             StopCoroutine("LaserLength");
             SetLaserActive(false);
         }
