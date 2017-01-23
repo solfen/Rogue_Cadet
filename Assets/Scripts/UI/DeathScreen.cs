@@ -37,8 +37,8 @@ public class DeathScreen : MonoBehaviour {
         enabled = true;
 
         if(score != null) {
-            scoreText.text = "Run money: " + score.score + "$";
-            highScore.text = "High score: " + Mathf.Max(score.score, GlobalData.instance.saveData.highScore) + "$";
+            scoreText.text = "Run money: " + ((int)score.score) + "$";
+            highScore.text = "High score: " + ((int)Mathf.Max(score.score, GlobalData.instance.saveData.highScore)) + "$";
         }
         else {
             scoreText.text = "";
