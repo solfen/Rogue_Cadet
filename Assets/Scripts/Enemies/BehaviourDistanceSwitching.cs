@@ -23,18 +23,29 @@ public class BehaviourDistanceSwitching : MonoBehaviour {
     void Start() {
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if(go == null) {
+            EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreated);
             enabled = false;
             return;
         }
 
+        Init(go);
+    }
+
+    private void Init(GameObject go) {
         player = go.GetComponent<Transform>();
         _transform = GetComponent<Transform>();
         SwitchBehaviour();
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
     }
 
+    private void OnPlayerCreated(object playerObj) {
+        Init(((Player)playerObj).gameObject);
+        enabled = true;
+    }
+
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreated);
     }
 
     private void OnPlayerDeath(object useless) {
