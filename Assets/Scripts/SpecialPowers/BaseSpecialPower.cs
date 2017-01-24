@@ -13,6 +13,10 @@ public abstract class BaseSpecialPower : MonoBehaviour {
 
     protected abstract void Activate();
 
+    void Awake() {
+        EventDispatcher.AddEventListener(Events.MANA_POTION_TAKEN, Regenerate);
+    }
+
     protected virtual void Start() {
         GameData gameData = GlobalData.instance.gameData;
         SaveData saveData = GlobalData.instance.saveData;
@@ -22,6 +26,10 @@ public abstract class BaseSpecialPower : MonoBehaviour {
         mana = maxMana;
 
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_CREATED, this); //to activate the UI
+    }
+
+    protected virtual void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.MANA_POTION_TAKEN, Regenerate);
     }
 
     protected virtual void Update() {
@@ -41,7 +49,7 @@ public abstract class BaseSpecialPower : MonoBehaviour {
         }
     }
 
-    public virtual void Regenerate(float amount) {
-        mana = Mathf.Min(maxMana, mana + amount);
+    private void Regenerate(object potionObj) {
+        mana = Mathf.Min(maxMana, mana + ((ManaPotion)potionObj).manaToRegenerate);
     }
 }

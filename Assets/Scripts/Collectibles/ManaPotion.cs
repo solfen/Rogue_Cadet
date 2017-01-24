@@ -5,10 +5,7 @@ public class ManaPotion : MonoBehaviour {
     public float manaToRegenerate;
 
     void OnTriggerEnter2D(Collider2D other) {
-        BaseSpecialPower power = other.GetComponentInChildren<BaseSpecialPower>();
-        if (power != null) {
-            power.Regenerate(manaToRegenerate);
-        }
+        EventDispatcher.DispatchEvent(Events.MANA_POTION_TAKEN, this);
     }
 
 }

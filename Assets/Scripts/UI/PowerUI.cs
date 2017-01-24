@@ -7,25 +7,32 @@ public class PowerUI : MonoBehaviour {
 
     [SerializeField] private Text manaText;
     [SerializeField] private Slider specialLoad;
+    private BaseSpecialPower power;
     
     void Start () {
-        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
-        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_CREATED, OnUsePower);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_CREATED, OnPowerCreation);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, ManaChanged);
+        EventDispatcher.AddEventListener(Events.MANA_POTION_TAKEN, ManaChanged);
     }
 
     void OnDestroy() {
-        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, OnUsePower);
-        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_CREATED, OnUsePower);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_CREATED, OnPowerCreation);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, ManaChanged);
+        EventDispatcher.RemoveEventListener(Events.MANA_POTION_TAKEN, ManaChanged);
     }
 
-    public void OnUsePower(object powerObj) {
-        BaseSpecialPower power = (BaseSpecialPower)powerObj;
+    private void OnPowerCreation(object powerObj) {
+       power = (BaseSpecialPower)powerObj;
+       ManaChanged(null);
+    }
+
+    private void ManaChanged(object useless) {
         manaText.text = (int)power.mana + "/" + power.maxMana;
 
-        StartCoroutine(FillLoadBar(power));
+        StartCoroutine(FillLoadBar());
     }
 
-    IEnumerator FillLoadBar(BaseSpecialPower power) {
+    IEnumerator FillLoadBar() {
         specialLoad.value = 0;
         float timer = 0;
         float duration = power.coolDownTimer;
