@@ -20,6 +20,7 @@ public class PowerUI : MonoBehaviour {
 
     public void OnUsePower(object powerObj) {
         BaseSpecialPower power = (BaseSpecialPower)powerObj;
+        manaText.text = (int)power.mana + "/" + power.maxMana;
 
         StartCoroutine(FillLoadBar(power));
     }
@@ -30,7 +31,6 @@ public class PowerUI : MonoBehaviour {
         float duration = power.coolDownTimer;
 
         while (timer < duration) {
-            manaText.text = power.mana + "/" + power.maxMana;
             timer += Time.deltaTime;
             specialLoad.value = Mathf.Lerp(0, 1, timer/duration);
             yield return null;
