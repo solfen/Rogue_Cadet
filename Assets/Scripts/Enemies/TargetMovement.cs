@@ -35,13 +35,24 @@ public class TargetMovement : BaseMovement {
 
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go == null) {
+            EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreated);
             enabled = false;
             canSwitch = false;
             return;
         }
 
-        playerTransform = go.GetComponent<Transform>();
-        player = go.GetComponent<Player>();
+        Init(go.GetComponent<Player>());
+    }
+
+    private void Init(Player _player) {
+        playerTransform = _player.GetComponent<Transform>();
+        player = _player;
+    }
+
+    private void OnPlayerCreated(object playerObj) {
+        Init((Player)playerObj);
+        enabled = true;
+        canSwitch = true;
     }
 
     public override void SwitchState(bool state) {
@@ -61,6 +72,7 @@ public class TargetMovement : BaseMovement {
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreated);
     }
 
     private void OnPlayerDeath(object useless) {

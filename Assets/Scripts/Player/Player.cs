@@ -55,9 +55,9 @@ public class Player : MonoBehaviour {
         if(!isDead)
             LifeUpdate();
 
-        /*if(Input.GetButtonDown("Cheat")) {
+        if(Input.GetButtonDown("Cheat")) {
             GetComponent<BoxCollider2D>().enabled = !GetComponent<BoxCollider2D>().enabled;
-        }*/
+        }
     }
 
     void FixedUpdate() {

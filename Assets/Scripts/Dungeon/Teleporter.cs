@@ -46,6 +46,7 @@ public class Teleporter : MonoBehaviour, IInteractable {
 
     private void OnPlayerTP (object playerLastPos) {
         teleportPos = (Vector3)playerLastPos;
+        Debug.LogError(teleportPos);
     }
 
     public void Activate() {
