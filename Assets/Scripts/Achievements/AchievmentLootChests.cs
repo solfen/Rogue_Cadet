@@ -11,7 +11,11 @@ public class AchievmentLootChests : BaseAchievement {
 
         EventDispatcher.AddEventListener(Events.CHEST_LOOTED, OnChestLooted);
 	}
-	
+
+    private void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.CHEST_LOOTED, OnChestLooted);
+    }
+
     private void OnChestLooted(object useless) {
         chestLooted++;
         if(chestLooted >= chestNeedNb) {
