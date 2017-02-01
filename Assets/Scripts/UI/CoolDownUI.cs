@@ -28,6 +28,7 @@ public class CoolDownUI : MonoBehaviour {
         weapon = (BaseWeapon)weaponObj;
         header.text = weapon.displayName + " cooldown:";
 
+        cooldownBar.gameObject.SetActive(weapon.coolDownTimer > 0);
         enabled = true;
     }
 
@@ -36,14 +37,12 @@ public class CoolDownUI : MonoBehaviour {
 	}
 
     private void OnWeaponCoolDownStart(object useless) {
-        enabled = false;
         cooldownBar.gameObject.SetActive(true);
         StartCoroutine("BlinkCooldownBar");
     }
 
     private void OnWeaponCoolDownEnd(object useless) {
-        enabled = true;
-        cooldownBar.gameObject.SetActive(false);
+        cooldownBar.gameObject.SetActive(weapon.coolDownTimer > 0); // need to check since it could be a event from a non active weapon
         StopCoroutine("BlinkCooldownBar");
     }
 

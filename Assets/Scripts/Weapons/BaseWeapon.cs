@@ -13,9 +13,10 @@ public abstract class BaseWeapon : MonoBehaviour {
     [SerializeField] private float coolDownDuration;
     protected bool isCoolDown;
     protected float damageInfluencer;
+    private bool isActive;
 
     void Awake() {
-        enabled = false;
+        isActive = false;
     }
 
     protected virtual void Start() {
@@ -24,19 +25,24 @@ public abstract class BaseWeapon : MonoBehaviour {
     }
 
     public void Activate() {
-        enabled = true;
+        isActive = true;
         EventDispatcher.DispatchEvent(Events.WEAPON_READY, this);
     }
 
     public void Disable() {
         SetFiring(false);
-        enabled = false;
+        isActive = false;
     }
 
     protected abstract void SetFiring(bool fireState);
 
     protected virtual void Update() {
         fireTimer -= Time.deltaTime;
+
+        if(!isActive) {
+            return;
+        }
+
         if (!isCoolDown && fireTimer >= maxFireDuration) {
             isCoolDown = true;
             StartCoroutine(CoolDown());
