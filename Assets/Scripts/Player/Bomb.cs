@@ -9,22 +9,14 @@ public class Bomb : MonoBehaviour {
 
     [SerializeField] private Animator explosion;
     [SerializeField] private float baseDamage = 50; // tmp needs to be in global config and specific to each ship. But I'm too close to the deadline to balance it.
+    [SerializeField] private float damageRadius = 10;
+    [SerializeField] private LayerMask layerMask;
 
-    private Transform bulletsParent;
-    private Room currentRoom;
+    private Transform _transform;
     private float damage;
 
-    void Awake() {
-        EventDispatcher.AddEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
-    }
-
     void Start() {
-        GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
-        if(find == null) {
-            Debug.LogError("No bullet parent! Bomb can't work");
-            return;
-        }
-        bulletsParent = find.transform;
+        _transform = GetComponent<Transform>();
 
         SaveData saveData = GlobalData.instance.saveData;
         ShipConfig shipconfig = GlobalData.instance.gameData.ships[saveData.selectedShip];
@@ -35,10 +27,6 @@ public class Bomb : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.BOMB_USED, this); //init UI;
     }
 
-    void OnDestroy () {
-        EventDispatcher.RemoveEventListener(Events.PLAYER_ENTER_ROOM, OnPlayerEnterRoom);
-    }
-
     void Update() {
         if(Input.GetButtonDown("Bomb") && currentStock > 0) {
             Activate();
@@ -46,32 +34,19 @@ public class Bomb : MonoBehaviour {
     }
 
     private void Activate() {
-        if (bulletsParent != null) {
-            Transform child = null;
-            for (int i = bulletsParent.childCount - 1; i >= 0; i--) {
-                child = bulletsParent.GetChild(i);
-                if(child.gameObject.activeSelf)
-                    child.GetComponent<Bullet>().BombKill();
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(_transform.position, damageRadius, layerMask.value);
+        for (int i = 0; i < colliders.Length; i++) {
+            Enemy enemy = colliders[i].GetComponent<Enemy>();
+            if(enemy != null) {
+                enemy.Hit(damage);
+            }
+            else {
+                colliders[i].GetComponent<Bullet>().BombKill();
             }
         }
 
-        if(currentRoom.enemiesParent != null && currentRoom.enemiesParent.childCount > 0) {
-            Transform enemiesParent = currentRoom.enemiesParent.GetChild(0);
-            Enemy enemy = null;
-            int enemiesCount = enemiesParent.childCount;
-            for (int i = enemiesCount - 1; i >= 0; i--) {
-                enemy = enemiesParent.GetChild(i).GetComponent<Enemy>();
-                if(enemy != null)
-                    enemy.Hit(damage);
-            }
-
-            explosion.SetTrigger("Explode");
-            currentStock--;
-            EventDispatcher.DispatchEvent(Events.BOMB_USED, this);
-        }
-    }
-
-    public void OnPlayerEnterRoom(object roomObj) {
-        currentRoom = ((GraphRoom)roomObj).roomInstance;
+        explosion.SetTrigger("Explode");
+        currentStock--;
+        EventDispatcher.DispatchEvent(Events.BOMB_USED, this);
     }
 }
