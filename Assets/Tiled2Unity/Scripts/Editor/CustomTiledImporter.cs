@@ -15,6 +15,11 @@ public class ColliderInfo {
 public class CustomTiledImporter : ICustomTiledImporter {
 
     private List<ColliderInfo> colliders = new List<ColliderInfo>();
+    private List<Exit> exits = new List<Exit>();
+    private float mapWidth;
+    private float mapHeight;
+    private float leftBorderMinVerticeY = 0;
+    private float rightBorderMinVerticeY = 0;
 
     private bool CheckColliderPos(int i, float tileWidth, float tileHeight) {
         return colliders[i].x > 0 && colliders[i].x + colliders[i].width < tileWidth && colliders[i].y > 0 && colliders[i].y < tileHeight;
@@ -22,9 +27,6 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
     public void CustomizePrefab(GameObject prefab) {
         Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone0" + prefab.name + ".prefab"); //!!!!!!!!!!!!!!!!!!! TODO: Tiled custom property to set zone !!!!!!!!!!!!!!!!!
-
-        float mapWidth = prefab.GetComponent<TiledMap>().NumTilesWide;
-        float mapHeight = prefab.GetComponent<TiledMap>().NumTilesHigh;
 
         GameObject roomGameObject;
         GameObject newTiledObj = Object.Instantiate(prefab, new Vector3(prefab.transform.position.x, mapHeight, prefab.transform.position.z), Quaternion.identity) as GameObject;
@@ -38,7 +40,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
             newTiledObj.transform.parent = roomGameObject.transform;
             newTiledObj.transform.SetAsFirstSibling();
 
-            FindRoomExits(roomGameObject.GetComponent<Room>(), mapWidth, mapHeight);
+            roomGameObject.GetComponent<Room>().exits = exits;
 
             PrefabUtility.ReplacePrefab(roomGameObject, existingPrefab, ReplacePrefabOptions.ReplaceNameBased);
         }
@@ -53,7 +55,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
             newTiledObj.transform.parent = roomGameObject.transform;
             enemiesGameObject.transform.parent = roomGameObject.transform;
 
-            FindRoomExits(roomComponent, mapWidth, mapHeight);
+            roomComponent.exits = exits;
 
             PrefabUtility.CreatePrefab("Assets/Prefabs/Rooms/" + prefab.name + ".prefab", roomGameObject);
         }
@@ -72,7 +74,13 @@ public class CustomTiledImporter : ICustomTiledImporter {
         float startX = vertices[0].x;
         float previousX = vertices[0].x;
         float previousY = vertices[0].y;
+
+        mapWidth = layer.transform.parent.GetComponent<TiledMap>().NumTilesWide;
+        mapHeight = layer.transform.parent.GetComponent<TiledMap>().NumTilesHigh;
+
         for (int i = 1; i < vertices.Length; i++) {
+            FindRoomExit(vertices[i], previousX);
+
             if (vertices[i].x > previousX + 1 || vertices[i].x < previousX) {
                 AddColliderLine(startX, previousX - startX, previousY * -1);
                 startX = vertices[i].x;
@@ -109,34 +117,32 @@ public class CustomTiledImporter : ICustomTiledImporter {
         currentCollider.height = y - currentCollider.y;
     }
 
-    private void FindRoomExits(Room room, float mapWidth, float mapHeight) {
-        room.exits.Clear();
+    private void CreateExitFromPos(float verticeX, float verticeY, bool isHorizontal) {
+        Debug.Log("x: " + verticeX + "  y: " + verticeY);
+        Exit exit = new Exit();
+        exit.pos = new Vector2(Mathf.Ceil(verticeX / 60) - 1, Mathf.Ceil((mapHeight + verticeY) / 34) - 1);
+        exit.dir = isHorizontal ? new Vector2(0, verticeY == -mapHeight ? -1 : 1) : new Vector2(verticeX == 0 ? -1 : 1, 0);
 
-        for (int i = 0; i < colliders.Count; i++) {
-            if (CheckColliderPos(i, mapWidth, mapHeight)) {
-                continue;
+        exits.Add(exit);
+    }
+
+    private void FindRoomExit(Vector3 vertice, float previousX) {
+        if (vertice.x == previousX + 6 && (vertice.y == -1 || vertice.y == -mapHeight)) { //horizontal gap
+            CreateExitFromPos(vertice.x, vertice.y == -1 ? 1 : vertice.y, true);
+        }
+        if (vertice.x == 0) { // vertice is on left border
+            if (vertice.y == leftBorderMinVerticeY - 7) {
+                CreateExitFromPos(vertice.x, vertice.y, false);
             }
 
-            for (int j = 0; j < colliders.Count; j++) {
-                if (!CheckColliderPos(j, mapWidth, mapHeight) && i != j) {
-                    if (colliders[i].width > colliders[i].height && colliders[j].width > colliders[j].height // same axis check
-                    && colliders[i].y == colliders[j].y && colliders[i].x < colliders[j].x) { // pos check
-                        Exit exit = new Exit();
-                        exit.pos = new Vector2(Mathf.Floor((colliders[i].x + colliders[i].width) / 60), colliders[i].y == 0 ? room.size.y : -1);
-                        exit.dir = new Vector2(0, colliders[i].y == 0 ? 1 : -1);
-                        room.exits.Add(exit);
-                        break;
-                    }
-                    else if (colliders[i].height > colliders[i].width && colliders[j].height > colliders[j].width
-                    && colliders[i].x == colliders[j].x && colliders[i].y < colliders[j].y) {
-                        Exit exit = new Exit();
-                        exit.pos = new Vector2(colliders[i].x == 0 ? -1 : room.size.x, -Mathf.Floor((colliders[i].y + colliders[i].height) / 34));
-                        exit.dir = new Vector2(colliders[i].x == 0 ? -1 : 1, 0);
-                        room.exits.Add(exit);
-                        break;
-                    }
-                }
+            leftBorderMinVerticeY = Mathf.Min(leftBorderMinVerticeY, vertice.y);
+        }
+        else if (vertice.x == mapWidth) { // vertice is on right border
+            if (vertice.y == rightBorderMinVerticeY - 6) {
+                CreateExitFromPos(vertice.x+1, vertice.y, false);
             }
+
+            rightBorderMinVerticeY = Mathf.Min(rightBorderMinVerticeY, vertice.y);
         }
     }
 }
