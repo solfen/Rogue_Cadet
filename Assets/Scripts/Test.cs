@@ -7,12 +7,10 @@ public class Test : MonoBehaviour {
 
     public Text realText;
 
-    void Start () {
-        StartCoroutine("Teste");
+    void Update () {
+        if (Input.GetButtonDown("Bomb")) {
+            Application.LoadLevel(4);
+        }
     }
-	
-    IEnumerator Teste() {
-        yield return new WaitForSeconds(1);
-        EventDispatcher.DispatchEvent(Events.GAME_STARTED, null);
-    }
+
 }
