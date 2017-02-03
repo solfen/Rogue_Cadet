@@ -118,7 +118,6 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     private void CreateExitFromPos(float verticeX, float verticeY, bool isHorizontal) {
-        Debug.Log("x: " + verticeX + "  y: " + verticeY);
         Exit exit = new Exit();
         exit.pos = new Vector2(Mathf.Ceil(verticeX / 60) - 1, Mathf.Ceil((mapHeight + verticeY) / 34) - 1);
         exit.dir = isHorizontal ? new Vector2(0, verticeY == -mapHeight ? -1 : 1) : new Vector2(verticeX == 0 ? -1 : 1, 0);
