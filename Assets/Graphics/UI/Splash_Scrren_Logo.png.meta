@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 70166dacabc562441a71b78ac86d0160
-timeCreated: 1486130213
+guid: 392ed79d5232f9548b014109510b6e32
+timeCreated: 1486130643
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Rogue_Cadet_logo_0
+    21300000: Splash_Scrren_Logo_0
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -25,21 +25,21 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
-    filterMode: 1
-    aniso: 16
+    filterMode: -1
+    aniso: -1
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
-  spritePivot: {x: 0.5230966, y: 0.49261713}
+  spritePivot: {x: 0.5, y: 0.5}
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spritePixelsToUnits: 128
   alphaUsage: 1
@@ -71,13 +71,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Rogue_Cadet_logo_0
+      name: Splash_Scrren_Logo_0
       rect:
         serializedVersion: 2
-        x: 1
-        y: 0
-        width: 630
-        height: 141
+        x: 41
+        y: 55
+        width: 521
+        height: 70
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
