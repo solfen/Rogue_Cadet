@@ -5,12 +5,12 @@ using UnityEditor;
 
 public class SaveRoomToDungeonTool {
 
-    [MenuItem("Tools/Save room to dungeon _F7", true)]
+    [MenuItem("Tools/Save room to dungeon _F6", true)]
     private static bool Validate() {
         return Selection.activeGameObject != null && Selection.activeGameObject.GetComponent<Room>() != null;
     }
 
-    [MenuItem("Tools/Save room to dungeon _F7")]
+    [MenuItem("Tools/Save room to dungeon _F6")]
     private static void AddRoomsToDungeon() {
         Dungeon dungeon = GameObject.FindObjectOfType<Dungeon>();
         if (dungeon == null) {

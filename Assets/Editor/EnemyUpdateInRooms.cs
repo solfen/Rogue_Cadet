@@ -7,7 +7,7 @@ public class EnemyUpdateInRooms {
 
     private static string[] roomsPaths = /*{ "Assets/Prefabs/Rooms/Test" };*/ { "Assets/Prefabs/Rooms/Zone0", "Assets/Prefabs/Rooms/Zone1", "Assets/Prefabs/Rooms/Zone2", "Assets/Prefabs/Rooms/Zone3" };
 
-    [MenuItem("Tools/Update enemy in rooms _F6")]
+    //[MenuItem("Tools/Update enemy in rooms _F6")]
     private static void UpdateEnemiesRoom() {
         List<GameObject> rooms = new List<GameObject>();
         string[] guids = AssetDatabase.FindAssets("t:GameObject", roomsPaths);
@@ -48,7 +48,7 @@ public class EnemyUpdateInRooms {
         Debug.Log("nb enemies updated: " + totalEnemies);
     }
 
-    [MenuItem("Tools/Update enemy in rooms _F6", true)]
+    //[MenuItem("Tools/Update enemy in rooms _F6", true)]
     private static bool UpdateEnemiesRoomValidate() {
         return Selection.activeGameObject != null && Selection.activeGameObject.GetComponent<Enemy>() != null;
     }

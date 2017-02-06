@@ -2,7 +2,7 @@
 using UnityEditor;
 
 public class EnemyPackCreationTool {
-    [MenuItem("Tools/Save Enemy Pack _F5")]
+   // [MenuItem("Tools/Save Enemy Pack")]
     private static void SaveEnemiesPacks() {
         Room room = Selection.activeTransform.root.GetComponent<Room>();
         room.enemiesContainers.Clear();
@@ -22,7 +22,7 @@ public class EnemyPackCreationTool {
         PrefabUtility.ReplacePrefab(room.gameObject, PrefabUtility.GetPrefabParent(room.gameObject), ReplacePrefabOptions.ConnectToPrefab);
     }
 
-    [MenuItem("Tools/Save Enemy Pack _F5", true)]
+   // [MenuItem("Tools/Save Enemy Pack", true)]
     private static bool SavePackMenuItemValidation() {
         return Selection.activeTransform != null
             && Selection.activeTransform.root.GetComponent<Room>() != null;
