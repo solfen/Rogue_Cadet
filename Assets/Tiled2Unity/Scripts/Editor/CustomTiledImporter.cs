@@ -20,17 +20,21 @@ public class CustomTiledImporter : ICustomTiledImporter {
     private float mapHeight;
     private float leftBorderMinVerticeY = 0;
     private float rightBorderMinVerticeY = 0;
+    private int zoneNb = -1;
 
     private bool CheckColliderPos(int i, float tileWidth, float tileHeight) {
         return colliders[i].x > 0 && colliders[i].x + colliders[i].width < tileWidth && colliders[i].y > 0 && colliders[i].y < tileHeight;
     }
 
     public void CustomizePrefab(GameObject prefab) {
-        Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone0" + prefab.name + ".prefab"); //!!!!!!!!!!!!!!!!!!! TODO: Tiled custom property to set zone !!!!!!!!!!!!!!!!!
-
+        Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone" + zoneNb + "/" + prefab.name + ".prefab");
         GameObject roomGameObject;
         GameObject newTiledObj = Object.Instantiate(prefab, new Vector3(prefab.transform.position.x, mapHeight, prefab.transform.position.z), Quaternion.identity) as GameObject;
         newTiledObj.name = "TiledMap";
+
+        if(zoneNb == -1) {
+            Debug.LogError("Room has no \"zoneNb\" Tiled property! Add one!");
+        }
 
         if(existingPrefab != null) {
             roomGameObject = Object.Instantiate(existingPrefab.gameObject);
@@ -49,15 +53,15 @@ public class CustomTiledImporter : ICustomTiledImporter {
             GameObject enemiesGameObject = new GameObject("Enemies");
 
             Room roomComponent = roomGameObject.gameObject.AddComponent<Room>();
+            roomComponent.zoneIndex = zoneNb;
             roomComponent.size = new Vector2(mapWidth / 60, mapHeight / 34); //hard coded == bad. But It's simplier. BTW future me if you had trouble because of that, I'm sory.
             roomComponent.enemiesParent = enemiesGameObject.transform;
-
             newTiledObj.transform.parent = roomGameObject.transform;
             enemiesGameObject.transform.parent = roomGameObject.transform;
 
             roomComponent.exits = exits;
 
-            PrefabUtility.CreatePrefab("Assets/Prefabs/Rooms/" + prefab.name + ".prefab", roomGameObject);
+            PrefabUtility.CreatePrefab("Assets/Prefabs/Rooms/Zone" + zoneNb + "/" + prefab.name + ".prefab", roomGameObject);
         }
 
         Object.DestroyImmediate(roomGameObject);
@@ -65,7 +69,18 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
     public void HandleCustomProperties(GameObject layer, IDictionary<string, string> props) {
 
-        if (layer.GetComponentInChildren<MeshFilter>() == null) { // will need to change this if multiple custom importers
+        foreach(KeyValuePair<string, string> elem in props) {
+            if(elem.Key == "obstaclesLayer") {
+                GetCollidersAndExit(layer);
+            }
+            else if(elem.Key == "zoneNb") {
+                zoneNb = int.Parse(elem.Value);
+            }
+        }
+    }
+
+    private void GetCollidersAndExit(GameObject layer) {
+        if (layer.GetComponentInChildren<MeshFilter>() == null) {
             Debug.LogError("no obstacle mesh!");
             return;
         }

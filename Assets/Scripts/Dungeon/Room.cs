@@ -24,7 +24,7 @@ public enum RoomType {
 
 public class Room : MonoBehaviour {
 
-    public bool debug = true;
+    public bool debug = false;
     public Transform enemiesParent;
     [Header("Dungeon data")]
     public int zoneIndex;
