@@ -5,6 +5,7 @@ using UnityEditor;
 
 public class SaveRoomPrefab {
 
+    private static RoomDynamicContent[] lastRoomContents;
     [MenuItem("Tools/Save room to prefab _F5", true)]
     private static bool Validate() {
         return Selection.activeGameObject != null && Selection.activeTransform.root.GetComponent<Room>() != null;
@@ -22,12 +23,12 @@ public class SaveRoomPrefab {
     }
 
     private static void SaveDynamicContent(Room room) {
-        RoomDynamicContent[] roomContents = room.GetComponentsInChildren<RoomDynamicContent>();
+        lastRoomContents = room.GetComponentsInChildren<RoomDynamicContent>();
 
         Undo.RecordObject(room.gameObject, "Save Room to Prefab");
 
-        for (int i = 0; i < roomContents.Length; i++) {
-            roomContents[i].ContentToList();
+        for (int i = 0; i < lastRoomContents.Length; i++) {
+            lastRoomContents[i].ContentToList();
         }
     }
 
@@ -48,13 +49,9 @@ public class SaveRoomPrefab {
     }
 
     private static void RestoreSceneRoomPreviousState(Room room) {
-        for (int i = 0; i < room.enemiesParent.childCount; i++) {
-            room.enemiesParent.GetChild(i).gameObject.SetActive(true);
-        }
-
-        RoomDynamicContent[] roomContents = room.GetComponentsInChildren<RoomDynamicContent>();
-        for (int i = 0; i < roomContents.Length; i++) {
-            roomContents[i].ListToContent();
+        for (int i = 0; i < lastRoomContents.Length; i++) {
+            lastRoomContents[i].gameObject.SetActive(true);
+            lastRoomContents[i].ListToContent();
         }
     }
 }
