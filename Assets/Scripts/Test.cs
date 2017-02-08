@@ -8,8 +8,14 @@ public class Test : MonoBehaviour {
     public Text realText;
 
     void Update () {
+
         if (Input.GetButtonDown("Bomb")) {
-            Application.LoadLevel(4);
+            // Application.LoadLevel(4);
+            GetComponent<InputRebinder>().StartRebinding();
+        }
+
+        if(InputManager.GetButtonDown(InputManager.GameButtonID.SHOOT)) {
+            Debug.Log("caca");
         }
     }
 
