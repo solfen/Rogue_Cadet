@@ -17,6 +17,10 @@ public class Test : MonoBehaviour {
         if(InputManager.GetButtonDown(InputManager.GameButtonID.SHOOT)) {
             Debug.Log("caca");
         }
+
+        //Debug.Log(InputManager.GetAxisRaw(InputManager.GameAxisID.MOVE_X));
+
+        Debug.Log(InputManager.useGamedad);
     }
 
 }

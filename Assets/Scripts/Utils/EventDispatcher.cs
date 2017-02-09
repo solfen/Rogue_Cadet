@@ -37,7 +37,8 @@ public enum Events {
     SELECT_UI,
     UI_ERROR,
     UI_SUCCESS,
-    MANA_POTION_TAKEN
+    MANA_POTION_TAKEN,
+    INPUT_DEVICE_CHANGED
 }
 
 public static class EventDispatcher {
@@ -78,6 +79,7 @@ public static class EventDispatcher {
         { Events.UI_ERROR,  null },
         { Events.UI_SUCCESS,  null },
         { Events.MANA_POTION_TAKEN,  null },
+        { Events.INPUT_DEVICE_CHANGED,  null },
     };
 
 

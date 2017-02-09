@@ -14,6 +14,11 @@ public class InputManager : MonoBehaviour {
         SHOW_HITBOX
     }
 
+    public enum GameAxisID {
+        MOVE_X,
+        MOVE_Y
+    }
+
     private static Dictionary<GameButtonID, string> defaultGamepadBind = new Dictionary<GameButtonID, string> {
         { GameButtonID.SHOOT, "RightTrigger" },
         { GameButtonID.SWITCH_WEAPONS, ((int)KeyCode.Joystick1Button2).ToString() },
@@ -30,30 +35,51 @@ public class InputManager : MonoBehaviour {
         { GameButtonID.SHOW_HITBOX, ((int)KeyCode.E).ToString() }
     };
 
+    private static Dictionary<GameAxisID, string> defaultGamepadAxes = new Dictionary<GameAxisID, string> {
+        { GameAxisID.MOVE_X, "LeftStickX" },
+        { GameAxisID.MOVE_Y, "LeftStickY" }
+    };
+
+    private static Dictionary<GameAxisID, KeyCode[]> defaultKeyboardAxes = new Dictionary<GameAxisID, KeyCode[]> {
+        { GameAxisID.MOVE_X, new KeyCode[2] { KeyCode.D, KeyCode.Q }  },
+        { GameAxisID.MOVE_Y, new KeyCode[2] { KeyCode.Z, KeyCode.S }  },
+    };
+
     private static Dictionary<GameButtonID, IGameButton> buttons = new Dictionary<GameButtonID, IGameButton>();
+    private static Dictionary<GameAxisID, IGameAxis> axes = new Dictionary<GameAxisID, IGameAxis>();
     private static string savePref;
 
     // Use this for initialization
     void Awake () {
-        if (Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "") {
-            useGamedad = true;
+        UpdateInputDevice(Input.GetJoystickNames().Length > 0 && Input.GetJoystickNames()[0] != "");
+    }
+
+    //Check to see if the player uses the gamepad or the keyboard.
+    //If there's a switch, the input config is changed instantly.
+    void Update () {
+        bool newUseGamePadState;
+
+        if (Input.GetAxisRaw("LeftStickX") != 0 || Input.GetAxisRaw("LeftStickY") != 0 || Input.GetAxisRaw("RightStickX") != 0 || Input.GetAxisRaw("RightStickY") != 0) {
+            newUseGamePadState = true;
+        }
+        else if(Input.anyKeyDown) { // keydown includes most of gamepad buttons
+            newUseGamePadState = SniffKeyPressed().ToString().Contains("Joystick");
+        }
+        else {
+            return;
         }
 
+        if(useGamedad != newUseGamePadState) {
+            UpdateInputDevice(newUseGamePadState);
+            EventDispatcher.DispatchEvent(Events.INPUT_DEVICE_CHANGED, useGamedad);
+        }
+    }
+
+    private void UpdateInputDevice(bool isGamepad) {
+        useGamedad = isGamepad;
         savePref = useGamedad ? "GameButton_JoyStick_" : "GameButton_KeyBoard_";
-        Dictionary<GameButtonID, string> defaultKeys = useGamedad ? defaultGamepadBind : defaultKeyboardBind;
-
-        foreach (GameButtonID id in System.Enum.GetValues(typeof(GameButtonID))) {
-            string savedKey = PlayerPrefs.GetString(savePref + id, defaultKeys[id]);
-            int tryParsed;
-            bool isInt = int.TryParse(savedKey, out tryParsed);
-
-            if(isInt) {
-                BindButtonInput(id, (KeyCode)tryParsed);
-            }
-            else {
-                BindButtonInput(id, savedKey);
-            }
-        }
+        BindSavedButtons();
+        BindSavedAxes();
     }
 
     public static bool GetButton(GameButtonID id) {
@@ -62,6 +88,10 @@ public class InputManager : MonoBehaviour {
 
     public static bool GetButtonDown(GameButtonID id) {
         return buttons[id].IsPressedDown();
+    }
+
+    public static float GetAxisRaw(GameAxisID id) {
+        return axes[id].GetAxisRaw();
     }
 
     public static void BindButtonInput(GameButtonID id, string axisName) {
@@ -73,11 +103,64 @@ public class InputManager : MonoBehaviour {
         buttons[id] = new KeyButton(key);
         PlayerPrefs.SetString(savePref + id, ((int)key).ToString());
     }
+
+    public static void BindAxisInput(GameAxisID id, string axisName) {
+        axes[id] = new AxisAxis(axisName);
+        PlayerPrefs.SetString(savePref + id, axisName);
+    }
+
+    public static void BindAxisInput(GameAxisID id, KeyCode positiveKey, KeyCode negativeKey) {
+        axes[id] = new KeyAxis(positiveKey, negativeKey);
+        PlayerPrefs.SetInt(savePref + id + "_Positive", (int)positiveKey);
+        PlayerPrefs.SetInt(savePref + id + "_Negative", (int)negativeKey);
+    }
+
+    public static void BindSavedButtons() {
+        Dictionary<GameButtonID, string> defaultKeys = useGamedad ? defaultGamepadBind : defaultKeyboardBind;
+
+        foreach (GameButtonID id in System.Enum.GetValues(typeof(GameButtonID))) {
+            string savedKey = PlayerPrefs.GetString(savePref + id, defaultKeys[id]);
+            int tryParsed;
+            bool isInt = int.TryParse(savedKey, out tryParsed);
+
+            if (isInt) {
+                BindButtonInput(id, (KeyCode)tryParsed);
+            }
+            else {
+                BindButtonInput(id, savedKey);
+            }
+        }
+    }
+
+    public static void BindSavedAxes() {
+        foreach (GameAxisID id in System.Enum.GetValues(typeof(GameAxisID))) {
+            if (useGamedad) {
+                BindAxisInput(id, PlayerPrefs.GetString(savePref + id, defaultGamepadAxes[id]));
+            }
+            else {
+                BindAxisInput(id, (KeyCode)PlayerPrefs.GetInt(savePref + id + "_Positive", (int)defaultKeyboardAxes[id][0]), (KeyCode)PlayerPrefs.GetInt(savePref + id + "_Negative", (int)defaultKeyboardAxes[id][1]));
+            }
+        }
+    }
+
+    public static KeyCode SniffKeyPressed() {
+        foreach (KeyCode vKey in System.Enum.GetValues(typeof(KeyCode))) {
+            if (Input.GetKey(vKey)) {
+                return vKey;
+            }
+        }
+
+        return KeyCode.None;
+    }
 }
 
 public interface IGameButton {
     bool IsPressed();
     bool IsPressedDown();
+}
+
+public interface IGameAxis {
+    float GetAxisRaw();
 }
 
 public class KeyButton : IGameButton {
@@ -119,5 +202,34 @@ public class AxisButton : IGameButton {
         wasPressedLastTime = isPressed;
 
         return isDown;
+    }
+}
+
+public class KeyAxis : IGameAxis {
+
+    private KeyCode postiveKey;
+    private KeyCode negativeKey;
+
+    public KeyAxis(KeyCode postive, KeyCode negative) {
+        postiveKey = postive;
+        negativeKey = negative;
+    }
+
+    public float GetAxisRaw() {
+        float positive = Input.GetKey(postiveKey) ? 1 : 0;
+        float negative = Input.GetKey(negativeKey) ? 1 : 0;
+        return positive - negative;
+    }
+}
+
+public class AxisAxis : IGameAxis {
+    private string axisName;
+
+    public AxisAxis(string _axisName) {
+        axisName = _axisName;
+    }
+
+    public float GetAxisRaw() {
+        return Input.GetAxisRaw(axisName);
     }
 }
