@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour {
         MOVE_Y
     }
 
+    //have to put the keys in a string since it can be an axis acting as a button or a key acting as a button
     private static Dictionary<GameButtonID, string> defaultGamepadBind = new Dictionary<GameButtonID, string> {
         { GameButtonID.SHOOT, "RightTrigger" },
         { GameButtonID.SWITCH_WEAPONS, ((int)KeyCode.Joystick1Button2).ToString() },
