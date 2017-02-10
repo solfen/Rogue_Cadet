@@ -24,9 +24,8 @@ public class WeaponSwitcher : MonoBehaviour {
         currentWeapon = weapons[currentWeaponIndex];
     }
 	
-	// Update is called once per frame
 	void Update () {
-	    if(Input.GetButtonDown("SwitchWeapon")) {
+	    if(Time.timeScale != 0 && Input.GetButtonDown("SwitchWeapon")) {
             weapons[currentWeaponIndex].Disable();
             currentWeaponIndex = (currentWeaponIndex + 1) % weapons.Count;
             weapons[currentWeaponIndex].Activate();

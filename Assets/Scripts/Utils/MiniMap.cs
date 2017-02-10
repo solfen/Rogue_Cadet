@@ -59,7 +59,7 @@ public class MiniMap : MonoBehaviour {
         if (playerTransform != null) {
             roomparentTransform.anchoredPosition = -playerTransform.position * scale;
 
-            if (Input.GetButtonDown("Map")) {
+            if (Time.timeScale != 0 && Input.GetButtonDown("Map")) {
                 currentMapSize = currentMapSize == smallMapSize ? bigMapSize : smallMapSize;
                 _rectTransform.sizeDelta = currentMapSize;
             }

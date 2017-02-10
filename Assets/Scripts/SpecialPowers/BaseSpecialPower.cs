@@ -35,7 +35,7 @@ public abstract class BaseSpecialPower : MonoBehaviour {
     protected virtual void Update() {
         coolDownTimer -= Time.deltaTime;
 
-        if (Input.GetButtonDown("SpecialPower")) {
+        if (Time.timeScale != 0 && Input.GetButtonDown("SpecialPower")) {
             if (coolDownTimer < 0 && mana >= manaCost) {
                 Activate();
                 coolDownTimer = coolDownDuration;

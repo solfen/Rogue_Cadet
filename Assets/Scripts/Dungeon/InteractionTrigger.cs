@@ -26,7 +26,7 @@ public class InteractionTrigger : MonoBehaviour {
     }
 
     IEnumerator WaitForInput() {
-        while (!Input.GetButtonDown(inputName)) {
+        while (!Input.GetButtonDown(inputName) || Time.timeScale == 0) {
             yield return null;
         }
 
