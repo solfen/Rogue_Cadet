@@ -27,7 +27,7 @@ public class ShowHitbox : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(Time.timeScale != 0 && Input.GetButtonDown("ShowHitbox")) {
+	    if(Time.timeScale != 0 && InputManager.GetButtonDown(InputManager.GameButtonID.SHOW_HITBOX)) {
             activated = !activated;
             line.enabled = !line.enabled;
 

@@ -18,11 +18,10 @@ public class ControllerMovement : BaseMovement {
     }
 
     private void Move() {
-        direction.x = Input.GetAxisRaw("MoveX");
-        direction.y = Input.GetAxisRaw("MoveY");
+        direction.x = InputManager.GetAxisRaw(InputManager.GameAxisID.MOVE_X);
+        direction.y = InputManager.GetAxisRaw(InputManager.GameAxisID.MOVE_Y);
 
-        _rigidbody.velocity = direction * speed;
-
+        _rigidbody.velocity = direction.normalized * speed;
     }
 
     private void Turn() {

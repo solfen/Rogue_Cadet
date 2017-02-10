@@ -25,7 +25,7 @@ public class WeaponSwitcher : MonoBehaviour {
     }
 	
 	void Update () {
-	    if(Time.timeScale != 0 && Input.GetButtonDown("SwitchWeapon")) {
+	    if(Time.timeScale != 0 && InputManager.GetButtonDown(InputManager.GameButtonID.SWITCH_WEAPONS)) {
             weapons[currentWeaponIndex].Disable();
             currentWeaponIndex = (currentWeaponIndex + 1) % weapons.Count;
             weapons[currentWeaponIndex].Activate();

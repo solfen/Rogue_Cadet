@@ -28,7 +28,7 @@ public class Bomb : MonoBehaviour {
     }
 
     void Update() {
-        if(Time.timeScale != 0 && Input.GetButtonDown("Bomb") && currentStock > 0) {
+        if(Time.timeScale != 0 && InputManager.GetButtonDown(InputManager.GameButtonID.BOMB) && currentStock > 0) {
             Activate();
         }
     }

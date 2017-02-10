@@ -4,12 +4,13 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour {
 
-    public static bool useGamedad;
+    public static bool useGamedad { get;  private set; }
+    public static bool isRebinding = false;
 
     public enum GameButtonID {
         SHOOT,
         SWITCH_WEAPONS,
-        SPECIAL,
+        SPECIAL_POWER,
         BOMB,
         SHOW_HITBOX
     }
@@ -23,7 +24,7 @@ public class InputManager : MonoBehaviour {
     private static Dictionary<GameButtonID, string> defaultGamepadBind = new Dictionary<GameButtonID, string> {
         { GameButtonID.SHOOT, "RightTrigger" },
         { GameButtonID.SWITCH_WEAPONS, ((int)KeyCode.Joystick1Button2).ToString() },
-        { GameButtonID.SPECIAL, ((int)KeyCode.Joystick1Button4).ToString() },
+        { GameButtonID.SPECIAL_POWER, ((int)KeyCode.Joystick1Button4).ToString() },
         { GameButtonID.BOMB, ((int)KeyCode.Joystick1Button8).ToString() },
         { GameButtonID.SHOW_HITBOX, ((int)KeyCode.Joystick1Button3).ToString() }
     };
@@ -31,7 +32,7 @@ public class InputManager : MonoBehaviour {
     private static Dictionary<GameButtonID, string> defaultKeyboardBind = new Dictionary<GameButtonID, string> {
         { GameButtonID.SHOOT, ((int)KeyCode.Mouse0).ToString() },
         { GameButtonID.SWITCH_WEAPONS, ((int)KeyCode.LeftControl).ToString() },
-        { GameButtonID.SPECIAL, ((int)KeyCode.LeftShift).ToString() },
+        { GameButtonID.SPECIAL_POWER, ((int)KeyCode.LeftShift).ToString() },
         { GameButtonID.BOMB, ((int)KeyCode.Space).ToString() },
         { GameButtonID.SHOW_HITBOX, ((int)KeyCode.E).ToString() }
     };

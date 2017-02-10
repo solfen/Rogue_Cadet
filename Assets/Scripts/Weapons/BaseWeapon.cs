@@ -48,7 +48,7 @@ public abstract class BaseWeapon : MonoBehaviour {
             StartCoroutine(CoolDown());
         }
 
-        bool isInput = Time.deltaTime != 0 && (Input.GetButton("MainShot") || Input.GetAxis("MainShot") < -0.5f); //don't want shoot in pause mode now, do we ?
+        bool isInput = Time.deltaTime != 0 && (InputManager.GetButton(InputManager.GameButtonID.SHOOT)); //don't want shoot in pause mode now, do we ?
         bool newFireState = !isCoolDown && isInput && fireTimer < maxFireDuration;
 
         if (isFiring != newFireState) {
