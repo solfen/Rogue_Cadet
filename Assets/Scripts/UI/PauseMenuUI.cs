@@ -28,7 +28,7 @@ public class PauseMenuUI : MonoBehaviour {
         if (!isLoaded)
             return;
         
-        if(Input.GetButtonDown("Pause")) {
+        if(!InputManager.isRebinding && Input.GetButtonDown("Pause")) {
             if(!isOpen) {
                 Open();
             }

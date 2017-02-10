@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(UIPosAnimator))]
 public class InputRebinder : MonoBehaviour {
@@ -12,6 +13,7 @@ public class InputRebinder : MonoBehaviour {
     private Vector2 UIUpPos = new Vector2(0, 350);
     private Vector2 UIDownPos = new Vector2(0, -350);
     private Vector2 UINormalPos = new Vector2(0, 0);
+    private GameObject lastUISelected;
 
     [SerializeField] private GameObject overlay;
     [SerializeField] private UIPosAnimator bindPane;
@@ -19,13 +21,17 @@ public class InputRebinder : MonoBehaviour {
     [SerializeField] private Text inputUIText;
 
     public void StartRebinding() {
+        lastUISelected = EventSystem.current.currentSelectedGameObject;
+        EventSystem.current.SetSelectedGameObject(null);
+        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
+        InputManager.isRebinding = true;
+        overlay.SetActive(true);
+
         StartCoroutine(Rebinding());
     }
 
     IEnumerator Rebinding() {
-        overlay.SetActive(true);
         inputUIText.text = InputManager.useGamedad ? ((InputManager.GameButtonID)(0)).ToString() : "UP";
-        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         yield return StartCoroutine(bindPane.Animate("Open", UINormalPos));
 
         if (!InputManager.useGamedad) {
@@ -61,7 +67,10 @@ public class InputRebinder : MonoBehaviour {
 
         EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         yield return StartCoroutine(bindPane.Animate("Close", new Vector2(0, Camera.main.pixelHeight)));
+        InputManager.isRebinding = false;
+
         overlay.SetActive(false);
+        EventSystem.current.SetSelectedGameObject(lastUISelected);
     }
 
     IEnumerator WaitForAnimAndKeyUp() {
