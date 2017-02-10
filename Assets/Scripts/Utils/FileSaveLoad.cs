@@ -6,9 +6,11 @@ using System.IO;
 
 public static class FileSaveLoad {
 
+    private static string fileName = "/gameSave.dat";
+
     public static void Save(SaveData data) {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/gameSave.dat");
+        FileStream file = File.Create(Application.persistentDataPath + fileName);
         bf.Serialize(file, data);
         file.Close();
 
@@ -18,7 +20,7 @@ public static class FileSaveLoad {
     public static SaveData Load() {
         if (DoesSaveExists()) {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/gameSave.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + fileName, FileMode.Open);
             SaveData data = (SaveData)bf.Deserialize(file);
             file.Close();
             return data;
@@ -28,7 +30,14 @@ public static class FileSaveLoad {
         }
     }
 
-    public static bool DoesSaveExists() {
-        return File.Exists(Application.persistentDataPath + "/gameSave.dat");
+    public static void Delete() {
+        if(DoesSaveExists()) {
+            File.Delete(Application.persistentDataPath + fileName);
+        }
     }
+
+    public static bool DoesSaveExists() {
+        return File.Exists(Application.persistentDataPath + fileName);
+    }
+
 }

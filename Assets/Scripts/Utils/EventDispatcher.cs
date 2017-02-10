@@ -38,7 +38,8 @@ public enum Events {
     UI_ERROR,
     UI_SUCCESS,
     MANA_POTION_TAKEN,
-    INPUT_DEVICE_CHANGED
+    INPUT_DEVICE_CHANGED,
+    SCREEN_SHAKE_MODIFIER_CHANGED,
 }
 
 public static class EventDispatcher {
@@ -80,6 +81,7 @@ public static class EventDispatcher {
         { Events.UI_SUCCESS,  null },
         { Events.MANA_POTION_TAKEN,  null },
         { Events.INPUT_DEVICE_CHANGED,  null },
+        { Events.SCREEN_SHAKE_MODIFIER_CHANGED,  null },
     };
 
 

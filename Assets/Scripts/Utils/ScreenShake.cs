@@ -25,6 +25,7 @@ public class ScreenShake : MonoBehaviour {
 
     private Dictionary<ScreenShakeTypes, ScreenShakeConfig> configs = new Dictionary<ScreenShakeTypes, ScreenShakeConfig>();
     private Transform _transform;
+    private float amplitudeMultiplier;
 
 
     void Awake () {
@@ -33,11 +34,13 @@ public class ScreenShake : MonoBehaviour {
         }
 
         _transform = GetComponent<Transform>();
+        OnAmplitudeModifierChanged(PlayerPrefs.GetFloat("ScreenShakeFore"));
 
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, StartExplosionShake);
         EventDispatcher.AddEventListener(Events.BULLET_VOLLEY_FIRED, StartFireShake);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, StartPlayerDeathShake);
         EventDispatcher.AddEventListener(Events.PLAYER_HIT, StartPlayerHitShake);
+        EventDispatcher.AddEventListener(Events.SCREEN_SHAKE_MODIFIER_CHANGED, OnAmplitudeModifierChanged);
     }
 
     void OnDestroy () {
@@ -45,6 +48,11 @@ public class ScreenShake : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.BULLET_VOLLEY_FIRED, StartFireShake);
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, StartPlayerDeathShake);
         EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, StartPlayerHitShake);
+        EventDispatcher.RemoveEventListener(Events.SCREEN_SHAKE_MODIFIER_CHANGED, OnAmplitudeModifierChanged);
+    }
+
+    private void OnAmplitudeModifierChanged(object value) {
+        amplitudeMultiplier = (float)value;
     }
 
     private void StartFireShake(object bulletFountain) {
@@ -72,7 +80,7 @@ public class ScreenShake : MonoBehaviour {
 
         do {
             Vector3 random = dir != null ? (Vector3)dir : (Vector3)Random.insideUnitCircle;
-            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude; ;
+            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude * amplitudeMultiplier;
 
             yield return new WaitForSecondsRealtime(shakeInterval);
 
