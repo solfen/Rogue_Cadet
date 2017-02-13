@@ -93,8 +93,9 @@ public class MiniMap : MonoBehaviour {
             for (int j = 0; j < graph[i].roomPrefab.exits.Count; j++) {
                 int x = (int)(graph[i].pos.x + graph[i].roomPrefab.exits[j].pos.x);
                 int y = (int)(graph[i].pos.y + graph[i].roomPrefab.exits[j].pos.y);
+                GraphRoom adjacentRoom = dungeon.GetRoomFromMapIndex(x, y);
 
-                if (x >= 0 && x < gameData.worldSize.x && y >= 0 && y < gameData.worldSize.y && graph[i].roomsConnected.Contains(dungeon.map[x,y].room)) {
+                if (adjacentRoom != null && graph[i].roomsConnected.Contains(adjacentRoom)) {
                     currentExitPos.Set(Mathf.Max(0,graph[i].roomPrefab.exits[j].pos.x) * roomBaseSize.x + 0.5f * roomBaseSize.x * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y), Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.y) * roomBaseSize.y + 0.5f * roomBaseSize.y * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x), 0);
                     currentExitSize.Set(roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y)), roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x)));
 

@@ -23,6 +23,8 @@ public class TargetMovement : BaseMovement {
     private Quaternion rightEyeQuat;
     private int eyesMask = 1 << 13;
     private int playerMask = 1 << 10;
+    private Dungeon dungeon;
+    private GraphRoom currentRoom;
 
     protected override void Awake () {
         base.Awake();
@@ -39,6 +41,11 @@ public class TargetMovement : BaseMovement {
             enabled = false;
             canSwitch = false;
             return;
+        }
+
+        GameObject dungeonGO = GameObject.FindGameObjectWithTag("Dungeon");
+        if(dungeonGO != null) {
+            dungeon = dungeonGO.GetComponent<Dungeon>();
         }
 
         Init(go.GetComponent<Player>());
@@ -81,12 +88,21 @@ public class TargetMovement : BaseMovement {
     }
 
 	void FixedUpdate () {
-        if(!player.isInvisible) {
-            _transform.up =  _transform.position - playerTransform.position; // "hack" to make it face the player
+        if (!player.isInvisible) {
+            _transform.up = _transform.position - playerTransform.position; // "hack" to make it face the player // actually it's bad, it sometimes makes them move 3D...
             _rigidbody.velocity = currentDir * speed;
+
         }
         else {
             _rigidbody.velocity = Vector2.zero;
+        }
+
+        if(dungeon != null) {
+            GraphRoom newRoom = dungeon.GetRoomFromPosition(_transform.position);
+            if (newRoom != null && newRoom != currentRoom) {
+                _transform.parent = newRoom.roomInstance.enemiesParent.GetChild(0);
+                currentRoom = newRoom;
+            }
         }
     }
 

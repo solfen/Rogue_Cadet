@@ -47,7 +47,7 @@ public class GraphRoom {
 
 public class Dungeon : MonoBehaviour {
 
-    public Sector[,] map;
+    private Sector[,] map;
     [Tooltip("Debug bool. check it to see all the dungeon")]
     public bool showRoomsAtInstantiation = false;
 
@@ -339,6 +339,20 @@ public class Dungeon : MonoBehaviour {
                 activeRooms.RemoveAt(i);
             }
         }
+    }
+
+    public GraphRoom GetRoomFromPosition(Vector3 pos) {
+        int x = (int)Mathf.Floor(pos.x / gameData.roomBaseSize.x);
+        int y = (int)Mathf.Floor(pos.y / gameData.roomBaseSize.y);
+        return (GetRoomFromMapIndex(x, y));
+    }
+
+    public GraphRoom GetRoomFromMapIndex(int x, int y) {
+        if (x >= 0 && x < gameData.worldSize.x && y >= 0 && y < gameData.worldSize.y) {
+            return map[x, y].room;
+        }
+
+        return null;
     }
 
 }
