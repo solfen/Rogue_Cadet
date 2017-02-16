@@ -1,18 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TargetMovement : BaseMovement {
 
+    private enum AvoidanceDir {
+        NONE,
+        LEFT,
+        RIGHT
+    }
+
     [Range(0,360)]
     public float angleOffset;
+    [Tooltip("Go toward a point at x distance before the player")]
     public float distanceOffset;
     public Vector3 posOffset;
-    public float minObstacleDist = 2f;
-    public float emergencyDistance = 4;
     public Transform leftEye;
     public Transform rightEye;
-    public float eyesLength = 10;
-    public float eyeAngle = 20;
+    public float eyesLength = 7.5f;
+    public float eyeAngle = 5;
+    [Tooltip("The minimum time between a dir change. To avoid left/right change at each frame")]
+    public float changeAvoidDirMinInterval = 0.3f;
     public float laserInterval = 0.5f;
 
     private Transform playerTransform;
@@ -25,6 +33,7 @@ public class TargetMovement : BaseMovement {
     private int playerMask = 1 << 10;
     private Dungeon dungeon;
     private GraphRoom currentRoom;
+    private KeyValuePair<AvoidanceDir, float> lastAvoidDirTime = new KeyValuePair<AvoidanceDir, float>();
 
     protected override void Awake () {
         base.Awake();
@@ -122,22 +131,24 @@ public class TargetMovement : BaseMovement {
                 RaycastHit2D hit2 = Physics2D.Raycast(rightEye.position, rightEyeQuat * currentDir, eyesLength, eyesMask);
                 float minDist = hit.distance == 0 ? hit2.distance : hit2.distance == 0 ? hit.distance : Mathf.Min(hit.distance, hit2.distance);
 
-                if(minDist > 0 && minDist < emergencyDistance) {
-                    yield return StartCoroutine(EmergencyBreak());
+                if (hit.collider != null && (lastAvoidDirTime.Key == AvoidanceDir.RIGHT || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
+                    currentDir = Quaternion.Euler(0, 0, -Mathf.Lerp(0, 180, 1 - (minDist / eyeAngle))) * currentDir;
+                    ChangeAvoidDir(AvoidanceDir.RIGHT);
+                }
+                else if(hit2.collider != null && (lastAvoidDirTime.Key == AvoidanceDir.LEFT || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
+                    currentDir = Quaternion.Euler(0, 0, Mathf.Lerp(0, 180, 1 - (minDist / eyeAngle))) * currentDir;
+                    ChangeAvoidDir(AvoidanceDir.LEFT);
                 }
                 else {
-                    if (hit.collider != null) {
-                        currentDir = Quaternion.Euler(0, 0, -Mathf.Lerp(10, 180, emergencyDistance / minDist)) * currentDir;
-                    }
-                    else if(hit2.collider != null) {
-                        currentDir = Quaternion.Euler(0, 0, Mathf.Lerp(10, 180, emergencyDistance / minDist)) * currentDir;
-                    }
+                    ChangeAvoidDir(AvoidanceDir.NONE);
                 }
-
+            }
+            else {
+                ChangeAvoidDir(AvoidanceDir.NONE);
             }
 
             currentDir.Normalize();
-           // Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
+            //Debug.DrawRay(_transform.position, currentDir * 1000, Color.blue);
 
             yield return new WaitForSeconds(laserInterval);
         }
@@ -151,7 +162,13 @@ public class TargetMovement : BaseMovement {
 
     void OnTriggerEnter2D(Collider2D other) {
         if (other.tag == "Wall") {
-            _transform.position -= currentDir.normalized * speed * Time.deltaTime * 5;
+            currentDir = Quaternion.Euler(0, 0, 90) * currentDir;
+        }
+    }
+
+    private void ChangeAvoidDir(AvoidanceDir newDir) {
+        if(lastAvoidDirTime.Key != newDir) {
+            lastAvoidDirTime = new KeyValuePair<AvoidanceDir, float>(newDir, Time.realtimeSinceStartup);
         }
     }
 
