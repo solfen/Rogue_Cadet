@@ -34,6 +34,7 @@ public class TargetMovement : BaseMovement {
     private Dungeon dungeon;
     private GraphRoom currentRoom;
     private KeyValuePair<AvoidanceDir, float> lastAvoidDirTime = new KeyValuePair<AvoidanceDir, float>();
+    private AvoidanceDir dominantAvoidStrategy;
 
     protected override void Awake () {
         base.Awake();
@@ -43,6 +44,7 @@ public class TargetMovement : BaseMovement {
         leftEyeQuat = Quaternion.Euler(0, 0, eyeAngle);
         rightEyeQuat = Quaternion.Euler(0, 0, -eyeAngle);
         offset = Quaternion.Euler(0, 0, angleOffset);
+        dominantAvoidStrategy = Random.value < 0.5f ? AvoidanceDir.RIGHT : AvoidanceDir.LEFT;
 
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go == null) {
@@ -131,17 +133,10 @@ public class TargetMovement : BaseMovement {
                 RaycastHit2D hit2 = Physics2D.Raycast(rightEye.position, rightEyeQuat * currentDir, eyesLength, eyesMask);
                 float minDist = hit.distance == 0 ? hit2.distance : hit2.distance == 0 ? hit.distance : Mathf.Min(hit.distance, hit2.distance);
 
-                if (hit.collider != null && (lastAvoidDirTime.Key == AvoidanceDir.RIGHT || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
-                    currentDir = Quaternion.Euler(0, 0, -Mathf.Lerp(0, 180, 1 - (minDist / eyeAngle))) * currentDir;
-                    ChangeAvoidDir(AvoidanceDir.RIGHT);
-                }
-                else if(hit2.collider != null && (lastAvoidDirTime.Key == AvoidanceDir.LEFT || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
-                    currentDir = Quaternion.Euler(0, 0, Mathf.Lerp(0, 180, 1 - (minDist / eyeAngle))) * currentDir;
-                    ChangeAvoidDir(AvoidanceDir.LEFT);
-                }
-                else {
-                    ChangeAvoidDir(AvoidanceDir.NONE);
-                }
+                if(dominantAvoidStrategy == AvoidanceDir.RIGHT)
+                    CheckForObstacles(dominantAvoidStrategy, hit, hit2, minDist);
+                else 
+                    CheckForObstacles(dominantAvoidStrategy, hit2, hit, minDist);
             }
             else {
                 ChangeAvoidDir(AvoidanceDir.NONE);
@@ -152,12 +147,6 @@ public class TargetMovement : BaseMovement {
 
             yield return new WaitForSeconds(laserInterval);
         }
-    }
-
-    IEnumerator EmergencyBreak() {
-        currentDir = -currentDir;
-        currentDir.Normalize();
-        yield return new WaitForSeconds(0.5f);
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -172,4 +161,22 @@ public class TargetMovement : BaseMovement {
         }
     }
 
+    private void CheckForObstacles(AvoidanceDir firstDir, RaycastHit2D hit1, RaycastHit2D hit2, float obstacleDist) {
+        AvoidanceDir secondDir = firstDir == AvoidanceDir.RIGHT ? AvoidanceDir.LEFT : AvoidanceDir.RIGHT;
+
+        if(hit1.collider != null && (lastAvoidDirTime.Key == firstDir || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
+            AvoidCollision(firstDir, obstacleDist);
+        }
+        else if (hit2.collider != null && (lastAvoidDirTime.Key == secondDir || lastAvoidDirTime.Value + changeAvoidDirMinInterval < Time.realtimeSinceStartup)) {
+            AvoidCollision(secondDir, obstacleDist);
+        }
+        else {
+            ChangeAvoidDir(AvoidanceDir.NONE);
+        }
+    }
+
+    private void AvoidCollision(AvoidanceDir dir, float obstacleDist) {
+        currentDir = Quaternion.Euler(0, 0, Mathf.Lerp(0, 180, 1 - (obstacleDist / eyeAngle)) * (dir == AvoidanceDir.RIGHT ? -1 : 1)) * currentDir;
+        ChangeAvoidDir(dir);
+    }
 }
