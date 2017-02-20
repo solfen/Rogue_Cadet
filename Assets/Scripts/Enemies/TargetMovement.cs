@@ -103,8 +103,11 @@ public class TargetMovement : BaseMovement {
         if (dungeon != null) {
             GraphRoom newRoom = dungeon.GetRoomFromPosition(_transform.position);
             if (newRoom != null && newRoom != currentRoom) {
-                _transform.parent = newRoom.roomInstance.enemiesParent.GetChild(0);
                 currentRoom = newRoom;
+
+                Transform enemiesParent = newRoom.roomInstance.enemiesParent;
+                if(enemiesParent != null && enemiesParent.childCount > 0)
+                    _transform.parent = newRoom.roomInstance.enemiesParent.GetChild(0);
             }
         }
     }
