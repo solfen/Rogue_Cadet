@@ -14,11 +14,9 @@ public class TeleportationMovement : BaseMovement {
     private int currentPoint = 0;
     private float timer = 0;
     private bool isTeleporting = false;
-    public Rigidbody2D _rigidBody;
 
     void Start() {
         timer = teleportInterval;
-        _rigidBody = GetComponent<Rigidbody2D>();
     }
 
     void Update() {
@@ -27,7 +25,7 @@ public class TeleportationMovement : BaseMovement {
             if(timer <= 0) {
                 anim.SetTrigger("Teleport");
                 timer = teleportInterval;
-                _rigidBody.simulated = false;
+                _rigidbody.simulated = false;
                 isTeleporting = true;
                 if(weapon != null) {
                     ((ISwitchable)weapon).SwitchState(false);
@@ -38,7 +36,7 @@ public class TeleportationMovement : BaseMovement {
 
     //Called from animation;
     public void ChangePos() {
-        _rigidBody.simulated = true;
+        _rigidbody.simulated = true;
 
         if (isRandom) {
             _transform.position =  new Vector3(_transform.position.x + Random.Range(-teleportMaxDistance, teleportMaxDistance), _transform.position.y + Random.Range(-teleportMaxDistance, teleportMaxDistance), 0);
@@ -57,6 +55,12 @@ public class TeleportationMovement : BaseMovement {
     }
 
     void OnTriggerEnter2D(Collider2D other) {
+        if (other.tag == "Wall") {
+            ChangePos();
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other) {
         if (other.tag == "Wall") {
             ChangePos();
         }
