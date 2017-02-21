@@ -28,8 +28,6 @@ public class TargetMovement : BaseMovement {
     private Quaternion offset;
     private int eyesMask = 1 << 13;
     private int playerMask = 1 << 10;
-    private Dungeon dungeon;
-    private GraphRoom currentRoom;
     private bool inWall = false;
     private Vector2 colliderSize;
     private Collider2D lastCollider;
@@ -63,11 +61,6 @@ public class TargetMovement : BaseMovement {
     private void Init(Player _player) {
         playerTransform = _player.GetComponent<Transform>();
         player = _player;
-
-        GameObject go = GameObject.FindGameObjectWithTag("Dungeon");
-        if (go != null) {
-            dungeon = go.GetComponent<Dungeon>();
-        }
     }
 
     private void OnPlayerCreated(object playerObj) {
@@ -98,17 +91,6 @@ public class TargetMovement : BaseMovement {
         }
         else {
             _rigidbody.velocity = Vector2.zero;
-        }
-
-        if (dungeon != null) {
-            GraphRoom newRoom = dungeon.GetRoomFromPosition(_transform.position);
-            if (newRoom != null && newRoom != currentRoom) {
-                currentRoom = newRoom;
-
-                Transform enemiesParent = newRoom.roomInstance.enemiesParent;
-                if(enemiesParent != null && enemiesParent.childCount > 0)
-                    _transform.parent = newRoom.roomInstance.enemiesParent.GetChild(0);
-            }
         }
     }
 

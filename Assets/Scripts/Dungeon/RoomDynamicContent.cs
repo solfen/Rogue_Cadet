@@ -10,7 +10,7 @@ using UnityEditor;
 
 public class RoomDynamicContent : MonoBehaviour {
 
-    private List<ContentInstance> content;
+    public List<ContentInstance> content;
 
     #if UNITY_EDITOR
     //take all the childs and transforms it into a list (prefab, pos, rot). Childs are destroyed
