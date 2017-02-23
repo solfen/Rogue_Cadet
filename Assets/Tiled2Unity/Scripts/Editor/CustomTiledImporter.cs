@@ -131,6 +131,9 @@ public class CustomTiledImporter : ICustomTiledImporter {
                 col.x = v1.x;
                 return;
             }
+            else if(v2.x > col.x && v1.x < col.x + col.width) {
+                return;
+            }
         }
 
         ColliderInfo newCol = new ColliderInfo();
@@ -156,6 +159,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     private void MergeX(List<ColliderInfo> colliders) {
+        colliders.Sort((a, b) => (int)(a.x - b.x));
         for (int i = colliders.Count - 1; i > 0; i--) {
             if (colliders[i].x == colliders[i - 1].x + colliders[i - 1].width) {
                 colliders[i - 1].width += colliders[i].width;
@@ -167,7 +171,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
     private void MergeY(List<ColliderInfo> row, List<ColliderInfo> upRow) {
         for (int i = row.Count - 1; i >= 0; i--) {
             for (int j = upRow.Count - 1; j >= 0; j--) {
-                if (row[i].x == upRow[j].x && row[i].width == upRow[j].width) {
+                if (row[i].x == upRow[j].x && row[i].width == upRow[j].width && upRow[j].y - upRow[j].height == row[i].y) {
                     row[i].y = upRow[j].y;
                     row[i].height += upRow[j].height;
                     upRow.RemoveAt(j);
