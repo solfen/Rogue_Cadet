@@ -14,18 +14,15 @@ public class ColliderInfo {
 [CustomTiledImporterAttribute]
 public class CustomTiledImporter : ICustomTiledImporter {
 
-    private List<ColliderInfo> colliders = new List<ColliderInfo>();
     private List<Exit> exits = new List<Exit>();
     private float mapWidth;
     private float mapHeight;
+    private float topBorderMaxVerticeX = 0;
+    private float bottomBorderMaxVerticeX = 0;
     private float leftBorderMinVerticeY = 0;
     private float rightBorderMinVerticeY = 0;
     private int zoneNb = -1;
-    private Dictionary<float, List<ColliderInfo>> collidersNew = new Dictionary<float, List<ColliderInfo>>();
-
-    private bool CheckColliderPos(int i, float tileWidth, float tileHeight) {
-        return colliders[i].x > 0 && colliders[i].x + colliders[i].width < tileWidth && colliders[i].y > 0 && colliders[i].y < tileHeight;
-    }
+    private Dictionary<float, List<ColliderInfo>> colliders = new Dictionary<float, List<ColliderInfo>>();
 
     public void CustomizePrefab(GameObject prefab) {
         Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone" + zoneNb + "/" + prefab.name + ".prefab");
@@ -72,7 +69,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
         foreach(KeyValuePair<string, string> elem in props) {
             if(elem.Key == "obstaclesLayer") {
-                GetCollidersAndExit(layer);
+                GetCollidersAndExits(layer);
             }
             else if(elem.Key == "zoneNb") {
                 zoneNb = int.Parse(elem.Value);
@@ -80,65 +77,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
         }
     }
 
-    private void FindAndUpdateColliderBasedOnVertices(Vector3 v1, Vector3 v2) {
-        for (int i = 0; i < collidersNew[v1.y].Count; i++) {
-            ColliderInfo col = collidersNew[v1.y][i];
-            if (v1.x == col.x + col.width) {
-                col.width += (v2.x - v1.x);
-                return;
-            }
-            else if(v2.x == col.x) {
-                col.width += (col.x - v1.x);
-                col.x = v1.x;
-                return;
-            }
-        }
-
-        ColliderInfo newCol = new ColliderInfo();
-        newCol.x = v1.x;
-        newCol.y = v1.y;
-        newCol.width = v2.x - v1.x;
-        newCol.height = 1;
-
-        collidersNew[v1.y].Add(newCol);
-    }
-
-    private void MergeColliders() {
-        var enumerator = collidersNew.Values.GetEnumerator();
-        enumerator.MoveNext();
-        List<ColliderInfo> previousRow = enumerator.Current;
-        MergeX(previousRow);
-
-        while (enumerator.MoveNext()) {
-            MergeX(enumerator.Current);
-            MergeY(enumerator.Current, previousRow);
-            previousRow = enumerator.Current;
-        }
-    }
-
-    private void MergeX(List<ColliderInfo> colliders) {
-        for(int i = colliders.Count - 1; i > 0; i--) {
-            if(colliders[i].x == colliders[i-1].x + colliders[i-1].width) {
-                colliders[i - 1].width += colliders[i].width;
-                colliders.RemoveAt(i);
-            }
-        }
-    }
-
-    private void MergeY(List<ColliderInfo> row, List<ColliderInfo> upRow) {
-        for (int i = row.Count - 1; i >= 0; i--) {
-            for(int j = upRow.Count - 1; j >= 0; j--) {
-                if (row[i].x == upRow[j].x && row[i].width == upRow[j].width) {
-                    row[i].y = upRow[j].y;
-                    row[i].height += upRow[j].height;
-                    upRow.RemoveAt(j);
-                    break;
-                }
-            }
-        }
-    }
-
-    private void GetCollidersAndExit(GameObject layer) {
+    private void GetCollidersAndExits(GameObject layer) {
         if (layer.GetComponentInChildren<MeshFilter>() == null) {
             Debug.LogError("no obstacle mesh!");
             return;
@@ -146,16 +85,19 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
         Vector3[] vertices = layer.GetComponentInChildren<MeshFilter>().sharedMesh.vertices;
         int[] triangles = layer.GetComponentInChildren<MeshFilter>().sharedMesh.triangles;
-        Debug.Log(layer.GetComponentInChildren<MeshFilter>().sharedMesh.subMeshCount);
-        for( int i = 1; i < triangles.Length; i+=3) {
+        mapWidth = layer.transform.parent.GetComponent<TiledMap>().NumTilesWide;
+        mapHeight = layer.transform.parent.GetComponent<TiledMap>().NumTilesHigh;
+
+        for ( int i = 1; i < triangles.Length; i+=3) {
             Vector3 v1 = vertices[triangles[i]];
             Vector3 v2 = vertices[triangles[i+1]];
 
-            if(!collidersNew.ContainsKey(v1.y)) {
-                collidersNew.Add(v1.y, new List<ColliderInfo>());
+            if(!colliders.ContainsKey(v1.y)) {
+                colliders.Add(v1.y, new List<ColliderInfo>());
             }
 
             FindAndUpdateColliderBasedOnVertices(v1, v2);
+            FindRoomExit(vertices[triangles[i-1]]);
 
             //Debug.Log(vertices[triangles[i-1]].x + ":" + vertices[triangles[i-1]].y + " , " + v1.x + ":" + v1.y + " , " + v2.x + ":" + v2.y);
         }
@@ -163,7 +105,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
         MergeColliders();
 
         GameObject collidersObj = new GameObject("colliders");
-        foreach (KeyValuePair<float, List<ColliderInfo>> elem in collidersNew) {
+        foreach (KeyValuePair<float, List<ColliderInfo>> elem in colliders) {
             for(int i = 0; i < elem.Value.Count; i++) {
                 ColliderInfo colData = elem.Value[i];
                 BoxCollider2D col = collidersObj.AddComponent<BoxCollider2D>();
@@ -177,17 +119,62 @@ public class CustomTiledImporter : ICustomTiledImporter {
         collidersObj.transform.parent = layer.transform;
     }
 
-    private void AddColliderLine(float x, float width, float y) {
-        ColliderInfo currentCollider = colliders.Find(collider => collider.x == x && collider.width == width && collider.height == y - 1 - collider.y);
-        if (currentCollider == null) {
-            currentCollider = new ColliderInfo();
-            currentCollider.x = x;
-            currentCollider.width = width;
-            currentCollider.y = y - 1;
-            colliders.Add(currentCollider);
+    private void FindAndUpdateColliderBasedOnVertices(Vector3 v1, Vector3 v2) {
+        for (int i = 0; i < colliders[v1.y].Count; i++) {
+            ColliderInfo col = colliders[v1.y][i];
+            if (v1.x == col.x + col.width) {
+                col.width += (v2.x - v1.x);
+                return;
+            }
+            else if (v2.x == col.x) {
+                col.width += (col.x - v1.x);
+                col.x = v1.x;
+                return;
+            }
         }
 
-        currentCollider.height = y - currentCollider.y;
+        ColliderInfo newCol = new ColliderInfo();
+        newCol.x = v1.x;
+        newCol.y = v1.y;
+        newCol.width = v2.x - v1.x;
+        newCol.height = 1;
+
+        colliders[v1.y].Add(newCol);
+    }
+
+    private void MergeColliders() {
+        var enumerator = colliders.Values.GetEnumerator();
+        enumerator.MoveNext();
+        List<ColliderInfo> previousRow = enumerator.Current;
+        MergeX(previousRow);
+
+        while (enumerator.MoveNext()) {
+            MergeX(enumerator.Current);
+            MergeY(enumerator.Current, previousRow);
+            previousRow = enumerator.Current;
+        }
+    }
+
+    private void MergeX(List<ColliderInfo> colliders) {
+        for (int i = colliders.Count - 1; i > 0; i--) {
+            if (colliders[i].x == colliders[i - 1].x + colliders[i - 1].width) {
+                colliders[i - 1].width += colliders[i].width;
+                colliders.RemoveAt(i);
+            }
+        }
+    }
+
+    private void MergeY(List<ColliderInfo> row, List<ColliderInfo> upRow) {
+        for (int i = row.Count - 1; i >= 0; i--) {
+            for (int j = upRow.Count - 1; j >= 0; j--) {
+                if (row[i].x == upRow[j].x && row[i].width == upRow[j].width) {
+                    row[i].y = upRow[j].y;
+                    row[i].height += upRow[j].height;
+                    upRow.RemoveAt(j);
+                    break;
+                }
+            }
+        }
     }
 
     private void CreateExitFromPos(float verticeX, float verticeY, bool isHorizontal) {
@@ -198,21 +185,30 @@ public class CustomTiledImporter : ICustomTiledImporter {
         exits.Add(exit);
     }
 
-    private void FindRoomExit(Vector3 vertice, float previousX) {
-        if (vertice.x == previousX + 6 && (vertice.y == -1 || vertice.y == -mapHeight)) { //horizontal gap
-            CreateExitFromPos(vertice.x, vertice.y == -1 ? 1 : vertice.y, true);
+    //this is ugly, I'm pretty sure it could be factorized. But hey, that way it's dead simple
+    private void FindRoomExit(Vector3 vertice) {
+        if (vertice.y == -1) { //vertice on top border
+            if(vertice.x == topBorderMaxVerticeX + 7)
+                CreateExitFromPos(vertice.x, 1, true);
+
+            topBorderMaxVerticeX = Mathf.Max(topBorderMaxVerticeX, vertice.x);
         }
+        else if(vertice.y == -mapHeight) { //vertice on bottom border
+            if (vertice.x == bottomBorderMaxVerticeX + 7)
+                CreateExitFromPos(vertice.x, vertice.y, true);
+
+            bottomBorderMaxVerticeX = Mathf.Max(bottomBorderMaxVerticeX, vertice.x);
+        }
+
         if (vertice.x == 0) { // vertice is on left border
-            if (vertice.y == leftBorderMinVerticeY - 7) {
+            if (vertice.y == leftBorderMinVerticeY - 7)
                 CreateExitFromPos(vertice.x, vertice.y, false);
-            }
 
             leftBorderMinVerticeY = Mathf.Min(leftBorderMinVerticeY, vertice.y);
         }
-        else if (vertice.x == mapWidth) { // vertice is on right border
-            if (vertice.y == rightBorderMinVerticeY - 6) {
-                CreateExitFromPos(vertice.x+1, vertice.y, false);
-            }
+        else if (vertice.x == mapWidth-1) { // vertice is on right border
+            if (vertice.y == rightBorderMinVerticeY - 7)
+                CreateExitFromPos(vertice.x+2, vertice.y, false);
 
             rightBorderMinVerticeY = Mathf.Min(rightBorderMinVerticeY, vertice.y);
         }
