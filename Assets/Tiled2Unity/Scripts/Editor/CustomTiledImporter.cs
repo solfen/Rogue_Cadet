@@ -23,6 +23,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
     private float rightBorderMinVerticeY = 0;
     private int zoneNb = -1;
     private Dictionary<float, List<ColliderInfo>> colliders = new Dictionary<float, List<ColliderInfo>>();
+    private List<ColliderInfo> collidersList = new List<ColliderInfo>();
 
     public void CustomizePrefab(GameObject prefab) {
         Transform existingPrefab = AssetDatabase.LoadAssetAtPath<Transform>("Assets/Prefabs/Rooms/Zone" + zoneNb + "/" + prefab.name + ".prefab");
@@ -66,10 +67,10 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     public void HandleCustomProperties(GameObject layer, IDictionary<string, string> props) {
-
         foreach(KeyValuePair<string, string> elem in props) {
             if(elem.Key == "obstaclesLayer") {
-                GetCollidersAndExits(layer);
+                GetColliders(layer);
+                FindRoomExits();
             }
             else if(elem.Key == "zoneNb") {
                 zoneNb = int.Parse(elem.Value);
@@ -77,7 +78,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
         }
     }
 
-    private void GetCollidersAndExits(GameObject layer) {
+    private void GetColliders(GameObject layer) {
         if (layer.GetComponentInChildren<MeshFilter>() == null) {
             Debug.LogError("no obstacle mesh!");
             return;
@@ -97,7 +98,6 @@ public class CustomTiledImporter : ICustomTiledImporter {
             }
 
             FindAndUpdateColliderBasedOnVertices(v1, v2);
-            FindRoomExit(vertices[triangles[i-1]]);
 
             //Debug.Log(vertices[triangles[i-1]].x + ":" + vertices[triangles[i-1]].y + " , " + v1.x + ":" + v1.y + " , " + v2.x + ":" + v2.y);
         }
@@ -111,6 +111,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
                 BoxCollider2D col = collidersObj.AddComponent<BoxCollider2D>();
                 col.offset = new Vector2(colData.x + colData.width / 2, (colData.y - colData.height / 2));
                 col.size = new Vector2(colData.width, colData.height);
+                collidersList.Add(colData);
             }
         }
 
@@ -190,31 +191,25 @@ public class CustomTiledImporter : ICustomTiledImporter {
     }
 
     //this is ugly, I'm pretty sure it could be factorized. But hey, that way it's dead simple
-    private void FindRoomExit(Vector3 vertice) {
-        if (vertice.y == -1) { //vertice on top border
-            if(vertice.x == topBorderMaxVerticeX + 7)
-                CreateExitFromPos(vertice.x, 1, true);
+    private void FindRoomExits() {
 
-            topBorderMaxVerticeX = Mathf.Max(topBorderMaxVerticeX, vertice.x);
-        }
-        else if(vertice.y == -mapHeight) { //vertice on bottom border
-            if (vertice.x == bottomBorderMaxVerticeX + 7)
-                CreateExitFromPos(vertice.x, vertice.y, true);
+        for(int i = 0; i < collidersList.Count; i++) {
+            for(int j = 0; j < collidersList.Count; j++) {
+                ColliderInfo col1 = collidersList[i], col2 = collidersList[j];
+                if (col1.y == 0 && col2.y == 0 && col1.x + col1.width == col2.x-6) {
+                    CreateExitFromPos(col2.x, 1, true);
+                }
+                else if(col1.y - col1.height == -mapHeight && col2.y - col2.height == -mapHeight && col1.x + col1.width == col2.x - 6) {
+                    CreateExitFromPos(col2.x, -mapHeight, true);
+                }
 
-            bottomBorderMaxVerticeX = Mathf.Max(bottomBorderMaxVerticeX, vertice.x);
-        }
-
-        if (vertice.x == 0) { // vertice is on left border
-            if (vertice.y == leftBorderMinVerticeY - 7)
-                CreateExitFromPos(vertice.x, vertice.y, false);
-
-            leftBorderMinVerticeY = Mathf.Min(leftBorderMinVerticeY, vertice.y);
-        }
-        else if (vertice.x == mapWidth-1) { // vertice is on right border
-            if (vertice.y == rightBorderMinVerticeY - 7)
-                CreateExitFromPos(vertice.x+2, vertice.y, false);
-
-            rightBorderMinVerticeY = Mathf.Min(rightBorderMinVerticeY, vertice.y);
+                if (col1.x == 0 && col2.x == 0 && col1.y - col1.height == col2.y + 6) {
+                    CreateExitFromPos(0, col2.y, false);
+                }
+                else if(col1.x + col1.width == mapWidth && col2.x + col2.width == mapWidth && col1.y - col1.height == col2.y + 6) {
+                    CreateExitFromPos(mapWidth+1, col2.y, false);
+                }
+            } 
         }
     }
 }
