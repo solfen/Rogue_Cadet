@@ -16,7 +16,6 @@ public class SaveRoomPrefab {
         Room room = Selection.activeTransform.root.GetComponent<Room>();
         SaveDynamicContent(room);
         SaveEnemiesPacks(room);
-        room.debug = false;
 
         PrefabUtility.ReplacePrefab(room.gameObject, PrefabUtility.GetPrefabParent(room.gameObject), ReplacePrefabOptions.ConnectToPrefab);
 
@@ -53,7 +52,8 @@ public class SaveRoomPrefab {
     private static void RestoreSceneRoomPreviousState(Room room) {
         for (int i = 0; i < lastRoomContents.Length; i++) {
             lastRoomContents[i].gameObject.SetActive(true);
-            lastRoomContents[i].ListToContent();
         }
+
+        room.debug = true;
     }
 }
