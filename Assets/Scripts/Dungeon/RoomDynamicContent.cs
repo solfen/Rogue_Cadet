@@ -48,11 +48,24 @@ public class RoomDynamicContent : MonoBehaviour {
             DestroyImmediate(child.gameObject);
         }
     }
+
+    void OnDisable() {
+        if(!gameObject.activeSelf)
+            DestroyAllChilds();
+    }
+
+    void OnEnable() {
+        if (gameObject.activeSelf) {
+            DestroyAllChilds();
+            ListToContent();
+        }
+    }
     #endif
 
     // Use this for initialization
     void Start() {
-        ListToContent();
+        DestroyAllChilds();
+        ListToContent(); 
     }
 
     //take the content list and make childs based on it
@@ -62,6 +75,14 @@ public class RoomDynamicContent : MonoBehaviour {
                 GameObject child = Instantiate(content[i].prefab, transform, false) as GameObject;
                 child.transform.localPosition = content[i].position;
                 child.transform.localRotation = content[i].rotation;
+            }
+        }
+    }
+
+    private void DestroyAllChilds() {
+        if (transform.childCount != 0) {
+            for (int i = transform.childCount - 1; i >= 0; i--) {
+                DestroyImmediate(transform.GetChild(i).gameObject);
             }
         }
     }
