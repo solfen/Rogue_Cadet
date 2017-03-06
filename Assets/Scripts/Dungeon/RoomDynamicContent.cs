@@ -55,7 +55,7 @@ public class RoomDynamicContent : MonoBehaviour {
     }
 
     void OnEnable() {
-        if (gameObject.activeSelf) {
+        if (gameObject.activeSelf && content != null && content.Count != 0) {
             DestroyAllChilds();
             ListToContent();
         }
@@ -63,10 +63,12 @@ public class RoomDynamicContent : MonoBehaviour {
     #endif
 
     // Use this for initialization
+    #if !UNITY_EDITOR
     void Start() {
         DestroyAllChilds();
         ListToContent(); 
     }
+    #endif
 
     //take the content list and make childs based on it
     public void ListToContent() {
@@ -86,6 +88,7 @@ public class RoomDynamicContent : MonoBehaviour {
             }
         }
     }
+
 }
 
 [System.Serializable]
