@@ -63,7 +63,7 @@ public class CustomTiledImporter : ICustomTiledImporter {
             PrefabUtility.CreatePrefab("Assets/Prefabs/Rooms/Zone" + zoneNb + "/" + prefab.name + ".prefab", roomGameObject);
         }
 
-        Object.DestroyImmediate(roomGameObject);
+        //Object.DestroyImmediate(roomGameObject);
     }
 
     public void HandleCustomProperties(GameObject layer, IDictionary<string, string> props) {
@@ -192,7 +192,6 @@ public class CustomTiledImporter : ICustomTiledImporter {
 
     //this is ugly, I'm pretty sure it could be factorized. But hey, that way it's dead simple
     private void FindRoomExits() {
-
         for(int i = 0; i < collidersList.Count; i++) {
             for(int j = 0; j < collidersList.Count; j++) {
                 ColliderInfo col1 = collidersList[i], col2 = collidersList[j];
@@ -204,10 +203,12 @@ public class CustomTiledImporter : ICustomTiledImporter {
                 }
 
                 if (col1.x == 0 && col2.x == 0 && col1.y - col1.height == col2.y + 6) {
+                    Debug.Log(col1.y + ":" + col1.height + "  ,  " + col2.y + ":"  + col2.height);
                     CreateExitFromPos(0, col2.y, false);
                 }
                 else if(col1.x + col1.width == mapWidth && col2.x + col2.width == mapWidth && col1.y - col1.height == col2.y + 6) {
                     CreateExitFromPos(mapWidth+1, col2.y, false);
+                    Debug.Log(col1.y + ":" + col1.height + "  ,  " + col2.y + ":" + col2.height);
                 }
             } 
         }
