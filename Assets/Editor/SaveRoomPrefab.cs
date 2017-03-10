@@ -8,12 +8,13 @@ public class SaveRoomPrefab {
     private static RoomDynamicContent[] lastRoomContents;
     [MenuItem("Tools/Save room to prefab _F5", true)]
     private static bool Validate() {
-        return Selection.activeGameObject != null && Selection.activeTransform.root.GetComponent<Room>() != null;
+        return Selection.activeGameObject != null && Selection.activeTransform != null && Selection.activeTransform.root.GetComponent<Room>() != null;
     }
 
     [MenuItem("Tools/Save room to prefab _F5")]
     private static void AddRoomsToDungeon() {
         Room room = Selection.activeTransform.root.GetComponent<Room>();
+        room.debug = false;
         SaveDynamicContent(room);
         SaveEnemiesPacks(room);
 
