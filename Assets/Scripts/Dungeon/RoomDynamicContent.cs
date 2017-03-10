@@ -50,12 +50,12 @@ public class RoomDynamicContent : MonoBehaviour {
     }
 
     void OnDisable() {
-        if(!gameObject.activeSelf)
+        if(!gameObject.activeSelf && !EditorApplication.isPlaying)
             DestroyAllChilds();
     }
 
     void OnEnable() {
-        if (gameObject.activeSelf && content != null && content.Count != 0) {
+        if (gameObject.activeSelf && content != null && content.Count != 0 && !EditorApplication.isPlaying) {
             DestroyAllChilds();
             ListToContent();
         }
@@ -63,12 +63,12 @@ public class RoomDynamicContent : MonoBehaviour {
     #endif
 
     // Use this for initialization
-    #if !UNITY_EDITOR
+
     void Start() {
         DestroyAllChilds();
         ListToContent(); 
     }
-    #endif
+
 
     //take the content list and make childs based on it
     public void ListToContent() {
