@@ -44,8 +44,6 @@ public class SaveRoomToDungeonTool {
     }
 
     private static void RoomToDungeon(Room newRoom, Dungeon dungeon) {
-        newRoom.debug = false;
-
         Undo.RecordObject(dungeon, "Add room to dungeon");
 
         while (dungeon.zoneRooms.Count <= newRoom.zoneIndex) {
