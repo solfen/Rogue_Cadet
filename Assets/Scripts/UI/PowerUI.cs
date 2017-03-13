@@ -29,7 +29,12 @@ public class PowerUI : MonoBehaviour {
     private void ManaChanged(object useless) {
         manaText.text = (int)power.mana + "/" + power.maxMana;
 
-        StartCoroutine(FillLoadBar());
+        if(power.mana >= power.manaCost) {
+            StartCoroutine(FillLoadBar());
+        }
+        else {
+            specialLoad.value = 0;
+        }
     }
 
     IEnumerator FillLoadBar() {
