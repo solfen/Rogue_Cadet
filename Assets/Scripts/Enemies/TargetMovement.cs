@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class TargetMovement : BaseMovement {
 
+    [SerializeField] private bool enabledAtStart = true;
     [Range(0, 360)]
     [SerializeField]
     private float angleOffset;
@@ -34,6 +35,8 @@ public class TargetMovement : BaseMovement {
     private float normalPerpendicularDir;
 
     protected override void Awake() {
+        enabled = enabledAtStart;
+
         base.Awake();
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
 
@@ -65,7 +68,7 @@ public class TargetMovement : BaseMovement {
 
     private void OnPlayerCreated(object playerObj) {
         Init((Player)playerObj);
-        enabled = true;
+        enabled = enabledAtStart;
         canSwitch = true;
     }
 
