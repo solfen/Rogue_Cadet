@@ -13,6 +13,7 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
 
     void Start() {
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
+        EventDispatcher.AddEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
 
         GameObject go = GameObject.FindGameObjectWithTag("Player");
         if (go == null) {
@@ -27,6 +28,7 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         EventDispatcher.RemoveEventListener(Events.PLAYER_CREATED, OnPlayerCreated);
+        EventDispatcher.RemoveEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
     }
 
     private void OnPlayerCreated(object playerObj) {
@@ -34,14 +36,13 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
         Init(((Player)playerObj).GetComponent<Transform>());
     }
 
-    private void Init(Transform player) {
+    private void Init(Transform _player) {
+        player = _player;
         GameObject find = GameObject.FindGameObjectWithTag("BulletsContainer");
         if (find != null)
             bulletsParent = find.transform;
 
-        for (int i = 0; i < bulletsFountains.Count; i++) {
-            bulletsFountains[i].Init(player, bulletsParent, 1);
-        }
+        InitBulletFountains();
 
         canSwitch = true;
     }
@@ -57,5 +58,17 @@ public class WeaponEnemies : MonoBehaviour, ISwitchable {
                 bulletsFountains[i].SetFiring(fire);
             }
         }
+    }
+
+    private void InitBulletFountains() {
+        float dmgMultiplier = PlayerPrefs.GetFloat("EnemiesBulletsDmgMultiplier", 1);
+        float fireSpeedMultiplier = PlayerPrefs.GetFloat("EnemiesFireSpeedMultiplier", 1);
+        for (int i = 0; i < bulletsFountains.Count; i++) {
+            bulletsFountains[i].Init(player, bulletsParent, dmgMultiplier, fireSpeedMultiplier);
+        }
+    }
+
+    private void DifficultyChanged(object useless) {
+        InitBulletFountains();
     }
 }

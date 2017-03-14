@@ -40,6 +40,7 @@ public enum Events {
     MANA_POTION_TAKEN,
     INPUT_DEVICE_CHANGED,
     SCREEN_SHAKE_MODIFIER_CHANGED,
+    DIFFICULTY_CHANGED,
 }
 
 public static class EventDispatcher {
@@ -82,6 +83,7 @@ public static class EventDispatcher {
         { Events.MANA_POTION_TAKEN,  null },
         { Events.INPUT_DEVICE_CHANGED,  null },
         { Events.SCREEN_SHAKE_MODIFIER_CHANGED,  null },
+        { Events.DIFFICULTY_CHANGED,  null },
     };
 
 

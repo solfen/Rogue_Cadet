@@ -17,11 +17,20 @@ public class Enemy : MonoBehaviour {
     private SpriteRenderer spriteRender;
     private Animator anim;
     private Color initialColor;
+    private float difficultyLifeMultiplier;
 
     void Start() {
         spriteRender = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         initialColor = spriteRender.color;
+        difficultyLifeMultiplier = PlayerPrefs.GetFloat("EnemiesLifeMultiplier", 1);
+        life *= difficultyLifeMultiplier;
+
+        EventDispatcher.AddEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
     }
 
     void OnTriggerEnter2D(Collider2D other) {
@@ -87,5 +96,11 @@ public class Enemy : MonoBehaviour {
         Destroy(gameObject, 0.6f);
 
         enabled = false;
+    }
+
+    private void DifficultyChanged(object useless) {
+        float newMultiplier = PlayerPrefs.GetFloat("EnemiesLifeMultiplier", 1);
+        life = newMultiplier * life / difficultyLifeMultiplier;
+        difficultyLifeMultiplier = newMultiplier;
     }
 }

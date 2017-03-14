@@ -23,6 +23,7 @@ public class Player : MonoBehaviour {
     private GraphRoom newRoom;
     private BoxCollider2D _collider;
     private Color initalColor;
+    private float difficultyLifeMultiplier;
 
     public float invincibiltyTimer;
 
@@ -31,12 +32,13 @@ public class Player : MonoBehaviour {
         _collider = GetComponent<BoxCollider2D>();
         anim = sprite.GetComponent<PlayerCustomAnimator>();
         spriteRender = sprite.GetComponent<SpriteRenderer>();
+        difficultyLifeMultiplier = PlayerPrefs.GetFloat("PlayerLifeMultiplier", 1);
 
         gameData = GlobalData.instance.gameData;
         SaveData saveData = GlobalData.instance.saveData;
         ShipConfig config = gameData.ships[saveData.selectedShip];
 
-        maxLife = gameData.shipBaseStats.maxLife * (config.lifePrecent + saveData.lifeUpgradeNb * config.lifeUpgradeRaise);
+        maxLife = gameData.shipBaseStats.maxLife * (config.lifePrecent + saveData.lifeUpgradeNb * config.lifeUpgradeRaise) * difficultyLifeMultiplier;
         _collider.size = gameData.shipBaseStats.hitboxSize * (config.hitboxSizePercent - saveData.hitboxUpgradeNb * config.hitboxUpgradeRaise);
         currentInvicibiltyDuration = gameData.shipBaseStats.invicibiltyDuration * config.invicibiltyDurationPercent;
 
@@ -44,7 +46,12 @@ public class Player : MonoBehaviour {
 
         initalColor = spriteRender.color;
 
+        EventDispatcher.AddEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
         EventDispatcher.DispatchEvent(Events.PLAYER_CREATED, this);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
     }
 
     public void Init(Dungeon _dungeon) {
@@ -124,5 +131,12 @@ public class Player : MonoBehaviour {
         Time.timeScale = 0.2f;
         EventDispatcher.DispatchEvent(Events.PLAYER_DIED, null);
         Destroy(gameObject, 2);
+    }
+
+    private void DifficultyChanged(object useless) {
+        float newMultiplier = PlayerPrefs.GetFloat("PlayerLifeMultiplier", 1);
+        maxLife = newMultiplier * maxLife / difficultyLifeMultiplier;
+        currentLife = newMultiplier * currentLife / difficultyLifeMultiplier;
+        difficultyLifeMultiplier = newMultiplier;
     }
 }

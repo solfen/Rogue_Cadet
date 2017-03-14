@@ -29,12 +29,19 @@ public class BulletFountain : MonoBehaviour {
     private Transform playerPos;
     private Player player;
     private float volleyTimer;
+    private float fireSpeed;
+    private float baseBulletDmg;
+    
+    void Awake() {
+        baseBulletDmg = bulletStats.damage;
+    }
 
-    public void Init(Transform _playerPos, Transform bulletParent, float damageMultiplier) {
+    public void Init(Transform _playerPos, Transform bulletParent, float damageMultiplier, float fireSpeedMultiplier = 1) {
+        fireSpeed = fireSpeedMultiplier;
         playerPos = _playerPos;
         player = playerPos != null ? playerPos.GetComponent<Player>() : null;
         bulletStats.parent = bulletParent;
-        bulletStats.damage *= damageMultiplier;
+        bulletStats.damage = baseBulletDmg * damageMultiplier;
     }
 
     public void SetFiring(bool fire) {
@@ -53,7 +60,7 @@ public class BulletFountain : MonoBehaviour {
 
     IEnumerator FireRoutine() {
         while (true) {
-            if (volleyTimer <= 0 && !(pattern.targetPlayer && player.isInvisible)) {
+            if (volleyTimer < 0 && !(pattern.targetPlayer && player.isInvisible)) {
                 float angleOffset = pattern.angleStart;
                 float angleIncrease = pattern.angleBetweenBullets;
 
@@ -76,7 +83,7 @@ public class BulletFountain : MonoBehaviour {
                         float timer = pattern.delayBetweenBullets;
                         while (timer >= 0) {
                             yield return null;
-                            timer -= Time.deltaTime;
+                            timer -= Time.deltaTime * fireSpeed;
                         }
                     }
 
@@ -90,7 +97,7 @@ public class BulletFountain : MonoBehaviour {
                 volleyTimer = pattern.volleyInterval;
             }
 
-            volleyTimer -= Time.deltaTime;
+            volleyTimer -= Time.deltaTime * fireSpeed;
             yield return null;
         }
     }
