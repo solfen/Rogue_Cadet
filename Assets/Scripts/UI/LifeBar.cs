@@ -9,7 +9,6 @@ public class LifeBar : MonoBehaviour {
     [SerializeField] private Slider lifeBar;
 
     private Player player;
-    private float maxLife;
 
     void Awake() {
         EventDispatcher.AddEventListener(Events.PLAYER_CREATED, OnPlayerCreation);
@@ -22,15 +21,14 @@ public class LifeBar : MonoBehaviour {
 
     private void OnPlayerCreation(object playerObj) {
         player = (Player)playerObj;
-        maxLife = player.maxLife;
         enabled = true;
     }
 
 
     void Update () {
         if(player != null) {
-            lifeBar.value = player.currentLife / maxLife;
-            text.text = Mathf.Max((int)(player.currentLife), 0) + "/" + maxLife;
+            lifeBar.value = player.currentLife / player.maxLife;
+            text.text = Mathf.Max((int)(player.currentLife), 0) + "/" + ((int)player.maxLife);
         }
 	}
 }

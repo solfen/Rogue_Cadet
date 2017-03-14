@@ -4,6 +4,7 @@ using System.Collections;
 
 public class MainMenuPanes : MonoBehaviour {
 
+    [SerializeField] private MainMenuPanes mainMenuPaneParent;
     private Animator anim;
     private bool isOpen = false;
     private GameObject lastSelected;
@@ -25,6 +26,10 @@ public class MainMenuPanes : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         anim.SetTrigger("Open");
         isOpen = true;
+
+        if (mainMenuPaneParent != null) {
+            mainMenuPaneParent.enabled = false;
+        }
     }
 
     private void Close() {
@@ -32,5 +37,11 @@ public class MainMenuPanes : MonoBehaviour {
         EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         anim.SetTrigger("Close");
         isOpen = false;
+
+        if (mainMenuPaneParent != null) {
+            mainMenuPaneParent.enabled = true;
+            if (Input.GetButtonDown("Start"))
+                mainMenuPaneParent.Close();
+        }
     }
 }
