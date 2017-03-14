@@ -12,6 +12,7 @@ public class MiniMap : MonoBehaviour {
     public RectTransform specialIconPrefab;
     public RectTransform exitPrefab;
     public Transform roomsParent;
+    public RectTransform playerIconPos;
     public float scale;
     public Vector2 smallMapSize;
 
@@ -57,7 +58,14 @@ public class MiniMap : MonoBehaviour {
 
     void Update() {
         if (playerTransform != null) {
-            roomparentTransform.anchoredPosition = -playerTransform.position * scale;
+            if (currentMapSize == smallMapSize) {
+                playerIconPos.anchoredPosition = Vector2.zero;
+                roomparentTransform.anchoredPosition = -playerTransform.position * scale;
+            }
+            else {
+                roomparentTransform.anchoredPosition = -bigMapSize / 2;
+                playerIconPos.anchoredPosition = (Vector2)playerTransform.position * scale - (bigMapSize / 2);
+            }
 
             if (Time.timeScale != 0 && Input.GetButtonDown("Map")) {
                 currentMapSize = currentMapSize == smallMapSize ? bigMapSize : smallMapSize;
