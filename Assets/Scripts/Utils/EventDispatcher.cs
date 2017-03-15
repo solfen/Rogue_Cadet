@@ -41,6 +41,8 @@ public enum Events {
     INPUT_DEVICE_CHANGED,
     SCREEN_SHAKE_MODIFIER_CHANGED,
     DIFFICULTY_CHANGED,
+    SCENE_CHANGED,
+    SPECIAL_POWER_COOLDOWN_END
 }
 
 public static class EventDispatcher {
@@ -84,6 +86,8 @@ public static class EventDispatcher {
         { Events.INPUT_DEVICE_CHANGED,  null },
         { Events.SCREEN_SHAKE_MODIFIER_CHANGED,  null },
         { Events.DIFFICULTY_CHANGED,  null },
+        { Events.SCENE_CHANGED,  null },
+        { Events.SPECIAL_POWER_COOLDOWN_END,  null },
     };
 
 

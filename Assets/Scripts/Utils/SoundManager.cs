@@ -30,12 +30,10 @@ public class GenericSound {
 public class SoundManager : MonoBehaviour {
 
     public List<GenericSound> soundsList;
-    public static SoundManager instance;
 
     private Dictionary<GenericSoundsEnum, AudioSource> sounds = new Dictionary<GenericSoundsEnum, AudioSource>();
 
 	void Awake () {
-        instance = this;
         for(int i = 0; i < soundsList.Count; i++) {
             sounds.Add(soundsList[i].key, soundsList[i].value);
         }
@@ -46,6 +44,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
         EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
         EventDispatcher.AddEventListener(Events.OPEN_UI_PANE, PlayOpenPaneSound);
@@ -62,6 +61,7 @@ public class SoundManager : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.PLAYER_HIT, PlayPlayerHitSound);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_START, PlayCantDoSound);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, PlayActivateSound);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_COOLDOWN_END, PlayActivateSound);
         EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED_IN_COOLDOWN, PlayCantDoSound);
         EventDispatcher.RemoveEventListener(Events.COLLECTIBLE_TAKEN, PlayCollectibleSound);
         EventDispatcher.RemoveEventListener(Events.OPEN_UI_PANE, PlayOpenPaneSound);
