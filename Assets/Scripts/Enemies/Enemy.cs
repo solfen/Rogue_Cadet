@@ -6,6 +6,7 @@ public class Enemy : MonoBehaviour {
 
     public float life;
     public float score;
+    public float shakeAmplitudeMultiplier = 1;
     public GenericSoundsEnum explosionSound;
     public SpawnEnemies deathSpawn;
 

@@ -62,8 +62,8 @@ public class ScreenShake : MonoBehaviour {
         }
     }
 
-    public void StartExplosionShake(object useless) {
-        StartCoroutine(Shake(configs[ScreenShakeTypes.EXPLOSION]));
+    public void StartExplosionShake(object enemy) {
+        StartCoroutine(Shake(configs[ScreenShakeTypes.EXPLOSION], null, ((Enemy)enemy).shakeAmplitudeMultiplier));
     }
 
     public void StartPlayerDeathShake(object useless) {
@@ -74,13 +74,13 @@ public class ScreenShake : MonoBehaviour {
         StartCoroutine(Shake(configs[ScreenShakeTypes.PLAYER_HIT]));
     }
 
-    IEnumerator Shake(ScreenShakeConfig config, Vector3? dir = null) {
+    IEnumerator Shake(ScreenShakeConfig config, Vector3? dir = null, float intensityMultiplier = 1) {
         float timer = 0;
         float lastTime = Time.unscaledTime;
 
         do {
             Vector3 random = dir != null ? (Vector3)dir : (Vector3)Random.insideUnitCircle;
-            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude * amplitudeMultiplier;
+            _transform.position += random * config.curve.Evaluate(timer / config.duration) * config.amplitude * intensityMultiplier * amplitudeMultiplier;
 
             yield return new WaitForSecondsRealtime(shakeInterval);
 
