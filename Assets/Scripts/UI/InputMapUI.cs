@@ -34,6 +34,7 @@ public class InputMapUI : MonoBehaviour {
     }
 
     public void OnOpenAnimFinished() {
+        EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 4);
         SceneManager.LoadScene(4);
     }
 }

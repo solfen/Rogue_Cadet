@@ -9,6 +9,7 @@ public class DeathScreen : MonoBehaviour {
     [SerializeField] private Text scoreText;
     [SerializeField] private Text highScore;
     [SerializeField] private int levelToLoad = 1;
+    [SerializeField] private AudioSource BGM;
 
     private Animator anim;
     private AudioSource sound;
@@ -28,6 +29,7 @@ public class DeathScreen : MonoBehaviour {
     void Update () {
         if(Input.GetButtonDown("Start")) {
             Time.timeScale = 1;
+            EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, levelToLoad);
             SceneManager.LoadScene(levelToLoad);
         }
     }

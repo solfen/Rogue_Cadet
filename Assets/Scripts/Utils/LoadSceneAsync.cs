@@ -21,9 +21,14 @@ public class LoadSceneAsync : MonoBehaviour {
     public void Load() {
         loader = SceneManager.LoadSceneAsync(sceneIndex);
         loader.allowSceneActivation = allowSceneActivationDirect;
+
+        if(allowSceneActivationDirect) {
+            EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, sceneIndex);
+        }
     }
 
     public void AllowActivate() {
+        EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, sceneIndex);
         loader.allowSceneActivation = true;
     }
 

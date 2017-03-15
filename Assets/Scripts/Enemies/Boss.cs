@@ -31,6 +31,7 @@ public class Boss : MonoBehaviour {
         FileSaveLoad.Save(data);
 
         if(data.bossesBeaten.Count >= 4) {
+            EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 5);
             SceneManager.LoadScene(5);
         }
     }

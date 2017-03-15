@@ -22,6 +22,7 @@ public class DeleteSave : MonoBehaviour {
             FileSaveLoad.Delete();
             if(SceneManager.GetActiveScene().buildIndex != 0) {
                 Time.timeScale = 1;
+                EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 0);
                 SceneManager.LoadScene(0);
             }
         }
