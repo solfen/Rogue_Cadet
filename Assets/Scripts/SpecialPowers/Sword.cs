@@ -8,15 +8,35 @@ public class Sword : MonoBehaviour {
     [SerializeField] private float maxLife;
 
     private Transform _transform;
+    private Vector3 initialPos;
+    private Quaternion initialRot;
     private float life;
-	// Use this for initialization
-	void Start () {
-        _transform = GetComponent<Transform>();
-        life = maxLife;
+    private bool isInit = false;
+
+	void Awake () {
+        if (!isInit)
+            Init();
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    private void Init() {
+        _transform = GetComponent<Transform>();
+        initialPos = _transform.localPosition;
+        initialRot = _transform.localRotation;
+        life = maxLife;
+        isInit = true;
+    }
+
+    public void Activate() {
+        if (!isInit)
+            Init();
+
+        _transform.localPosition = initialPos;
+        _transform.localRotation = initialRot;
+        life = maxLife;
+        gameObject.SetActive(true);
+    }
+
+    void Update () {
         _transform.RotateAround(_transform.parent.position, Vector3.forward, moveSpeed * Time.deltaTime);
         _transform.Rotate(new Vector3(0, 0, rotateSpeed * Time.deltaTime));
 	}
@@ -26,7 +46,6 @@ public class Sword : MonoBehaviour {
         if (damager != null) {
             life -= damager.damage;
             if(life <= 0) {
-                life = maxLife;
                 gameObject.SetActive(false);
             }
         }

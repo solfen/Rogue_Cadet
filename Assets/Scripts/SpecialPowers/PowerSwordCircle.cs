@@ -15,7 +15,7 @@ public class PowerSwordCircle : BaseSpecialPower {
 
     protected override void Activate() {
         for(int i = 0; i < swords.Count; i++) {
-            swords[i].gameObject.SetActive(true);
+            swords[i].Activate();
         }
     }
 
