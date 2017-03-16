@@ -9,22 +9,28 @@ public class UpgradesShop : MonoBehaviour {
     [SerializeField] private WheightUI wheightUI;
     [SerializeField] private MoneyUI moneyUI;
     [SerializeField] private InputMapUI inputMap;
+    [SerializeField] private Animator overloadErrorUIAnimator;
 
     private int currentCategory;
     private List<UpgradeCategory> upgradesCategories;
     private bool isShopOpen = false;
     private GameData gameData;
     private BaseUpgrade selectedUpgrade;
+    private bool isOverWheight;
 
     // Use this for initialization
     void Start () {
         gameData = GlobalData.instance.gameData;
         upgradesCategories = gameData.upgradesCategories;
         shopUI.InitItems(upgradesCategories);
+
+        if (CheckIfOverwheight(FileSaveLoad.Load())) {
+            overloadErrorUIAnimator.SetTrigger("Open");
+        }
     }
 
     void Update() {
-        if (Input.GetButtonDown("Start")) {
+        if (!isOverWheight && Input.GetButtonDown("Start")) {
             inputMap.Open();
         }
         else if (isShopOpen) {
@@ -56,7 +62,6 @@ public class UpgradesShop : MonoBehaviour {
         if (!upgrade.canBuy) {
             EventDispatcher.DispatchEvent(Events.UI_ERROR, null);
             return;
-            //TODO: Error feedback
         }
 
         SaveData data = FileSaveLoad.Load();
@@ -76,6 +81,10 @@ public class UpgradesShop : MonoBehaviour {
         shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
         EventDispatcher.DispatchEvent(Events.UI_SUCCESS, null);
+
+        if (isOverWheight && !CheckIfOverwheight(data)) {
+            overloadErrorUIAnimator.SetTrigger("Close");
+        }
     }
 
     public void UnEquip(BaseUpgrade upgrade) {
@@ -85,7 +94,6 @@ public class UpgradesShop : MonoBehaviour {
         if(!upgrade.canUnEquip || upgradeInfo.currentUpgradeNb <= 0) {
             EventDispatcher.DispatchEvent(Events.UI_ERROR, null);
             return;
-            //TODO: Error feedback
         }
 
         data.shipWeight -= upgrade.wheight;
@@ -98,5 +106,15 @@ public class UpgradesShop : MonoBehaviour {
         shopUI.UpdateAllItems();
         shopDetailsPane.UpdateDetails(upgrade);
         EventDispatcher.DispatchEvent(Events.UI_SUCCESS, null);
+
+        if (isOverWheight && !CheckIfOverwheight(data)) {
+            overloadErrorUIAnimator.SetTrigger("Close");
+        }
+    }
+
+    private bool CheckIfOverwheight(SaveData data) {
+        float maxWheight = gameData.shipBaseStats.maxWeight * (gameData.ships[data.selectedShip].maxWheightPercent + data.wheightUpgradeNb * gameData.ships[data.selectedShip].wheightUpgradeRaise);
+        isOverWheight = data.shipWeight > maxWheight;
+        return isOverWheight;
     }
 }
