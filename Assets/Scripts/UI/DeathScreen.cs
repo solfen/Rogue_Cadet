@@ -7,18 +7,18 @@ using UnityEngine.SceneManagement;
 public class DeathScreen : MonoBehaviour {
     [SerializeField] private Score score;
     [SerializeField] private Text scoreText;
-    [SerializeField] private Text highScore;
+    [SerializeField] private Text bestScore;
+    [SerializeField] private Text time;
+    [SerializeField] private Text bestTime;
+    [SerializeField] private Text kills;
+    [SerializeField] private Text bestKills;
     [SerializeField] private int levelToLoad = 1;
-    [SerializeField] private AudioSource BGM;
 
     private Animator anim;
-    private AudioSource sound;
 
     void Awake() {
-        sound = GetComponent<AudioSource>();
         anim = GetComponent<Animator>();
         anim.enabled = false;
-
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
     }
 
@@ -39,14 +39,26 @@ public class DeathScreen : MonoBehaviour {
         enabled = true;
 
         if(score != null) {
-            scoreText.text = "Run money: " + ((int)score.score) + "$";
-            highScore.text = "High score: " + ((int)Mathf.Max(score.score, GlobalData.instance.saveData.highScore)) + "$";
+            scoreText.text = "Money: " + ((int)score.score) + "$";
+            time.text = "Time: " + FormatTime(Time.time - score.timeStart);
+            kills.text = "Kills: " + score.enemiesKilled;
+
+            bestScore.text = "Best: " + ((int)Mathf.Max(score.score, GlobalData.instance.saveData.highScore)) + "$";
+            bestTime.text = "Best: " + FormatTime(Mathf.Max(Time.time - score.timeStart, GlobalData.instance.saveData.bestTime));
+            bestKills.text = "Best: " + Mathf.Max(score.enemiesKilled, GlobalData.instance.saveData.bestEnemiesKilled);
         }
         else {
             scoreText.text = "";
-            highScore.text = "";
+            time.text = "";
+            kills.text = "";
+            bestScore.text = "";
+            bestTime.text = "";
+            bestKills.text = "";
         }
+    }
 
-        sound.Play();
+    private string FormatTime(float seconds) {
+        System.TimeSpan ts = System.TimeSpan.FromSeconds(seconds);
+        return string.Format("{0}:{1}:{2}", ((int)ts.TotalHours), ts.Minutes, ts.Seconds);
     }
 }

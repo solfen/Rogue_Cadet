@@ -23,6 +23,8 @@ public class SaveData {
     public float shipWeight;
     public float money;
     public float highScore;
+    public float bestTime;
+    public int bestEnemiesKilled = 0;
     public List<int> selectedWeapons;
     public int maxWeaponNb = 1;
     public List<int> bossesBeaten = new List<int>();

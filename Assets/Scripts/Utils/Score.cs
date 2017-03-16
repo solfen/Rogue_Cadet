@@ -8,6 +8,8 @@ public class Score : MonoBehaviour {
     public float comboDownInterval = 1;
 
     public float score = 0;
+    public float timeStart;
+    public int enemiesKilled = 0;
 
     private float combo = 1;
     private float comboDownTimer = 0;
@@ -17,6 +19,8 @@ public class Score : MonoBehaviour {
     // Use this for initialization
     void Start () {
         comboDownTimer = comboDownInterval;
+        timeStart = Time.time;
+
         EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, CollectibleTaken);
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, KilledEnemy);
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
@@ -49,6 +53,7 @@ public class Score : MonoBehaviour {
     private void KilledEnemy(object enemy) {
         float scoreToAdd = ((Enemy)enemy).score;
 
+        enemiesKilled++;
         score += scoreToAdd * combo * shipGoldPercent * difficultyGoldMultiplier;
         combo = Mathf.Min(maxCombo, combo+1);
         comboDownTimer = comboDownInterval;
@@ -75,6 +80,8 @@ public class Score : MonoBehaviour {
         SaveData data = FileSaveLoad.Load();
         data.money += score;
         data.highScore = Mathf.Max(data.highScore, score);
+        data.bestTime = Mathf.Max(data.bestTime, Time.time - timeStart);
+        data.bestEnemiesKilled = Mathf.Max(data.bestEnemiesKilled, enemiesKilled);
         FileSaveLoad.Save(data);
     }
 
