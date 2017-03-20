@@ -17,6 +17,10 @@ public class MainMenuPanes : MonoBehaviour {
 	void Update () {
 	    if(isOpen && !InputManager.isRebinding && (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Start"))) {
             Close();
+
+            if(Input.GetButtonDown("Start")) {
+                EventSystem.current.SetSelectedGameObject(null);
+            }
         }
 	}
 
