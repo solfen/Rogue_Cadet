@@ -8,6 +8,7 @@ public class PauseMenuUI : MonoBehaviour {
 
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private GameObject firstSelectable;
+    [SerializeField] private bool waitForGameStart = true;
 
     private bool isLoaded = false;
     private bool isOpen = false;
@@ -18,6 +19,7 @@ public class PauseMenuUI : MonoBehaviour {
 	void Start () {
         anim = GetComponent<Animator>();
         EventDispatcher.AddEventListener(Events.GAME_STARTED, OnGameStarted);
+        isLoaded = !waitForGameStart;
     }
 
     void OnDestroy () {
