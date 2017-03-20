@@ -5,19 +5,22 @@ using System.Collections;
 [RequireComponent(typeof(Text))]
 public class LetterByLetter : MonoBehaviour {
 
+    public bool isWriting; 
     [SerializeField] private float letterInterval;
     private Text textUI;
+    private string orignialText;
 
-	void Awake () {
+    void Awake () {
         textUI = GetComponent<Text>();
     }
 
     void OnEnable () {
+        isWriting = true;
         StartCoroutine(LetterAnim());
     }
 
     IEnumerator LetterAnim() {
-        string orignialText = textUI.text;
+        orignialText = textUI.text;
         textUI.text = "";
 
         for(int i = 0;  i < orignialText.Length; i++) {
@@ -27,5 +30,13 @@ public class LetterByLetter : MonoBehaviour {
                 yield return null;
             }
         }
+
+        isWriting = false;
+    }
+
+    public void FinishEarly() {
+        StopAllCoroutines();
+        textUI.text = orignialText;
+        isWriting = false;
     }
 }

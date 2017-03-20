@@ -2,7 +2,7 @@
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class LoadSceneAsync : MonoBehaviour {
+public class LoadSceneAsync : MonoBehaviour, IInteractable {
 
     public int sceneIndex;
 
@@ -30,6 +30,10 @@ public class LoadSceneAsync : MonoBehaviour {
     public void AllowActivate() {
         EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, sceneIndex);
         loader.allowSceneActivation = true;
+    }
+
+    public void Activate() {
+        AllowActivate();
     }
 
 }
