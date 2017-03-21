@@ -34,5 +34,8 @@ public class Boss : MonoBehaviour {
             EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 5);
             SceneManager.LoadScene(5);
         }
+        else {
+            EventDispatcher.DispatchEvent(Events.BOSS_BEATEN, bossIndex);
+        }
     }
 }

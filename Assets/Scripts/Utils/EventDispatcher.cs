@@ -42,7 +42,8 @@ public enum Events {
     SCREEN_SHAKE_MODIFIER_CHANGED,
     DIFFICULTY_CHANGED,
     SCENE_CHANGED,
-    SPECIAL_POWER_COOLDOWN_END
+    SPECIAL_POWER_COOLDOWN_END,
+    BOSS_BEATEN,
 }
 
 public static class EventDispatcher {
@@ -88,6 +89,7 @@ public static class EventDispatcher {
         { Events.DIFFICULTY_CHANGED,  null },
         { Events.SCENE_CHANGED,  null },
         { Events.SPECIAL_POWER_COOLDOWN_END,  null },
+        { Events.BOSS_BEATEN,  null },
     };
 
 

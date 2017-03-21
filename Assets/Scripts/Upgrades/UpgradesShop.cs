@@ -8,7 +8,7 @@ public class UpgradesShop : MonoBehaviour {
     [SerializeField] private ShopDetailsUI shopDetailsPane;
     [SerializeField] private WheightUI wheightUI;
     [SerializeField] private MoneyUI moneyUI;
-    [SerializeField] private InputMapUI inputMap;
+    [SerializeField] private MostWantedScreenUI inputMap;
     [SerializeField] private Animator overloadErrorUIAnimator;
 
     private int currentCategory;
@@ -31,7 +31,7 @@ public class UpgradesShop : MonoBehaviour {
 
     void Update() {
         if (!isOverWheight && Input.GetButtonDown("Start")) {
-            inputMap.Open();
+            inputMap.OpenGameScene();
         }
         else if (isShopOpen) {
             if(Input.GetButtonDown("Cancel")) {
