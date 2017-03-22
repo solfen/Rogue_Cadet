@@ -30,8 +30,8 @@ public class PauseMenuUI : MonoBehaviour {
         if (!isLoaded)
             return;
         
-        if(!InputManager.isRebinding && Time.timeScale != 0 && Input.GetButtonDown("Pause")) {
-            if(!isOpen) {
+        if(!InputManager.isRebinding && Input.GetButtonDown("Pause")) {
+            if(!isOpen && Time.timeScale != 0) {
                 Open();
             }
             else {
