@@ -9,10 +9,27 @@ public class AchievementUIMain : MonoBehaviour {
     [SerializeField] private Text description;
     [SerializeField] private GameObject unlocked;
 
-    public void Init(AchievementUI data, bool isUnlocked) {
+    private int achievementIndex;
+
+    void Start() {
+        EventDispatcher.AddEventListener(Events.ACHIEVMENT_UNLOCKED, OnAchievementUnlocked);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.ACHIEVMENT_UNLOCKED, OnAchievementUnlocked);
+    }
+
+    public void Init(AchievementUI data, int _achievementIndex) {
+        achievementIndex = _achievementIndex;
         icon.sprite = data.icon;
         title.text = data.name;
         description.text = data.description;
-        unlocked.SetActive(isUnlocked);
+        unlocked.SetActive(GlobalData.instance.saveData.achievementsUnlocked.Contains(achievementIndex));
+    }
+
+    private void OnAchievementUnlocked(object indexObj) {
+        if((int)indexObj == achievementIndex) {
+            unlocked.SetActive(true);
+        }
     }
 }

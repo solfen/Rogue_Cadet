@@ -7,7 +7,7 @@ public class AchievementsListUI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         EventDispatcher.AddEventListener(Events.ACHIEVMENT_CREATED, OnAchievementCreated);
-	}
+    }
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.ACHIEVMENT_CREATED, OnAchievementCreated);
@@ -16,6 +16,6 @@ public class AchievementsListUI : MonoBehaviour {
     private void OnAchievementCreated(object achievementIndex) {
         int i = (int)achievementIndex;
         AchievementUIMain element = Instantiate(UIprefab, transform, false) as AchievementUIMain;
-        element.Init(GlobalData.instance.gameData.achievementsUI[i], GlobalData.instance.saveData.achievementsUnlocked.Contains(i));
+        element.Init(GlobalData.instance.gameData.achievementsUI[i], i);
     }
 }

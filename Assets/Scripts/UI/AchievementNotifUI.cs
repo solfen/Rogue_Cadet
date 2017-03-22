@@ -3,7 +3,6 @@ using System.Collections;
 
 public class AchievementNotifUI : MonoBehaviour {
     
-    [SerializeField] private AchievementUIMain achievementUI;
     private Animator anim;
 
 	// Use this for initialization
@@ -18,7 +17,6 @@ public class AchievementNotifUI : MonoBehaviour {
 
     private void OnAchievementUnlocked(object indexObj) {
         EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
-        achievementUI.Init(GlobalData.instance.gameData.achievementsUI[(int)indexObj], true);
         anim.SetTrigger("Open");
     }
 
