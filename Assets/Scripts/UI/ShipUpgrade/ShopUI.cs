@@ -12,6 +12,7 @@ public class ShopUI : MonoBehaviour {
     [SerializeField] private Animator anim;
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private Text moneyText;
+    [SerializeField] private Text categoryHeader;
 
     private Transform _transform;
     private ResponsiveGridLayout gridLayout;
@@ -74,6 +75,8 @@ public class ShopUI : MonoBehaviour {
         if(activeCategoryContainer != null) {
             activeCategoryContainer.SetActive(false);
         }
+
+        categoryHeader.text = category.description;
 
         activeCategoryContainer = categoriesContainers[category];
         activeCategoryContainer.SetActive(true);

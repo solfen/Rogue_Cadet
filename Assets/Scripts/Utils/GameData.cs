@@ -79,6 +79,7 @@ public class ShipTypeUIItem {
 
 [System.Serializable]
 public class UpgradeCategory {
+    public string description;
     public List<BaseUpgrade> upgrades;
 }
 
