@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MiniMap : MonoBehaviour {
 
+    public bool showAllRoomsAtStart;
     public GameData gameData;
     public Dungeon dungeon;
     public RectTransform roomPrefab; 
@@ -113,7 +114,7 @@ public class MiniMap : MonoBehaviour {
                 }
             }
 
-           currentRoom.gameObject.SetActive(false);
+           currentRoom.gameObject.SetActive(showAllRoomsAtStart);
         }
     }
 
