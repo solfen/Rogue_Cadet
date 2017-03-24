@@ -11,19 +11,27 @@ public class PowerUI : MonoBehaviour {
     
     void Start () {
         EventDispatcher.AddEventListener(Events.SPECIAL_POWER_CREATED, OnPowerCreation);
-        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, ManaChanged);
+        EventDispatcher.AddEventListener(Events.SPECIAL_POWER_USED, OnPowerUsed);
         EventDispatcher.AddEventListener(Events.MANA_POTION_TAKEN, ManaChanged);
     }
 
     void OnDestroy() {
         EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_CREATED, OnPowerCreation);
-        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, ManaChanged);
+        EventDispatcher.RemoveEventListener(Events.SPECIAL_POWER_USED, OnPowerUsed);
         EventDispatcher.RemoveEventListener(Events.MANA_POTION_TAKEN, ManaChanged);
     }
 
     private void OnPowerCreation(object powerObj) {
        power = (BaseSpecialPower)powerObj;
        ManaChanged(null);
+    }
+
+    private void OnPowerUsed(object powerObj) {
+        if(power == null) {
+            power = (BaseSpecialPower)powerObj;
+        }
+
+        ManaChanged(null);
     }
 
     private void ManaChanged(object useless) {
