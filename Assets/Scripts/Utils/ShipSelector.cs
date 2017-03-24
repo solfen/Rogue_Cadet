@@ -11,7 +11,9 @@ public class ShipSelector : MonoBehaviour {
         List<ShipConfig> ships = GlobalData.instance.gameData.ships;
 
         for (int i = 0; i < ships.Count; i++) {
-            data.shipsInfo[i].stock = Mathf.Min(ships[i].maxStock, data.shipsInfo[i].stock + ships[i].stockGainByRun);
+            if(data.selectedShip != i) {
+                data.shipsInfo[i].stock = Mathf.Min(ships[i].maxStock, data.shipsInfo[i].stock + ships[i].stockGainByRun);
+            }
         }
 
         FileSaveLoad.Save(data);
@@ -28,6 +30,5 @@ public class ShipSelector : MonoBehaviour {
 
             transitor.Transition();
         }
-        // TODO: Else sound of error 
     }
 }
