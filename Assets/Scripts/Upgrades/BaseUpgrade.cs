@@ -18,6 +18,7 @@ public abstract class BaseUpgrade : MonoBehaviour {
 
     public bool canBuy { get; private set; }
     public bool isUnlocked { get; private set; }
+    public bool isMaxed { get; private set; }
 
     [HideInInspector] public float currentPrice;
     [HideInInspector] public int currentEquipedNb;
@@ -32,7 +33,8 @@ public abstract class BaseUpgrade : MonoBehaviour {
         currentPrice = basePrice * Mathf.Pow(priceMultiplierPerUpgrade, upgradeInfo.currentUpgradeNb) * priceMultiplier;
         currentEquipedNb = upgradeInfo.currentUpgradeNb;
 
-        canBuy = currentPrice <= data.money && upgradeInfo.isUnlocked && upgradeInfo.currentUpgradeNb < numberOfUpgrade && data.shipWeight + wheight <= maxWheight;
+        isMaxed = upgradeInfo.currentUpgradeNb >= numberOfUpgrade;
+        canBuy = currentPrice <= data.money && upgradeInfo.isUnlocked && !isMaxed && data.shipWeight + wheight <= maxWheight;
         isUnlocked = upgradeInfo.isUnlocked;
     }
 

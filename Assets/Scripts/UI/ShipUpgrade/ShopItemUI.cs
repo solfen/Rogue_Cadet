@@ -8,6 +8,7 @@ public class ShopItemUI : MonoBehaviour, ISelectHandler {
     [SerializeField] private Image image;
     [SerializeField] private Text nameText;
     [SerializeField] private GameObject UnavailableImage;
+    [SerializeField] private GameObject MaxedImage;
     [SerializeField] private Sprite LockedSprite;
 
     private UpgradesShop shop;
@@ -25,7 +26,8 @@ public class ShopItemUI : MonoBehaviour, ISelectHandler {
 
     public void UpdateItem() {
         associatedUpgrade.UpdateDynamicDetails();
-        UnavailableImage.SetActive(!associatedUpgrade.canBuy && associatedUpgrade.isUnlocked);
+        MaxedImage.SetActive(associatedUpgrade.isMaxed);
+        UnavailableImage.SetActive(!associatedUpgrade.canBuy && associatedUpgrade.isUnlocked && !associatedUpgrade.isMaxed);
         image.sprite = associatedUpgrade.isUnlocked ? associatedUpgrade.sprite : LockedSprite;
         nameText.text = associatedUpgrade.isUnlocked ? associatedUpgrade.title : "????";
     }
