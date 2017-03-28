@@ -61,6 +61,7 @@ public class BulletFountain : MonoBehaviour {
     IEnumerator FireRoutine() {
         while (true) {
             if (volleyTimer < 0 && !(pattern.targetPlayer && player.isInvisible)) {
+                volleyTimer = pattern.volleyInterval;
                 float angleOffset = pattern.angleStart;
                 float angleIncrease = pattern.angleBetweenBullets;
 
@@ -93,8 +94,6 @@ public class BulletFountain : MonoBehaviour {
 
                     angleOffset += angleIncrease;
                 }
-
-                volleyTimer = pattern.volleyInterval;
             }
 
             volleyTimer -= Time.deltaTime * fireSpeed;
