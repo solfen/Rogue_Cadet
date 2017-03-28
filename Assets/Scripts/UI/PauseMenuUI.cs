@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
@@ -63,6 +64,8 @@ public class PauseMenuUI : MonoBehaviour {
     }
 
     public void Quit() {
-        Application.Quit();
+        Time.timeScale = 1;
+        EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 0);
+        SceneManager.LoadScene(0);
     }
 }
