@@ -80,7 +80,7 @@ public class ShipDetailsPane : MonoBehaviour {
             achievementParent.SetActive(true);
             statsParent.SetActive(false);
             nameText.text = "Locked";
-            description.text = "Achievement required";
+            description.text = gameData.shipsUIItems[selectedShip].types[selectedType].associatedAchievementIndex  < 12 ? "Achievement required" : "Upgrade required";
             achivementImage.sprite = achiev.icon;
             powerName.text = achiev.name;
             powerDescription.text = achiev.description;

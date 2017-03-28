@@ -14,7 +14,9 @@ public class ShipUI : MonoBehaviour {
         rectTrans.offsetMax = Vector2.zero;
         rectTrans.offsetMin = Vector2.zero;
 
-        shipImage.sprite = data.spriteUI;
-        shipName.text = data.name;
+        if(data != null) {
+            shipImage.sprite = data.spriteUI;
+            shipName.text = data.name;
+        }
     }
 }

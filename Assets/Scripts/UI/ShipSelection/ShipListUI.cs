@@ -29,13 +29,12 @@ public class ShipListUI : MonoBehaviour {
         SaveData saveData = GlobalData.instance.saveData;
 
         UIHalfSize = UISize * 0.5f;
+        shipNb = gamedata.shipsUIItems.Count;
 
         for (int i = 0; i < gamedata.shipsUIItems.Count; i++)  {
-            if(saveData.shipsInfo[gamedata.shipsUIItems[i].associatedShipIndex].isUnlocked) {
-                GameObject obj = Instantiate(shipUIPrefab, _transform) as GameObject;
-                obj.GetComponentInChildren<ShipUI>().Init(gamedata.shipsUIItems[i], i, UIHalfSize);
-                shipNb++;
-            }
+            ShipsUIItemData dataToSend = saveData.shipsInfo[gamedata.shipsUIItems[i].associatedShipIndex].isUnlocked ? gamedata.shipsUIItems[i] : null;
+            GameObject obj = Instantiate(shipUIPrefab, _transform) as GameObject;
+            obj.GetComponentInChildren<ShipUI>().Init(dataToSend, i, UIHalfSize);
         }
 
         _rectTransform.anchoredPosition = new Vector2(0.5f * Camera.main.pixelWidth, 0);
