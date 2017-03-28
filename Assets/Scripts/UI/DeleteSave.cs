@@ -20,11 +20,11 @@ public class DeleteSave : MonoBehaviour {
 
         if(timePressed == nbToPress) {
             FileSaveLoad.Delete();
-            if(SceneManager.GetActiveScene().buildIndex != 0) {
-                Time.timeScale = 1;
-                EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 0);
-                SceneManager.LoadScene(0);
-            }
+
+            Time.timeScale = 1;
+            EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 0);
+            SceneManager.LoadScene(0);
+            
         }
 
         int pressLeft = nbToPress - timePressed;
