@@ -49,14 +49,15 @@ public class PowerUI : MonoBehaviour {
         specialLoad.value = 0;
         float timer = 0;
         float duration = power.coolDownTimer;
+        float finalFill = power.mana / power.maxMana;
 
         while (timer < duration) {
             timer += Time.deltaTime;
-            specialLoad.value = Mathf.Lerp(0, 1, timer/duration);
+            specialLoad.value = Mathf.Lerp(0, finalFill, timer/duration);
             yield return null;
         }
 
-        specialLoad.value = 1;
+        specialLoad.value = finalFill;
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_COOLDOWN_END, null);
     }
 }
