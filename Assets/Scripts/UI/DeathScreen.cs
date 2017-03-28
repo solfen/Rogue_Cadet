@@ -12,6 +12,8 @@ public class DeathScreen : MonoBehaviour {
     [SerializeField] private Text bestTime;
     [SerializeField] private Text kills;
     [SerializeField] private Text bestKills;
+    [SerializeField] private Text tip;
+    [SerializeField] private List<string> deathTips;
     [SerializeField] private int levelToLoad = 1;
 
     private Animator anim;
@@ -29,6 +31,7 @@ public class DeathScreen : MonoBehaviour {
     void Update () {
         if(Input.GetButtonDown("Start")) {
             Time.timeScale = 1;
+            Input.ResetInputAxes();
             EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, levelToLoad);
             SceneManager.LoadScene(levelToLoad);
         }
@@ -37,8 +40,9 @@ public class DeathScreen : MonoBehaviour {
     private void OnPlayerDeath(object useless) {
         anim.enabled = true;
         enabled = true;
+        tip.text = deathTips[Random.Range(0, deathTips.Count)];
 
-        if(score != null) {
+        if (score != null) {
             scoreText.text = "Money: " + ((int)score.score) + "$";
             time.text = "Time: " + FormatTime(Time.time - score.timeStart);
             kills.text = "Kills: " + score.enemiesKilled;
