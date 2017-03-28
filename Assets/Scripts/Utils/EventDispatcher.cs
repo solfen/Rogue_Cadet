@@ -44,6 +44,7 @@ public enum Events {
     SCENE_CHANGED,
     SPECIAL_POWER_COOLDOWN_END,
     BOSS_BEATEN,
+    COLORBLIND_MODE_CHANGED,
 }
 
 public static class EventDispatcher {
@@ -90,6 +91,7 @@ public static class EventDispatcher {
         { Events.SCENE_CHANGED,  null },
         { Events.SPECIAL_POWER_COOLDOWN_END,  null },
         { Events.BOSS_BEATEN,  null },
+        { Events.COLORBLIND_MODE_CHANGED,  null },
     };
 
 
