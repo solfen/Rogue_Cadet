@@ -20,11 +20,13 @@ public class PauseMenuUI : MonoBehaviour {
 	void Start () {
         anim = GetComponent<Animator>();
         EventDispatcher.AddEventListener(Events.GAME_STARTED, OnGameStarted);
+        EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDied);
         isLoaded = !waitForGameStart;
     }
 
     void OnDestroy () {
         EventDispatcher.RemoveEventListener(Events.GAME_STARTED, OnGameStarted);
+        EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDied);
     }
 
     void Update () {
@@ -49,6 +51,10 @@ public class PauseMenuUI : MonoBehaviour {
 
     private void OnGameStarted(object useless) {
         StartCoroutine(EnableDelay());
+    }
+
+    private void OnPlayerDied(object useless) {
+        isLoaded = false;
     }
 
     IEnumerator EnableDelay() {
