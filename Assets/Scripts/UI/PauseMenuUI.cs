@@ -8,6 +8,7 @@ public class PauseMenuUI : MonoBehaviour {
 
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private GameObject firstSelectable;
+    [SerializeField] private MainMenuPanes associatedPane;
     [SerializeField] private bool waitForGameStart = true;
 
     private bool isLoaded = false;
@@ -30,13 +31,19 @@ public class PauseMenuUI : MonoBehaviour {
         if (!isLoaded)
             return;
         
-        if(!InputManager.isRebinding && Input.GetButtonDown("Pause")) {
-            if(!isOpen && Time.timeScale != 0) {
-                Open();
+        if(Input.GetButtonDown("Pause")) {
+            if(!associatedPane.isOpen && !isOpen && Time.timeScale != 0) {
+                isOpen = true;
+                previousTimeScale = Time.timeScale;
+                Time.timeScale = 0;
+                Input.ResetInputAxes();
+                associatedPane.Open();
             }
-            else {
-                Close();
-            }
+        }
+
+        if(!associatedPane.isOpen && isOpen) {
+            Time.timeScale = previousTimeScale;
+            isOpen = false;
         }
 	}
 
@@ -47,25 +54,6 @@ public class PauseMenuUI : MonoBehaviour {
     IEnumerator EnableDelay() {
         yield return new WaitForSeconds(0.5f);
         isLoaded = true;
-    }
-
-    private void Open() {
-        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
-        previousSelected = eventSystem.currentSelectedGameObject;
-        previousTimeScale = Time.timeScale;
-
-        anim.SetTrigger("Open");
-        eventSystem.SetSelectedGameObject(firstSelectable);
-        Time.timeScale = 0;
-        isOpen = true;
-    }
-
-    public void Close() {
-        EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
-        anim.SetTrigger("Close");
-        eventSystem.SetSelectedGameObject(previousSelected);
-        Time.timeScale = previousTimeScale;
-        isOpen = false;
     }
 
     public void Quit() {

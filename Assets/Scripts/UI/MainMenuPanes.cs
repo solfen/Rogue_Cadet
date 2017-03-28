@@ -5,9 +5,11 @@ using System.Collections;
 public class MainMenuPanes : MonoBehaviour {
 
     [SerializeField] private MainMenuPanes mainMenuPaneParent;
+    [SerializeField] private GameObject firstSelectable = null;
+
     private Animator anim;
-    private bool isOpen = false;
     private GameObject lastSelected;
+    public bool isOpen { get; private set; }
 
     void Start () {
         anim = GetComponent<Animator>();
@@ -15,18 +17,14 @@ public class MainMenuPanes : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(isOpen && !InputManager.isRebinding && (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Start"))) {
+	    if(isOpen && (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Pause"))) {
             Close();
-
-            if(Input.GetButtonDown("Start")) {
-                EventSystem.current.SetSelectedGameObject(null);
-            }
         }
 	}
 
     public void Open() {
         lastSelected = EventSystem.current.currentSelectedGameObject;
-        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(firstSelectable);
         EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         anim.SetTrigger("Open");
         isOpen = true;
@@ -36,7 +34,7 @@ public class MainMenuPanes : MonoBehaviour {
         }
     }
 
-    private void Close() {
+    public void Close() {
         EventSystem.current.SetSelectedGameObject(lastSelected);
         EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         anim.SetTrigger("Close");

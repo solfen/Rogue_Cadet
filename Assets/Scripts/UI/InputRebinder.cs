@@ -16,23 +16,19 @@ public class InputRebinder : MonoBehaviour {
     private GameObject lastUISelected;
 
     [SerializeField] private GameObject overlay;
-    [SerializeField] private UIPosAnimator bindPane;
+    [SerializeField] private MainMenuPanes bindPane;
     [SerializeField] private UIPosAnimator inputUI;
     [SerializeField] private Text inputUIText;
 
     public void StartRebinding() {
-        lastUISelected = EventSystem.current.currentSelectedGameObject;
-        EventSystem.current.SetSelectedGameObject(null);
-        EventDispatcher.DispatchEvent(Events.OPEN_UI_PANE, null);
         InputManager.isRebinding = true;
         overlay.SetActive(true);
-
+        bindPane.Open();
         StartCoroutine(Rebinding());
     }
 
     IEnumerator Rebinding() {
         inputUIText.text = InputManager.useGamedad ? ((InputManager.GameButtonID)(0)).ToString() : "UP";
-        yield return StartCoroutine(bindPane.Animate("Open", UINormalPos));
 
         if (!InputManager.useGamedad) {
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
@@ -65,12 +61,12 @@ public class InputRebinder : MonoBehaviour {
             yield return StartCoroutine(WaitForAnimAndKeyUp());
         }
 
+        bindPane.Close();
         EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
-        yield return StartCoroutine(bindPane.Animate("Close", new Vector2(0, Camera.main.pixelHeight)));
+        yield return new WaitForSecondsRealtime(0.15f);
         InputManager.isRebinding = false;
 
         overlay.SetActive(false);
-        EventSystem.current.SetSelectedGameObject(lastUISelected);
     }
 
     IEnumerator WaitForAnimAndKeyUp() {

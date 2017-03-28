@@ -17,7 +17,7 @@ public class PowerSlowTime : BaseSpecialPower {
 
         while (timer > 0) {
             yield return null;
-            timer -= Time.unscaledDeltaTime;
+            timer -= Time.deltaTime / timeFactor;
         }
 
         Time.timeScale = 1;
