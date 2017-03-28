@@ -30,12 +30,8 @@ public class Boss : MonoBehaviour {
         data.bossesBeaten.Add(bossIndex);
         FileSaveLoad.Save(data);
 
-        if(data.bossesBeaten.Count >= 4) {
-            EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 5);
-            SceneManager.LoadScene(5);
-        }
-        else {
-            EventDispatcher.DispatchEvent(Events.BOSS_BEATEN, bossIndex);
-        }
+        EventDispatcher.DispatchEvent(Events.BOSS_BEATEN, bossIndex);
     }
+
+
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BossWantedUI : MonoBehaviour {
@@ -26,6 +27,10 @@ public class BossWantedUI : MonoBehaviour {
         if( (int)bossIndexObj == bossIndex) {
             StartCoroutine(IconAppearFade());
         }
+
+        if(GlobalData.instance.saveData.bossesBeaten.Count >= 4) {
+            StartCoroutine(EndGame());
+        }
     }
 
     IEnumerator IconAppearFade() {
@@ -33,5 +38,14 @@ public class BossWantedUI : MonoBehaviour {
         icon.gameObject.SetActive(true);
         icon.CrossFadeAlpha(0, 0, true);
         icon.CrossFadeAlpha(1, fadeDuration, true);
+    }
+
+    IEnumerator EndGame() {
+        while(!Input.GetButtonDown("Start")) {
+            yield return null;
+        }
+
+        EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 5);
+        SceneManager.LoadScene(5);
     }
 }
