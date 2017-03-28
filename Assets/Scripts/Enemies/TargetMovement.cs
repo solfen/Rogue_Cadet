@@ -89,7 +89,8 @@ public class TargetMovement : BaseMovement {
     void FixedUpdate() {
         if (!player.isInvisible) {
             LaserEyes();
-            _transform.up = _transform.position - playerTransform.position; // "hack" to make it face the player // actually it's bad, it sometimes makes them move in 3D...
+            Vector3 dir = _transform.position - playerTransform.position;
+            _transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90);
             _rigidbody.velocity = currentDir * speed;
         }
         else {
