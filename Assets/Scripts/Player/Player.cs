@@ -81,6 +81,7 @@ public class Player : MonoBehaviour {
             }
             else {
                 Heal(-damager.damage);
+                EventDispatcher.DispatchEvent(Events.HEALTH_POTION_TAKEN, -damager.damage);
             }
         }
     }

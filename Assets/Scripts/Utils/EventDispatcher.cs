@@ -45,6 +45,7 @@ public enum Events {
     SPECIAL_POWER_COOLDOWN_END,
     BOSS_BEATEN,
     COLORBLIND_MODE_CHANGED,
+    HEALTH_POTION_TAKEN,
 }
 
 public static class EventDispatcher {
@@ -92,6 +93,7 @@ public static class EventDispatcher {
         { Events.SPECIAL_POWER_COOLDOWN_END,  null },
         { Events.BOSS_BEATEN,  null },
         { Events.COLORBLIND_MODE_CHANGED,  null },
+        { Events.HEALTH_POTION_TAKEN,  null },
     };
 
 
