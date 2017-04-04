@@ -45,6 +45,7 @@ public class ShipTypesUI : MonoBehaviour {
             if(savedData.isUnlocked) {
                 shipTypesUI[i].image.sprite = data.typeSprite;
                 shipTypesUI[i].image.color = currentStock >= 1 ? Color.white : Color.grey;
+                shipTypesUI[i].stock.color = currentStock >= 1 ? Color.white : Color.red;
                 shipTypesUI[i].stock.text = "Stock: " + currentStock + "/" + gameData.ships[data.associatedShipIndex].maxStock;
             }
             else {
