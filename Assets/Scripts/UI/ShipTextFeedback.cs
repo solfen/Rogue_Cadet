@@ -10,6 +10,7 @@ public class TextFeedbackColors {
     public Color manaPotion;
     public Color healthPotion;
     public Color goldCoin;
+    public Color bomb;
 }
 
 public class ShipTextFeedback : MonoBehaviour {
@@ -29,6 +30,7 @@ public class ShipTextFeedback : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.MANA_POTION_TAKEN, OnManaPotionTaken);
         EventDispatcher.AddEventListener(Events.HEALTH_POTION_TAKEN, OnHealthPotionTaken);
         EventDispatcher.AddEventListener(Events.COLLECTIBLE_TAKEN, OnGoldCoinTaken);
+        EventDispatcher.AddEventListener(Events.BOMB_COLLECTIBLE_TAKEN, OnBombTaken);
 
         EventDispatcher.AddEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         EventDispatcher.AddEventListener(Events.COLORBLIND_MODE_CHANGED, OnColorBlindModeChange);
@@ -41,6 +43,7 @@ public class ShipTextFeedback : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.MANA_POTION_TAKEN, OnManaPotionTaken);
         EventDispatcher.RemoveEventListener(Events.HEALTH_POTION_TAKEN, OnHealthPotionTaken);
         EventDispatcher.RemoveEventListener(Events.COLLECTIBLE_TAKEN, OnGoldCoinTaken);
+        EventDispatcher.RemoveEventListener(Events.BOMB_COLLECTIBLE_TAKEN, OnBombTaken);
         EventDispatcher.RemoveEventListener(Events.PLAYER_DIED, OnPlayerDeath);
         EventDispatcher.RemoveEventListener(Events.COLORBLIND_MODE_CHANGED, OnColorBlindModeChange);
     }
@@ -83,13 +86,19 @@ public class ShipTextFeedback : MonoBehaviour {
     }
 
     private void OnGoldCoinTaken(object goldCoin) {
-        feedback.color = feedbackColors.goldCoin;
         float value = ((Collectible)goldCoin).value;
 
         if(value > 0) {
+            feedback.color = feedbackColors.goldCoin;
             feedback.text = "+" + value + " $";
             anim.SetTrigger("Open");
         }
+    }
+
+    private void OnBombTaken(object bombObj) {
+        feedback.color = feedbackColors.bomb;
+        feedback.text = "+" + ((BombCollectible)bombObj).bombsToRefill + " bombs";
+        anim.SetTrigger("Open");
     }
 
     private void OnPlayerDeath(object useless) {

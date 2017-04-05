@@ -25,6 +25,11 @@ public class Bomb : MonoBehaviour {
         damage = baseDamage * (1 + saveData.bombDamageUpgradeNb * shipconfig.bombDamagePerUpgrade);
 
         EventDispatcher.DispatchEvent(Events.BOMB_USED, this); //init UI;
+        EventDispatcher.AddEventListener(Events.BOMB_COLLECTIBLE_TAKEN, OnBombCollectibleTaken);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.BOMB_COLLECTIBLE_TAKEN, OnBombCollectibleTaken);
     }
 
     void Update() {
@@ -48,5 +53,10 @@ public class Bomb : MonoBehaviour {
         explosion.SetTrigger("Explode");
         currentStock--;
         EventDispatcher.DispatchEvent(Events.BOMB_USED, this);
+    }
+
+    private void OnBombCollectibleTaken(object collectibleObj) {
+        currentStock = Mathf.Min(currentStock + 1, maxStock);
+        EventDispatcher.DispatchEvent(Events.BOMB_USED, this); //that's just used in UI (at least for now...)
     }
 }

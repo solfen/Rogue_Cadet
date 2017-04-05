@@ -46,6 +46,7 @@ public enum Events {
     BOSS_BEATEN,
     COLORBLIND_MODE_CHANGED,
     HEALTH_POTION_TAKEN,
+    BOMB_COLLECTIBLE_TAKEN,
 }
 
 public static class EventDispatcher {
@@ -94,6 +95,7 @@ public static class EventDispatcher {
         { Events.BOSS_BEATEN,  null },
         { Events.COLORBLIND_MODE_CHANGED,  null },
         { Events.HEALTH_POTION_TAKEN,  null },
+        { Events.BOMB_COLLECTIBLE_TAKEN,  null },
     };
 
 

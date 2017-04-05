@@ -26,5 +26,4 @@ public class BombUI : MonoBehaviour {
         Bomb bomb = (Bomb)bombObj;
         bombText.text = "Bomb stock: " + bomb.currentStock + "/" + bomb.maxStock;
     }
-
 }
