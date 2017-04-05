@@ -31,6 +31,7 @@ public abstract class BaseWeapon : MonoBehaviour {
 
     public void Disable() {
         SetFiring(false);
+        isFiring = false;
         isActive = false;
     }
 
