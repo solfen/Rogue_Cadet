@@ -22,6 +22,8 @@ public abstract class BaseWeapon : MonoBehaviour {
     protected virtual void Start() {
         ShipConfig shipConfig = GlobalData.instance.gameData.ships[GlobalData.instance.saveData.selectedShip];
         damageInfluencer = shipConfig.damagePrecent + GlobalData.instance.saveData.damageUpgradeNb * shipConfig.damageUpgradeRaise;
+        maxFireDuration *= 1 + GlobalData.instance.saveData.cooldownUpgradeNb * shipConfig.cooldownUpgradeRaise;
+        coolDownDuration *= 1 - GlobalData.instance.saveData.cooldownUpgradeNb * shipConfig.cooldownUpgradeRaise;
     }
 
     public void Activate() {

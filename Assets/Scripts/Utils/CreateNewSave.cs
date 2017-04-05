@@ -23,12 +23,17 @@ public class CreateNewSave : MonoBehaviour {
                 data.shipsInfo[GlobalData.instance.gameData.shipsUnlockedAtStart[i]].isUnlocked = true;
             }
 
-            data.upgradesInfo = new List<UpgradeInfo>();
+            int upgradesNb = 0;
+            for (int i = 0; i < upgradesCategories.Count; i++) {
+                upgradesNb += upgradesCategories[i].upgrades.Count;
+            }
+
+            data.upgradesInfo = new UpgradeInfo[upgradesNb];
             for(int i = 0; i < upgradesCategories.Count; i++) {
                 for(int j = 0; j < upgradesCategories[i].upgrades.Count; j++) {
                     UpgradeInfo info = new UpgradeInfo();
                     info.isUnlocked = upgradesCategories[i].upgrades[j].unlockedAtStart;
-                    data.upgradesInfo.Add(info);
+                    data.upgradesInfo[upgradesCategories[i].upgrades[j].saveDataIndex] = info;
                 }
             }
 

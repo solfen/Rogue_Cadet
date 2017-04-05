@@ -52,6 +52,7 @@ public class ShipConfig {
     public float goldUpgradeRaise;
     public int bombStockUpgradeRaise;
     public float bombDamagePerUpgrade;
+    public float cooldownUpgradeRaise = 0.1f;
 
     [Header("Stock")]
     public int maxStock = 5;

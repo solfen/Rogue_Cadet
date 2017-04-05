@@ -38,8 +38,9 @@ public class SaveData {
     public int bombUpgradeNb;
     public int bombDamageUpgradeNb;
     public int wheightUpgradeNb;
+    public int cooldownUpgradeNb;
 
     public List<ShipInfo> shipsInfo;
-    public List<UpgradeInfo> upgradesInfo;
+    public UpgradeInfo[] upgradesInfo;
 
 }
