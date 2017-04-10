@@ -22,8 +22,8 @@ public class AchievementUIMain : MonoBehaviour {
     public void Init(AchievementUI data, int _achievementIndex) {
         achievementIndex = _achievementIndex;
         icon.sprite = data.icon;
-        title.text = data.name;
-        description.text = data.description;
+        title.text = LocalizationManager.GetLocalizedText(data.name);
+        description.text = LocalizationManager.GetLocalizedText(data.description);
         unlocked.SetActive(GlobalData.instance.saveData.achievementsUnlocked.Contains(achievementIndex));
     }
 

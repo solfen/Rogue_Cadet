@@ -22,20 +22,20 @@ public class ShopDetailsUI : MonoBehaviour {
 
     public void UpdateDetails(BaseUpgrade upgrade) {
         if(upgrade.isUnlocked) {
-            header.text = upgrade.title;
-            description.text = upgrade.description;
-            activeNb.text = "Active: " + upgrade.currentEquipedNb + "/" + upgrade.numberOfUpgrade;
-            price.text = "Price: " + (int)upgrade.currentPrice + "$";
-            wheight.text = "Wheight: " + upgrade.wheight;
-            totalWeight.text = "Tot Wheight: " + (int)(upgrade.wheight * upgrade.currentEquipedNb);
+            header.text = LocalizationManager.GetLocalizedText(upgrade.title);
+            description.text = LocalizationManager.GetLocalizedText(upgrade.description);
+            activeNb.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_ACTIVE") + upgrade.currentEquipedNb + "/" + upgrade.numberOfUpgrade;
+            price.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_PRICE") + (int)upgrade.currentPrice + "$";
+            wheight.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_WHEIGHT") + upgrade.wheight;
+            totalWeight.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_TOTAL_WHEIGHT") + (int)(upgrade.wheight * upgrade.currentEquipedNb);
         }
         else {
             header.text = "?????";
-            description.text = "You really think, I'm going to give you the description of something you didn't unlock?";
-            activeNb.text = "Active: none";
-            price.text = "Price: " + "??";
-            wheight.text = "Wheight: ???";
-            totalWeight.text = "Tot Wheight: 0";
+            description.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_LOCKED_DESCRIPTION");
+            activeNb.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_ACTIVE") + LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_ACTIVE_NONE");
+            price.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_PRICE") + "??";
+            wheight.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_WHEIGHT") + "???";
+            totalWeight.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_TOTAL_WHEIGHT") + "0";
         }
     }
 }

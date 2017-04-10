@@ -47,6 +47,8 @@ public enum Events {
     COLORBLIND_MODE_CHANGED,
     HEALTH_POTION_TAKEN,
     BOMB_COLLECTIBLE_TAKEN,
+    LANGUAGE_PREF_CHANGED,
+    LOCALIZATION_CHANGED,
 }
 
 public static class EventDispatcher {
@@ -96,6 +98,8 @@ public static class EventDispatcher {
         { Events.COLORBLIND_MODE_CHANGED,  null },
         { Events.HEALTH_POTION_TAKEN,  null },
         { Events.BOMB_COLLECTIBLE_TAKEN,  null },
+        { Events.LANGUAGE_PREF_CHANGED,  null },
+        { Events.LOCALIZATION_CHANGED,  null },
     };
 
 

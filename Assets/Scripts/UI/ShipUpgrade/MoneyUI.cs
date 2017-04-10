@@ -11,6 +11,6 @@ public class MoneyUI : MonoBehaviour {
     }
 
 	public void UpdateMoney () {
-        moneyText.text = "Money: " + (int)GlobalData.instance.saveData.money + " $";
+        moneyText.text = LocalizationManager.GetLocalizedText("SHIPS_UPGRADES_MONEY") + (int)GlobalData.instance.saveData.money + " $";
     }
 }

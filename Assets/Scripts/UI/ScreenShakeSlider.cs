@@ -15,7 +15,7 @@ public class ScreenShakeSlider : MonoBehaviour {
     }
 	
     public void OnValueChange(float value) {
-        volumeText.text = "Screen Shake Force: " + Mathf.RoundToInt(value * 100) + "%";
+        volumeText.text = LocalizationManager.GetLocalizedText("SETTINGS_PANE_SCREENSHAKE") + Mathf.RoundToInt(value * 100) + "%";
         EventDispatcher.DispatchEvent(Events.SCREEN_SHAKE_MODIFIER_CHANGED, value);
         PlayerPrefs.SetFloat("ScreenShakeFore", value);
     }

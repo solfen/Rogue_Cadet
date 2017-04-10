@@ -24,6 +24,6 @@ public class BombUI : MonoBehaviour {
 
     private void OnUsePower(object bombObj) {
         Bomb bomb = (Bomb)bombObj;
-        bombText.text = "Bomb stock: " + bomb.currentStock + "/" + bomb.maxStock;
+        bombText.text = LocalizationManager.GetLocalizedText("GAME_UI_BOMBS") + bomb.currentStock + "/" + bomb.maxStock;
     }
 }

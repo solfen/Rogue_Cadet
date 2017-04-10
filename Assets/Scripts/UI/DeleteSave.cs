@@ -28,6 +28,6 @@ public class DeleteSave : MonoBehaviour {
         }
 
         int pressLeft = nbToPress - timePressed;
-        nbToPressText.text = pressLeft <= 0 ? "(Deleted)" : "(Press " + pressLeft + " more time(s))";
+        nbToPressText.text = pressLeft <= 0 ? LocalizationManager.GetLocalizedText("SETTINGS_PANE_DELETED_SAVE_FEEDBACK") : string.Format(LocalizationManager.GetLocalizedText("SETTINGS_PANE_DELETE_SAVE_FEEDBACK"), pressLeft);
     }
 }

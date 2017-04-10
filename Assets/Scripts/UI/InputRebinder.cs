@@ -28,25 +28,25 @@ public class InputRebinder : MonoBehaviour {
     }
 
     IEnumerator Rebinding() {
-        inputUIText.text = InputManager.useGamedad ? ((InputManager.GameButtonID)(0)).ToString() : "UP";
+        inputUIText.text = InputManager.useGamedad ? ((InputManager.GameButtonID)(0)).ToString() : LocalizationManager.GetLocalizedText("INPUT_PANE_UP");
 
         if (!InputManager.useGamedad) {
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
             yield return StartCoroutine(SniffAxesInput(InputManager.GameAxisID.MOVE_Y, 0));
 
             yield return StartCoroutine(WaitForAnimAndKeyUp());
-            inputUIText.text = "DOWN";
+            inputUIText.text = LocalizationManager.GetLocalizedText("INPUT_PANE_DOWN");
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
             yield return StartCoroutine(SniffAxesInput(InputManager.GameAxisID.MOVE_Y, 1));
             InputManager.BindAxisInput(InputManager.GameAxisID.MOVE_Y, sniffedAxis[0], sniffedAxis[1]);
 
             yield return StartCoroutine(WaitForAnimAndKeyUp());
-            inputUIText.text = "RIGHT";
+            inputUIText.text = LocalizationManager.GetLocalizedText("INPUT_PANE_RIGHT");
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
             yield return StartCoroutine(SniffAxesInput(InputManager.GameAxisID.MOVE_X, 0));
 
             yield return StartCoroutine(WaitForAnimAndKeyUp());
-            inputUIText.text = "LEFT";
+            inputUIText.text = LocalizationManager.GetLocalizedText("INPUT_PANE_LEFT");
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
             yield return StartCoroutine(SniffAxesInput(InputManager.GameAxisID.MOVE_X, 1));
 
@@ -55,7 +55,7 @@ public class InputRebinder : MonoBehaviour {
         }
 
         foreach (InputManager.GameButtonID id in System.Enum.GetValues(typeof(InputManager.GameButtonID))) {
-            inputUIText.text = id.ToString().Replace('_', ' ');
+            inputUIText.text = LocalizationManager.GetLocalizedText("INPUT_PANE_" + id);
             yield return inputUI.StartCoroutine(inputUI.Animate("Normal", UINormalPos));
             yield return StartCoroutine(SniffInput(id));
             yield return StartCoroutine(WaitForAnimAndKeyUp());

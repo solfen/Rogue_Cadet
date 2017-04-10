@@ -19,7 +19,7 @@ public class ScoreUI : MonoBehaviour {
     }
 
     public void UpdateScore(object score) {
-        scoreText.text = "Money: " + ((int)(float)score) + " $";
+        scoreText.text = LocalizationManager.GetLocalizedText("GAME_UI_SCORE") + ((int)(float)score) + " $";
     }
 
     public void UpdateCombo(object combo) {

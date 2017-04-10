@@ -7,6 +7,7 @@ public class LetterByLetter : MonoBehaviour {
 
     public bool isWriting; 
     [SerializeField] private float letterInterval;
+    [SerializeField] private string localziedTextID;
     private Text textUI;
     private string orignialText;
 
@@ -20,7 +21,7 @@ public class LetterByLetter : MonoBehaviour {
     }
 
     IEnumerator LetterAnim() {
-        orignialText = textUI.text;
+        orignialText = localziedTextID != ""  ? LocalizationManager.GetLocalizedText(localziedTextID) : textUI.text;
         textUI.text = "";
 
         for(int i = 0;  i < orignialText.Length; i++) {

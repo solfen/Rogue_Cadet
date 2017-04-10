@@ -28,7 +28,7 @@ public class MostWantedScreenUI : MonoBehaviour {
     }
 
     private void OnLoaded(object useless) {
-        text.text = "Press start or space";
+        text.text = LocalizationManager.GetLocalizedText("MOST_WANTED_LOADED");
     }
 
     private void OnGameStart(object useless) {
@@ -36,7 +36,6 @@ public class MostWantedScreenUI : MonoBehaviour {
     }
 
     private void OnBossBeaten(object useless) {
-        Debug.Log("caca");
         StartCoroutine(BossBeatenRoutine());
     }
 

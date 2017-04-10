@@ -6,6 +6,8 @@ public class ShipUI : MonoBehaviour {
 
     [SerializeField] private Image shipImage;
     [SerializeField] private Text shipName;
+
+    private bool isInit;
 	
     public void Init (ShipsUIItemData data, int elemIndex, Vector2 halfsize) {
         RectTransform rectTrans = GetComponent<RectTransform>();
@@ -16,7 +18,14 @@ public class ShipUI : MonoBehaviour {
 
         if(data != null) {
             shipImage.sprite = data.spriteUI;
-            shipName.text = data.name;
+            shipName.text = LocalizationManager.GetLocalizedText(data.name);
+            isInit = true;
         }
+
+    }
+
+    void Start() {
+        if (!isInit)
+            shipName.text = LocalizationManager.GetLocalizedText("SHIPS_DETAILS_LOCKED");
     }
 }

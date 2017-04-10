@@ -29,7 +29,7 @@ public class ShopItemUI : MonoBehaviour, ISelectHandler {
         MaxedImage.SetActive(associatedUpgrade.isMaxed);
         UnavailableImage.SetActive(!associatedUpgrade.canBuy && associatedUpgrade.isUnlocked && !associatedUpgrade.isMaxed);
         image.sprite = associatedUpgrade.isUnlocked ? associatedUpgrade.sprite : LockedSprite;
-        nameText.text = associatedUpgrade.isUnlocked ? associatedUpgrade.title : "????";
+        nameText.text = associatedUpgrade.isUnlocked ? LocalizationManager.GetLocalizedText(associatedUpgrade.title) : "????";
     }
 
     public void OnSelect (BaseEventData data) {

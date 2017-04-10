@@ -40,16 +40,16 @@ public class DeathScreen : MonoBehaviour {
     private void OnPlayerDeath(object useless) {
         anim.enabled = true;
         enabled = true;
-        tip.text = deathTips[Random.Range(0, deathTips.Count)];
+        tip.text = LocalizationManager.GetLocalizedText(deathTips[Random.Range(0, deathTips.Count)]); 
 
         if (score != null) {
-            scoreText.text = "Money: " + ((int)score.score) + "$";
-            time.text = "Time: " + FormatTime(Time.time - score.timeStart);
-            kills.text = "Kills: " + score.enemiesKilled;
+            scoreText.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_MONEY") + ((int)score.score) + "$";
+            time.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_TIME") + FormatTime(Time.time - score.timeStart);
+            kills.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_KILLS") + score.enemiesKilled;
 
-            bestScore.text = "Best: " + ((int)Mathf.Max(score.score, GlobalData.instance.saveData.highScore)) + "$";
-            bestTime.text = "Best: " + FormatTime(Mathf.Max(Time.time - score.timeStart, GlobalData.instance.saveData.bestTime));
-            bestKills.text = "Best: " + Mathf.Max(score.enemiesKilled, GlobalData.instance.saveData.bestEnemiesKilled);
+            bestScore.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_BEST") + ((int)Mathf.Max(score.score, GlobalData.instance.saveData.highScore)) + "$";
+            bestTime.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_BEST") + FormatTime(Mathf.Max(Time.time - score.timeStart, GlobalData.instance.saveData.bestTime));
+            bestKills.text = LocalizationManager.GetLocalizedText("DEATH_SCREEN_BEST") + Mathf.Max(score.enemiesKilled, GlobalData.instance.saveData.bestEnemiesKilled);
         }
         else {
             scoreText.text = "";

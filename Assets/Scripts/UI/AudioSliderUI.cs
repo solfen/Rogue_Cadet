@@ -13,6 +13,7 @@ public enum AudioMixerNames {
 public class AudioSliderUI : MonoBehaviour {
 
     [SerializeField] private AudioMixerNames mixerName;
+    [SerializeField] private string localizedTextID;
     [SerializeField] private Text volumeText;
     [SerializeField] private Slider slider;
     [SerializeField] private AudioMixer mixer;
@@ -24,7 +25,7 @@ public class AudioSliderUI : MonoBehaviour {
     }
 	
     public void OnValueChange(float value) {
-        volumeText.text = mixerName + " Volume: " + (value >= 0 ? "+" : "") + value + " dB";
+        volumeText.text = LocalizationManager.GetLocalizedText(localizedTextID) + (value >= 0 ? "+" : "") + value + " dB";
         mixer.SetFloat(mixerName + "Volume", value);
         PlayerPrefs.SetFloat(mixerName + "Volume", value);
     }

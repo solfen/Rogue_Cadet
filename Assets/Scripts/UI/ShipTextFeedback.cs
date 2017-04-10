@@ -65,7 +65,7 @@ public class ShipTextFeedback : MonoBehaviour {
         lastPlayerLife = lastPlayerLife == -1 ? player.maxLife : Mathf.Min(lastPlayerLife, player.maxLife); // need to do a max() because of dumb += in HealthPotionTaken
 
         feedback.color = feedbackColors.hit;
-        feedback.text = "-" + (lastPlayerLife - player.currentLife) + " pv";
+        feedback.text = "-" + (lastPlayerLife - player.currentLife) + " " + LocalizationManager.GetLocalizedText("SHIP_TEXT_FEEDBACK_HP");
         anim.SetTrigger("Open");
 
         lastPlayerLife = player.currentLife;
@@ -79,7 +79,7 @@ public class ShipTextFeedback : MonoBehaviour {
 
     private void OnHealthPotionTaken(object healthTaken) {
         feedback.color = feedbackColors.healthPotion;
-        feedback.text = "+" + ((float)healthTaken) + " pv";
+        feedback.text = "+" + ((float)healthTaken) + " " + LocalizationManager.GetLocalizedText("SHIP_TEXT_FEEDBACK_HP");
         anim.SetTrigger("Open");
 
         lastPlayerLife += (float)healthTaken;

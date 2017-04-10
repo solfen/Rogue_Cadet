@@ -65,25 +65,25 @@ public class ShipDetailsPane : MonoBehaviour {
         if (GlobalData.instance.saveData.shipsInfo[shipIndex].isUnlocked) {
             achievementParent.SetActive(false);
             statsParent.SetActive(true);
-            nameText.text = gameData.shipsUIItems[selectedShip].types[selectedType].name;
-            description.text = gameData.shipsUIItems[selectedShip].types[selectedType].description;
-            powerName.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerName;
-            powerDescription.text = gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription;
+            nameText.text = LocalizationManager.GetLocalizedText(gameData.shipsUIItems[selectedShip].types[selectedType].name);
+            description.text = LocalizationManager.GetLocalizedText(gameData.shipsUIItems[selectedShip].types[selectedType].description);
+            powerName.text = LocalizationManager.GetLocalizedText(gameData.shipsUIItems[selectedShip].types[selectedType].powerName);
+            powerDescription.text = LocalizationManager.GetLocalizedText(gameData.shipsUIItems[selectedShip].types[selectedType].powerDescription);
 
             ShipConfig shipConfig = gameData.ships[shipIndex];
-            life.text = "- Life: " + (int)(shipConfig.lifePrecent*100) + "%";
-            dps.text = "- Damage: " + (int)(shipConfig.damagePrecent * 100) + "%";
-            mana.text = "- Mana: " + (int)(shipConfig.manaPrecent * 100) + "%";
+            life.text = "- " + LocalizationManager.GetLocalizedText("SHIPS_DETAILS_LIFE") + (int)(shipConfig.lifePrecent*100) + "%";
+            dps.text = "- " + LocalizationManager.GetLocalizedText("SHIPS_DETAILS_DAMAGE") + (int)(shipConfig.damagePrecent * 100) + "%";
+            mana.text = "- " + LocalizationManager.GetLocalizedText("SHIPS_DETAILS_MANA") + (int)(shipConfig.manaPrecent * 100) + "%";
         }
         else {
             AchievementUI achiev = gameData.achievementsUI[gameData.shipsUIItems[selectedShip].types[selectedType].associatedAchievementIndex];
             achievementParent.SetActive(true);
             statsParent.SetActive(false);
-            nameText.text = "Locked";
-            description.text = gameData.shipsUIItems[selectedShip].types[selectedType].associatedAchievementIndex  < 12 ? "Achievement required" : "Upgrade required";
+            nameText.text = LocalizationManager.GetLocalizedText("SHIPS_DETAILS_LOCKED");
+            description.text = gameData.shipsUIItems[selectedShip].types[selectedType].associatedAchievementIndex  < 12 ? LocalizationManager.GetLocalizedText("SHIPS_DETAILS_ACHIEVEMENT_REQUIRED") : LocalizationManager.GetLocalizedText("SHIPS_DETAILS_UPGRADE_REQUIRED");
             achivementImage.sprite = achiev.icon;
-            powerName.text = achiev.name;
-            powerDescription.text = achiev.description;
+            powerName.text = LocalizationManager.GetLocalizedText(achiev.name);
+            powerDescription.text = LocalizationManager.GetLocalizedText(achiev.description);
         }
     }
 }
