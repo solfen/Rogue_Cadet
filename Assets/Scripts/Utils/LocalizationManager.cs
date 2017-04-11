@@ -13,7 +13,7 @@ public class LocalizationManager : MonoBehaviour {
             texts.Add(db.texts[i].id, db.texts[i]);
         }
 
-        currentLanguage = PlayerPrefs.GetInt("Language", 1);
+        currentLanguage = PlayerPrefs.GetInt("Language", 0);
 
         EventDispatcher.AddEventListener(Events.LANGUAGE_PREF_CHANGED, OnLangChanged);
     }
@@ -23,7 +23,7 @@ public class LocalizationManager : MonoBehaviour {
     }
 
     private void OnLangChanged(object useless) {
-        currentLanguage = PlayerPrefs.GetInt("Language", 1);
+        currentLanguage = PlayerPrefs.GetInt("Language", 0);
         EventDispatcher.DispatchEvent(Events.LOCALIZATION_CHANGED, null);
     }
 
