@@ -33,7 +33,7 @@ public class CoolDownUI : MonoBehaviour {
     }
 
     void Update () {
-        UISlider.value = Mathf.Max(0, 1 - weapon.fireTimer / weapon.maxFireDuration);
+        UISlider.value = Mathf.Min(1, weapon.fireTimer / weapon.maxFireDuration);
 	}
 
     private void OnWeaponCoolDownStart(object useless) {

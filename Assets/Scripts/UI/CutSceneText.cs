@@ -13,7 +13,8 @@ public class CutSceneText : MonoBehaviour, IInteractable {
     [SerializeField] private float intervalBetweenTexts = 0.5f;
     [SerializeField] private bool autoStart = false;
 
-    private bool isAnimating = false;
+    private bool isFadingOut = false;
+    private bool isFadingIn = false;
 
     void Start() {
         if(autoStart) {
@@ -22,8 +23,15 @@ public class CutSceneText : MonoBehaviour, IInteractable {
     }
 
     void Update() {
-        if(Input.GetButtonDown("Submit") && !isAnimating) {
+        if(Input.GetButtonDown("Submit") && !isFadingOut) {
             StopAllCoroutines();
+            text.color = new Color(text.color.r, text.color.g, text.color.b, 1);
+
+            if(isFadingIn) {
+                isFadingIn = false;
+                return;
+            }
+
             StartCoroutine(FadeOut());
         }
     }
@@ -48,10 +56,10 @@ public class CutSceneText : MonoBehaviour, IInteractable {
     } 
 
     IEnumerator FadeOut() {
-        isAnimating = true;
+        isFadingOut = true;
         yield return StartCoroutine(FadeText(1, 0));
         yield return StartCoroutine(FadeGraphicAlpha(1, 0));
-        isAnimating = false;
+        isFadingOut = false;
 
         gameObject.SetActive(false);
 
@@ -63,10 +71,10 @@ public class CutSceneText : MonoBehaviour, IInteractable {
     }
 
     IEnumerator FadeIn() {
-        isAnimating = true;
+        isFadingIn = true;
         yield return StartCoroutine(FadeGraphicAlpha(0, 1));
         yield return StartCoroutine(FadeText(0, 1));
-        isAnimating = false;
+        isFadingIn = false;
     }
 
     public void Activate() {
