@@ -76,7 +76,7 @@ public class ShopUI : MonoBehaviour {
             activeCategoryContainer.SetActive(false);
         }
 
-        categoryHeader.text = category.description;
+        categoryHeader.text = LocalizationManager.GetLocalizedText(category.description);
 
         activeCategoryContainer = categoriesContainers[category];
         activeCategoryContainer.SetActive(true);

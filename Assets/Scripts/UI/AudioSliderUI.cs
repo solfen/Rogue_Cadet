@@ -22,11 +22,21 @@ public class AudioSliderUI : MonoBehaviour {
         float baseValue = PlayerPrefs.GetFloat(mixerName + "Volume", 0);
         slider.value = baseValue;
         OnValueChange(baseValue);
+
+        EventDispatcher.AddEventListener(Events.LOCALIZATION_CHANGED, OnLocaChnaged);
     }
-	
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.LOCALIZATION_CHANGED, OnLocaChnaged);
+    }
+
     public void OnValueChange(float value) {
         volumeText.text = LocalizationManager.GetLocalizedText(localizedTextID) + (value >= 0 ? "+" : "") + value + " dB";
         mixer.SetFloat(mixerName + "Volume", value);
         PlayerPrefs.SetFloat(mixerName + "Volume", value);
+    }
+
+    private void OnLocaChnaged(object useless) {
+        OnValueChange(slider.value);
     }
 }
