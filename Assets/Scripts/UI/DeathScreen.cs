@@ -15,6 +15,7 @@ public class DeathScreen : MonoBehaviour {
     [SerializeField] private Text tip;
     [SerializeField] private List<string> deathTips;
     [SerializeField] private int levelToLoad = 1;
+    [SerializeField] private bool loadSceneOnExit = true;
 
     private Animator anim;
 
@@ -33,7 +34,11 @@ public class DeathScreen : MonoBehaviour {
             Time.timeScale = 1;
             Input.ResetInputAxes();
             EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, levelToLoad);
-            SceneManager.LoadScene(levelToLoad);
+            if(loadSceneOnExit) {
+                SceneManager.LoadScene(levelToLoad);
+            }
+
+            enabled = false;
         }
     }
 

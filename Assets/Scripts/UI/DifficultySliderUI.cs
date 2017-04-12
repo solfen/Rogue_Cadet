@@ -22,14 +22,27 @@ public class DifficultySliderUI : MonoBehaviour {
 
     void Start() {
         baseText = sliderText.text;
+
         float baseValue = PlayerPrefs.GetFloat(multiplierName + "Multiplier", 1);
         slider.value = baseValue;
         OnValueChange(baseValue);
+
+        EventDispatcher.AddEventListener(Events.PLAYER_SKILLS_SNIFFED, OnSniffed);
+    }
+
+    void OnDestroy() {
+        EventDispatcher.RemoveEventListener(Events.PLAYER_SKILLS_SNIFFED, OnSniffed);
     }
 
     public void OnValueChange(float value) {
         sliderText.text = baseText + ": x" + value.ToString("F2");
         PlayerPrefs.SetFloat(multiplierName + "Multiplier", value);
         EventDispatcher.DispatchEvent(Events.DIFFICULTY_CHANGED, null);
+    }
+
+    public void OnSniffed(object useless) {
+        float baseValue = PlayerPrefs.GetFloat(multiplierName + "Multiplier", 1);
+        slider.value = baseValue;
+        sliderText.text = baseText + ": x" + baseValue.ToString("F2");
     }
 }

@@ -49,6 +49,7 @@ public enum Events {
     BOMB_COLLECTIBLE_TAKEN,
     LANGUAGE_PREF_CHANGED,
     LOCALIZATION_CHANGED,
+    PLAYER_SKILLS_SNIFFED,
 }
 
 public static class EventDispatcher {
@@ -100,6 +101,7 @@ public static class EventDispatcher {
         { Events.BOMB_COLLECTIBLE_TAKEN,  null },
         { Events.LANGUAGE_PREF_CHANGED,  null },
         { Events.LOCALIZATION_CHANGED,  null },
+        { Events.PLAYER_SKILLS_SNIFFED,  null },
     };
 
 
