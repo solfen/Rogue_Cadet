@@ -8,15 +8,13 @@ public class LocalizationManager : MonoBehaviour {
     private static int currentLanguage = 0;
     private static Dictionary<string, LocalizedText> texts = new Dictionary<string, LocalizedText>();
 
-    private static LocalizationManager instance;
-
     void Awake() {
-        if (instance != null) {
+        if (texts.Count > 0) {
             Destroy(gameObject);
             return;
         }
 
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(transform.gameObject);
 
         for (int i = 0; i < db.texts.Count; i++) {
             texts.Add(db.texts[i].id, db.texts[i]);
@@ -25,7 +23,6 @@ public class LocalizationManager : MonoBehaviour {
         currentLanguage = PlayerPrefs.GetInt("Language", 0);
 
         EventDispatcher.AddEventListener(Events.LANGUAGE_PREF_CHANGED, OnLangChanged);
-        instance = this;
     }
 
     void OnDestroy() {
