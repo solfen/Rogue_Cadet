@@ -156,6 +156,8 @@ public class Dungeon : MonoBehaviour {
             }
         }
 
+        yield return null; // makes sure all the starts have been called;
+
         EventDispatcher.DispatchEvent(Events.GAME_LOADED, null);
     }
 
