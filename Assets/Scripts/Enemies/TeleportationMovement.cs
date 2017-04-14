@@ -10,10 +10,13 @@ public class TeleportationMovement : BaseMovement {
     public float teleportInterval = 1;
     public Animator anim;
     public WeaponEnemies weapon;
+    public LayerMask teleportColissionCheck;
+    public float collisionRadius;
 
     private int currentPoint = 0;
     private float timer = 0;
     private bool isTeleporting = false;
+    private Collider2D[] cols = new Collider2D[1];
 
     void Start() {
         timer = teleportInterval;
@@ -36,10 +39,13 @@ public class TeleportationMovement : BaseMovement {
 
     //Called from animation;
     public void ChangePos() {
-        _rigidbody.simulated = true;
 
         if (isRandom) {
             _transform.position =  new Vector3(_transform.position.x + Random.Range(-teleportMaxDistance, teleportMaxDistance), _transform.position.y + Random.Range(-teleportMaxDistance, teleportMaxDistance), 0);
+            if(Physics2D.OverlapCircleNonAlloc(_transform.position, collisionRadius, cols, teleportColissionCheck.value) > 0) {
+                Debug.Log("é");
+                ChangePos();
+            }
         }
         else {
             currentPoint = (currentPoint + 1) % points.Count;
@@ -49,20 +55,10 @@ public class TeleportationMovement : BaseMovement {
 
     //Called from animation;
     public void TeleportAnimEnd() {
+        _rigidbody.simulated = true;
+
         isTeleporting = false;
         if (weapon != null)
             ((ISwitchable)weapon).SwitchState(true);
-    }
-
-    void OnTriggerEnter2D(Collider2D other) {
-        if (other.tag == "Wall") {
-            ChangePos();
-        }
-    }
-
-    void OnTriggerStay2D(Collider2D other) {
-        if (other.tag == "Wall") {
-            ChangePos();
-        }
     }
 }
