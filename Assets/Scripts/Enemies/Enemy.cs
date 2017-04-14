@@ -85,7 +85,7 @@ public class Enemy : MonoBehaviour {
         StopCoroutine("hitFeedback");
 
         anim.SetTrigger("Death");
-        spriteRender.color = Color.white;
+        spriteRender.color = initialColor;
         GetComponent<Rigidbody2D>().simulated = false; //remove from physics
         if (drop != null) {
             drop.Pop();
