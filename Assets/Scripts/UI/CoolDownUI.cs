@@ -15,6 +15,7 @@ public class CoolDownUI : MonoBehaviour {
         EventDispatcher.AddEventListener(Events.WEAPON_READY, OnWeaponReady);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_START, OnWeaponCoolDownStart);
         EventDispatcher.AddEventListener(Events.WEAPON_COOLDOWN_END, OnWeaponCoolDownEnd);
+        EventDispatcher.AddEventListener(Events.LOCALIZATION_CHANGED, OnLocaleChanged);
         enabled = false;
     }
 
@@ -22,11 +23,12 @@ public class CoolDownUI : MonoBehaviour {
         EventDispatcher.RemoveEventListener(Events.WEAPON_READY, OnWeaponReady);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_START, OnWeaponCoolDownStart);
         EventDispatcher.RemoveEventListener(Events.WEAPON_COOLDOWN_END, OnWeaponCoolDownEnd);
+        EventDispatcher.RemoveEventListener(Events.LOCALIZATION_CHANGED, OnLocaleChanged);
     }
 
     private void OnWeaponReady(object weaponObj) {
         weapon = (BaseWeapon)weaponObj;
-        header.text = weapon.displayName + " cooldown:";
+        header.text = string.Format(LocalizationManager.GetLocalizedText("GAME_UI_COOLDOWN"), LocalizationManager.GetLocalizedText(weapon.displayName));
 
         cooldownBar.gameObject.SetActive(weapon.coolDownTimer > 0);
         enabled = true;
@@ -50,6 +52,12 @@ public class CoolDownUI : MonoBehaviour {
         while (true) {
             yield return new WaitForSeconds(cooldownBarBlinkInterval);
             cooldownBar.value = cooldownBar.value == 1 ? 0 : 1;
+        }
+    }
+
+    private void OnLocaleChanged(object useless) {
+        if(weapon != null) {
+            header.text = string.Format(LocalizationManager.GetLocalizedText("GAME_UI_COOLDOWN"), LocalizationManager.GetLocalizedText(weapon.displayName));
         }
     }
 }
