@@ -43,7 +43,6 @@ public class TeleportationMovement : BaseMovement {
         if (isRandom) {
             _transform.position =  new Vector3(_transform.position.x + Random.Range(-teleportMaxDistance, teleportMaxDistance), _transform.position.y + Random.Range(-teleportMaxDistance, teleportMaxDistance), 0);
             if(Physics2D.OverlapCircleNonAlloc(_transform.position, collisionRadius, cols, teleportColissionCheck.value) > 0) {
-                Debug.Log("é");
                 ChangePos();
             }
         }
