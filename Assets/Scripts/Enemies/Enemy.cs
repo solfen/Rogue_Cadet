@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Enemy : MonoBehaviour {
 
     public float life;
+    public float maxLife;
     public float score;
     public float shakeAmplitudeMultiplier = 1;
     public GenericSoundsEnum explosionSound;
@@ -26,6 +27,7 @@ public class Enemy : MonoBehaviour {
         initialColor = spriteRender.color;
         difficultyLifeMultiplier = PlayerPrefs.GetFloat("EnemiesLifeMultiplier", 1);
         life *= difficultyLifeMultiplier;
+        maxLife = life; // just used for boss UI, I know, I know, I should've put only this public and put a getter, setter on life instead. 
 
         EventDispatcher.AddEventListener(Events.DIFFICULTY_CHANGED, DifficultyChanged);
     }

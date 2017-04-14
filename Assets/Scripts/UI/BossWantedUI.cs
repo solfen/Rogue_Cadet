@@ -34,7 +34,7 @@ public class BossWantedUI : MonoBehaviour {
     }
 
     IEnumerator IconAppearFade() {
-        yield return new WaitForSecondsRealtime(1.65f); //boss explosion time
+        yield return new WaitForSecondsRealtime(3.65f); //boss explosion time
         icon.gameObject.SetActive(true);
         icon.CrossFadeAlpha(0, 0, true);
         icon.CrossFadeAlpha(1, fadeDuration, true);

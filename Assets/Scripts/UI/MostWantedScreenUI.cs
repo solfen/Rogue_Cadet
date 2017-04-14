@@ -47,7 +47,7 @@ public class MostWantedScreenUI : MonoBehaviour {
     }
 
     IEnumerator BossBeatenRoutine() {
-        yield return new WaitForSecondsRealtime(0.65f);
+        yield return new WaitForSecondsRealtime(2.65f);
         Time.timeScale = 0;
         anim.SetTrigger("Open");
         yield return new WaitForSecondsRealtime(0.5f);

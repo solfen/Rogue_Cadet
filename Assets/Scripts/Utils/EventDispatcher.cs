@@ -50,6 +50,7 @@ public enum Events {
     LANGUAGE_PREF_CHANGED,
     LOCALIZATION_CHANGED,
     PLAYER_SKILLS_SNIFFED,
+    BOSS_BECAME_VISIBLE,
 }
 
 public static class EventDispatcher {
@@ -102,6 +103,7 @@ public static class EventDispatcher {
         { Events.LANGUAGE_PREF_CHANGED,  null },
         { Events.LOCALIZATION_CHANGED,  null },
         { Events.PLAYER_SKILLS_SNIFFED,  null },
+        { Events.BOSS_BECAME_VISIBLE,  null },
     };
 
 

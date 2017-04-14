@@ -4,11 +4,12 @@ using UnityEngine.SceneManagement;
 
 public class Boss : MonoBehaviour {
 
-    [SerializeField] private int bossIndex;
+    public int bossIndex;
     [SerializeField] private Enemy enemyScriptRef;
     [SerializeField] private GameObject bossBeatenObjects;
 
     private bool isDead = false;
+    private bool hasAppeared = false;
 	
     void Start () {
         bossBeatenObjects.SetActive(false);
@@ -31,6 +32,13 @@ public class Boss : MonoBehaviour {
         FileSaveLoad.Save(data);
 
         EventDispatcher.DispatchEvent(Events.BOSS_BEATEN, bossIndex);
+    }
+
+    void OnBecameVisible() {
+        if(!hasAppeared) {
+            EventDispatcher.DispatchEvent(Events.BOSS_BECAME_VISIBLE, this);
+            hasAppeared = true;
+        }
     }
 
 
