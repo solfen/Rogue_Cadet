@@ -20,6 +20,7 @@ public class DeleteSave : MonoBehaviour {
 
         if(timePressed == nbToPress) {
             FileSaveLoad.Delete();
+            PlayerPrefs.DeleteAll(); //tmp only for demo version, where the user changes when the save is destroyed
 
             Time.timeScale = 1;
             EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, 0);
