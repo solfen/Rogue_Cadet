@@ -63,6 +63,10 @@ public class Dungeon : MonoBehaviour {
     [Tooltip("Rooms that teleports to the bossses")]
     public List<BossRoomConfig> bossRooms;
 
+    [Header("Exits")]
+    [SerializeField] private GameObject exitBlock;
+    [SerializeField] private Material[] roomsMaterials;
+
     [Header("Misc")]
     [Tooltip("To avoid having too small dungeon. Dead end are not possible before this number of rooms")]
     public int minRoomsBeforeDeadEnd = 10;
@@ -150,6 +154,23 @@ public class Dungeon : MonoBehaviour {
             roomWorldPos.Set(graph[i].pos.x * gameData.roomBaseSize.x, graph[i].pos.y * gameData.roomBaseSize.y, 0);
             graph[i].roomInstance = Instantiate(graph[i].roomPrefab, roomWorldPos, Quaternion.identity, roomsParent[map[(int)graph[i].pos.x, (int)graph[i].pos.y].zoneType]) as Room;
             graph[i].roomInstance.gameObject.SetActive(showRoomsAtInstantiation);
+
+            if(graph[i].pos.y == 0) {
+                
+            }
+
+            for (int j = 0; j < graph[i].roomInstance.exits.Count; j++) {
+                int x = (int)(graph[i].pos.x + graph[i].roomPrefab.exits[j].pos.x);
+                int y = (int)(graph[i].pos.y + graph[i].roomPrefab.exits[j].pos.y);
+                GraphRoom adjacentRoom = GetRoomFromMapIndex(x, y);
+
+                if (adjacentRoom == null || !graph[i].roomsConnected.Contains(adjacentRoom)) {
+                    float angle = graph[i].roomPrefab.exits[j].dir.x * 90 + (graph[i].roomPrefab.exits[j].dir.y == 1 ? 180 : 0);
+                    Vector3 pos = new Vector3(Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.x) * gameData.roomBaseSize.x + 0.5f * gameData.roomBaseSize.x * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y), Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.y) * gameData.roomBaseSize.y + 0.5f * gameData.roomBaseSize.y * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x), 0);
+                    GameObject exit = Instantiate(exitBlock, roomWorldPos+pos, Quaternion.Euler(0, 0, angle), graph[i].roomInstance.transform) as GameObject;
+                    exit.GetComponent<SpriteRenderer>().material = roomsMaterials[graph[i].roomPrefab.zoneIndex];
+                }
+            }
 
             if (secondsBetweenInstanciation > 0) {
                 yield return new WaitForSecondsRealtime(secondsBetweenInstanciation);
