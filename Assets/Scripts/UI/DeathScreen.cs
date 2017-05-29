@@ -30,7 +30,7 @@ public class DeathScreen : MonoBehaviour {
     }
 
     void Update () {
-        if(Input.GetButtonDown("Start") && !SaveEmailToTxt.isOpen) {
+        if(Input.GetButtonDown("Start")) {
             Time.timeScale = 1;
             Input.ResetInputAxes();
             EventDispatcher.DispatchEvent(Events.SCENE_CHANGED, levelToLoad);
