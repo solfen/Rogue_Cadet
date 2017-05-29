@@ -6,6 +6,11 @@ using UnityEngine;
 public class Exit {
     public Vector2 pos;
     public Vector2 dir;
+
+    public static bool AreExitsConnected(Exit exit, Exit adjacent, GraphRoom room, GraphRoom adjRoom) {
+        return ((adjacent.dir.x != 0 && adjacent.dir.x == -exit.dir.x && adjRoom.pos.y + adjacent.pos.y == room.pos.y + exit.pos.y) 
+        || (adjacent.dir.y != 0 && adjacent.dir.y == -exit.dir.y && adjRoom.pos.x + adjacent.pos.x == room.pos.x + exit.pos.x));
+    }
 }
 
 [System.Serializable]

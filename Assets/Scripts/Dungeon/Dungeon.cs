@@ -160,15 +160,16 @@ public class Dungeon : MonoBehaviour {
             }
 
             for (int j = 0; j < graph[i].roomInstance.exits.Count; j++) {
-                int x = (int)(graph[i].pos.x + graph[i].roomPrefab.exits[j].pos.x);
-                int y = (int)(graph[i].pos.y + graph[i].roomPrefab.exits[j].pos.y);
+                Exit exit = graph[i].roomPrefab.exits[j];
+                int x = (int)(graph[i].pos.x + exit.pos.x);
+                int y = (int)(graph[i].pos.y + exit.pos.y);
                 GraphRoom adjacentRoom = GetRoomFromMapIndex(x, y);
 
-                if (adjacentRoom == null || !graph[i].roomsConnected.Contains(adjacentRoom)) {
-                    float angle = graph[i].roomPrefab.exits[j].dir.x * 90 + (graph[i].roomPrefab.exits[j].dir.y == 1 ? 180 : 0);
-                    Vector3 pos = new Vector3(Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.x) * gameData.roomBaseSize.x + 0.5f * gameData.roomBaseSize.x * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y), Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.y) * gameData.roomBaseSize.y + 0.5f * gameData.roomBaseSize.y * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x), 0);
-                    GameObject exit = Instantiate(exitBlock, roomWorldPos+pos, Quaternion.Euler(0, 0, angle), graph[i].roomInstance.transform) as GameObject;
-                    exit.GetComponent<SpriteRenderer>().material = roomsMaterials[graph[i].roomPrefab.zoneIndex];
+                if (adjacentRoom == null || !adjacentRoom.roomPrefab.exits.Exists(adjExit => Exit.AreExitsConnected(exit, adjExit, graph[i], adjacentRoom))) {
+                    float angle = exit.dir.x * 90 + (exit.dir.y == 1 ? 180 : 0);
+                    Vector3 pos = new Vector3(Mathf.Max(0, exit.pos.x) * gameData.roomBaseSize.x + 0.5f * gameData.roomBaseSize.x * Mathf.Abs(exit.dir.y), Mathf.Max(0, exit.pos.y) * gameData.roomBaseSize.y + 0.5f * gameData.roomBaseSize.y * Mathf.Abs(exit.dir.x), 0);
+                    GameObject exitObj = Instantiate(exitBlock, roomWorldPos + pos, Quaternion.Euler(0, 0, angle), graph[i].roomInstance.transform) as GameObject;
+                    exitObj.GetComponent<SpriteRenderer>().material = roomsMaterials[graph[i].roomPrefab.zoneIndex];
                 }
             }
 

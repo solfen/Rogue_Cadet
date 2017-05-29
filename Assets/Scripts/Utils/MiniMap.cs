@@ -100,13 +100,14 @@ public class MiniMap : MonoBehaviour {
             rooms.Add(graph[i], currentRoom.gameObject);
 
             for (int j = 0; j < graph[i].roomPrefab.exits.Count; j++) {
-                int x = (int)(graph[i].pos.x + graph[i].roomPrefab.exits[j].pos.x);
-                int y = (int)(graph[i].pos.y + graph[i].roomPrefab.exits[j].pos.y);
+                Exit exit = graph[i].roomPrefab.exits[j];
+                int x = (int)(graph[i].pos.x + exit.pos.x);
+                int y = (int)(graph[i].pos.y + exit.pos.y);
                 GraphRoom adjacentRoom = dungeon.GetRoomFromMapIndex(x, y);
 
-                if (adjacentRoom != null && graph[i].roomsConnected.Contains(adjacentRoom)) {
-                    currentExitPos.Set(Mathf.Max(0,graph[i].roomPrefab.exits[j].pos.x) * roomBaseSize.x + 0.5f * roomBaseSize.x * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y), Mathf.Max(0, graph[i].roomPrefab.exits[j].pos.y) * roomBaseSize.y + 0.5f * roomBaseSize.y * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x), 0);
-                    currentExitSize.Set(roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.y)), roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(graph[i].roomPrefab.exits[j].dir.x)));
+                if (adjacentRoom != null && adjacentRoom.roomPrefab.exits.Exists(adjExit => Exit.AreExitsConnected(exit, adjExit, graph[i], adjacentRoom))) {
+                    currentExitPos.Set(Mathf.Max(0, exit.pos.x) * roomBaseSize.x + 0.5f * roomBaseSize.x * Mathf.Abs(exit.dir.y), Mathf.Max(0, exit.pos.y) * roomBaseSize.y + 0.5f * roomBaseSize.y * Mathf.Abs(exit.dir.x), 0);
+                    currentExitSize.Set(roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(exit.dir.y)), roomBaseSize.y * (0.10f + 0.38f * Mathf.Abs(exit.dir.x)));
 
                     currentExit = Instantiate(exitPrefab, currentRoom.transform) as RectTransform;
                     currentExit.localPosition = currentExitPos;
