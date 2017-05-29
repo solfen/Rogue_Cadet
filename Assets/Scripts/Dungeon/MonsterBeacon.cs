@@ -8,7 +8,7 @@ public class MonsterBeacon : MonoBehaviour, IInteractable {
     [SerializeField] private GameObject firstDialogOption;
     [SerializeField] private GameObject exitBlock;
     [SerializeField] private GameObject reward;
-    [SerializeField] private GameObject enemies;
+    [SerializeField] private RoomDynamicContent enemies;
 
     private float enemiesNb;
     private Animator explosionAnim;
@@ -45,9 +45,9 @@ public class MonsterBeacon : MonoBehaviour, IInteractable {
 
         gameObject.SetActive(false);
         exitBlock.SetActive(true);
-        enemies.SetActive(true);
+        enemies.gameObject.SetActive(true);
 
-        enemiesNb = enemies.transform.childCount;
+        enemiesNb = enemies.content.Count;
         EventDispatcher.AddEventListener(Events.ENEMY_DIED, OnEnemyDied);
     }
 

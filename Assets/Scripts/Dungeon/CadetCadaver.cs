@@ -10,12 +10,16 @@ public class CadetCadaver : MonoBehaviour, IInteractable {
     [SerializeField] private List<GameObject> possibleRewards;
 
     private Animator explosionAnim;
+    private bool destroyed = false;
 
     void Start() {
         explosionAnim = GetComponent<Animator>();
     }
 
     public void Activate() {
+        if (destroyed)
+            return;
+
         Time.timeScale = 0;
         dialogBox.SetTrigger("Open");
         StartCoroutine(SelectUIObject());
@@ -28,6 +32,7 @@ public class CadetCadaver : MonoBehaviour, IInteractable {
 
     public void ConfirmAction() {
         Time.timeScale = 1;
+        destroyed = true;
         explosionAnim.SetTrigger("Explode");
         dialogBox.SetTrigger("Close");
 
@@ -35,7 +40,7 @@ public class CadetCadaver : MonoBehaviour, IInteractable {
     }
 
     IEnumerator WaitForAnimToFinish() {
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSecondsRealtime(0.6f);
         gameObject.SetActive(false);
         possibleRewards[Random.Range(0, possibleRewards.Count)].SetActive(true);
     }

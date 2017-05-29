@@ -20,6 +20,7 @@ public class Enemy : MonoBehaviour {
     private Animator anim;
     private Color initialColor;
     private float difficultyLifeMultiplier;
+    private bool dead = false;
 
     void Start() {
         spriteRender = GetComponent<SpriteRenderer>();
@@ -49,7 +50,7 @@ public class Enemy : MonoBehaviour {
 
     public void Hit(float damage) {
         life -= damage;
-        if (life <= 0) {
+        if (!dead && life <= 0) {
             Death();
         }
         else {
@@ -81,6 +82,8 @@ public class Enemy : MonoBehaviour {
     }
 
     private void Death() {
+        dead = true;
+
         StopCoroutine("TintSprite");
         StopCoroutine("hitFeedback");
 
