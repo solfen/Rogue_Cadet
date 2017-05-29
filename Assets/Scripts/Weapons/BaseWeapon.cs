@@ -8,7 +8,7 @@ public abstract class BaseWeapon : MonoBehaviour {
     [HideInInspector] public float coolDownTimer;
 
     public bool isFiring { get; protected set; }
-    public float fireTimer { get; protected set; }
+    [HideInInspector] public float fireTimer;
 
     [SerializeField] private float coolDownDuration;
     protected bool isCoolDown;

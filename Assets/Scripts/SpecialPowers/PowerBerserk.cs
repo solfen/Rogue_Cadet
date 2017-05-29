@@ -25,7 +25,7 @@ public class PowerBerserk : BaseSpecialPower {
     IEnumerator BerserkTime() {
         BaseWeapon playerWeapon = playerWeaponSwitcher.currentWeapon;
 
-        player.transform.localScale *= 1.5f;
+        player.transform.localScale *= 1.3f;
         playerWeapon.maxFireDuration *= 9000; // 9000 is just my "infinity" value. 'cause you know over nine thousand.
         playerWeapon.coolDownTimer = -1; // reset cooldown if ther's any
 
@@ -35,8 +35,9 @@ public class PowerBerserk : BaseSpecialPower {
             timer -= Time.unscaledDeltaTime;
         }
 
-        player.transform.localScale /= 1.5f;
+        player.transform.localScale /= 1.3f;
         playerWeapon.maxFireDuration /= 9000;
+        playerWeapon.fireTimer = 0;
 
         EventDispatcher.DispatchEvent(Events.SPECIAL_POWER_USE_END, null);
     }
