@@ -17,7 +17,7 @@ public class MainMenuPanes : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-	    if(isOpen && (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Pause"))) {
+	    if(isOpen && !InputManager.isRebinding && (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Pause"))) {
             Close();
         }
 	}

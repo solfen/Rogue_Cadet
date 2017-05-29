@@ -61,6 +61,10 @@ public class InputRebinder : MonoBehaviour {
             yield return StartCoroutine(WaitForAnimAndKeyUp());
         }
 
+        StartCoroutine(Close());
+    }
+
+    IEnumerator Close() {
         bindPane.Close();
         EventDispatcher.DispatchEvent(Events.CLOSE_UI_PANE, null);
         yield return new WaitForSecondsRealtime(0.15f);
@@ -90,6 +94,16 @@ public class InputRebinder : MonoBehaviour {
             yield return null;
         }
 
+        if (Input.GetButtonDown("Cancel") || Input.GetButtonDown("Pause")) {
+            StopAllCoroutines();
+            StartCoroutine(Close());
+            yield break;
+        }
+
+        if (Input.GetButtonDown("Map")) {
+            yield return null;
+        }
+
         lastKeyPressed = KeyCode.None;
         lastAxisPressed = "";
 
@@ -112,7 +126,16 @@ public class InputRebinder : MonoBehaviour {
             yield return null;
         }
 
-        lastKeyPressed = InputManager.SniffKeyPressed();
-        sniffedAxis[axisKeyIndex] = lastKeyPressed;
+        if(Input.GetButtonDown("Cancel") || Input.GetButtonDown("Pause")) {
+            Debug.Log("wut");
+            StopAllCoroutines();
+            StartCoroutine(Close());
+            yield break;
+        }
+
+        if(!Input.GetButtonDown("Map")) {
+            lastKeyPressed = InputManager.SniffKeyPressed();
+            sniffedAxis[axisKeyIndex] = lastKeyPressed;
+        }
     }
 }
