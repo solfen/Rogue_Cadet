@@ -20,6 +20,11 @@ public class WeaponSwitcher : MonoBehaviour {
             weapons.Add(Instantiate(gameData.weapons[saveData.selectedWeapons[i]], _transform, false) as BaseWeapon);
         }
 
+        // in case the dumbass player has unequiped all his weapons. Preventing from doing so in the shop would be better but more complicated
+        Debug.Log(weapons.Count);
+        if (weapons.Count == 0) 
+            weapons.Add(Instantiate(gameData.weapons[0], _transform, false) as BaseWeapon);
+
         weapons[currentWeaponIndex].Activate();
         currentWeapon = weapons[currentWeaponIndex];
     }
