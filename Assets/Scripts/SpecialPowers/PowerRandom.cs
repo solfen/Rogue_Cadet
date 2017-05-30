@@ -13,7 +13,8 @@ public class PowerRandom : BaseSpecialPower {
     }
 
     protected override void Activate() {
-        StartCoroutine(WaitForDestroy());
+        if(activePower.coolDownTimer <= 0)
+            StartCoroutine(WaitForDestroy());
     }
 
     protected override void Update() {
@@ -30,6 +31,7 @@ public class PowerRandom : BaseSpecialPower {
         }
 
         float currentMana = activePower.mana;
+        Debug.Log(currentMana);
         DestroyImmediate(activePower.gameObject);
         activePower = Instantiate(powers[Random.Range(0, powers.Count)], transform.parent, false) as BaseSpecialPower;
         yield return null;
